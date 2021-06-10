@@ -20,7 +20,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "prod:build": "npm install && rm -rf build && npm run build"
+    "heroku-prebuild": "npm install -f",
+    "heroku-postbuild": "npm run prod"
   },
   "eslintConfig": {
     "extends": [
