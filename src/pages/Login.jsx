@@ -9,13 +9,17 @@ import { apiUrl } from "../config/config";
 import axios from "axios";
 
 export default function Login(){
+    const parsedData = window.location.host.split(".");
+    const subDomain = parsedData[0];
+    
     const params = useParams();
     const history = useHistory();
     const emailRef = useRef();
     const passwordRef = useRef();
-    const [error, setError] = useState(null);
     const {dispatch, state } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+
     const submitForm = async (e,dus) => {
         const user_type = params.user_type;
         e.preventDefault();
@@ -30,57 +34,58 @@ export default function Login(){
             return false;
         }else{
             setLoading(true);
-            const formData = {email: emailRef.current.value , password: passwordRef.current.value};
-            console.log(formData)
-            const response = await axios.post(`${apiUrl}v1/${user_type}/login`, formData);
-            if(response?.data?.status === 401){
-                // addToast(`${response?.data?.message}`, { appearance: 'error',autoDismiss: true });
-                setLoading(false);
-            }else{
-                let access_token = response?.data?.accessToken
-                let refresh_token = response?.data?.refreshToken
-                let first_name = user_type == "student" ? response?.data?.student?.first_name : (user_type == "teacher") ? response?.data?.teacher?.first_name : response?.data?.principal?.first_name
-                let last_name = user_type == "student" ? response?.data?.student?.last_name : (user_type == "teacher") ? response?.data?.teacher?.last_name : response?.data?.principal?.last_name
-                let email = user_type == "student" ? response?.data?.student?.email : (user_type == "teacher") ? response?.data?.teacher?.email : response?.data?.principal?.email
-                let username = user_type == "student" ? response?.data?.student?.username : (user_type == "teacher") ? response?.data?.teacher?.username : response?.data?.principal?.username
-                let created_at = user_type == "student" ? response?.data?.student?.created_at : (user_type == "teacher") ? response?.data?.teacher?.created_at : response?.data?.principal?.created_at
-                let school_id = user_type == "student" ? response?.data?.student?.school_id : (user_type == "teacher") ? response?.data?.teacher?.school_id : response?.data?.principal?.school_id
-
-                let isLoggedIn = true;
-                localStorage.setItem('access_token', access_token)
-                localStorage.setItem('refresh_token', refresh_token);
-                localStorage.setItem('first_name', first_name);
-                localStorage.setItem('last_name', last_name);
-                localStorage.setItem('email', email);
-                localStorage.setItem('username', username);
-                localStorage.setItem('user_type', user_type);
-                localStorage.setItem('created_at', created_at);
-                localStorage.setItem('isLoggedIn', isLoggedIn);
-                const payloadData = {
-                    isLoggedIn,
-                    first_name,
-                    last_name,
-                    email,
-                    username,
-                    user_type,
-                    created_at,
-                    access_token,
-                    refresh_token
+            const formData = {email: emailRef.current.value , password: passwordRef.current.value, sub_domain: subDomain};
+            await axios.post(`${apiUrl}v1/${user_type}/login`, formData).then(
+                response=>{
+                    console.log(response)
+                    if(response?.data?.status ===203){
+                        setErrorMessage('Password Mismatch!');
+                    }else if(response.status == 200){
+                        let access_token = response?.data?.accessToken
+                        let refresh_token = response?.data?.refreshToken
+                        let name = user_type == "student" ? response?.data?.student?.name : (user_type == "teacher") ? response?.data?.Teacher?.name : response?.data?.Principal?.name
+                        let email = user_type == "student" ? response?.data?.student?.email : (user_type == "teacher") ? response?.data?.Teacher?.email : response?.data?.Principal?.email
+                        let created_at = user_type == "student" ? response?.data?.student?.created_at : (user_type == "T") ? response?.data?.Teacher?.created_at : response?.data?.Principal?.created_at
+                        let school_id = user_type == "student" ? response?.data?.student?.school_id : (user_type == "teacher") ? response?.data?.Teacher?.school_id : response?.data?.Principal?.school_id
+                        let isLoggedIn = true;
+                        localStorage.setItem('access_token', access_token)
+                        localStorage.setItem('refresh_token', refresh_token);
+                        localStorage.setItem('name', name);
+                        localStorage.setItem('email', email);
+                        localStorage.setItem('user_type', user_type);
+                        localStorage.setItem('created_at', created_at);
+                        localStorage.setItem('isLoggedIn', isLoggedIn);
+                        const payloadData = {
+                            isLoggedIn,
+                            name,
+                            email,
+                            user_type,
+                            created_at,
+                            access_token,
+                            refresh_token
+                        }
+                        if(isLoggedIn){
+                            dispatch({type: 'LOGIN', payload: payloadData});
+                            if(user_type=== 'student'){
+                                history.push('/student/student-dashboard')
+                            }
+                            else if(user_type === 'teacher'){
+                                history.push('/teacher/teacher-dashboard')
+                            }
+                            else if(user_type === 'principal'){
+                                history.push('/principal/principal-dashboard')
+                            }
+                            // history.push('/student/student-dashboard');
+                        }
+                    }
+            }).catch(error =>{
+                console.log(error.response)
+                if(error.response.status == 401){
+                    // addToast(`${response?.data?.message}`, { appearance: 'error',autoDismiss: true });
+                    setErrorMessage('Unauthorized!');
                 }
-                if(isLoggedIn){
-                    dispatch({type: 'LOGIN', payload: payloadData});
-                    if(user_type=== 'student'){
-                        history.push('/student/student-dashboard')
-                    }
-                    else if(user_type === 'teacher'){
-                        history.push('/teacher/teacher-dashboard')
-                    }
-                    else if(user_type === 'principal'){
-                        history.push('/principal/principal-dashboard')
-                    }
-                    // history.push('/student/student-dashboard');
-                }
-            }
+            })
+            
             setLoading(false);
         }   
     }
@@ -156,6 +161,9 @@ export default function Login(){
                                                     <input type="password" className="form-control" name="password" required id="password" ref={passwordRef} placeholder="Enter Password"/>
                                                 </div>
                                                 <div className="form-group col-md-12">
+                                                {errorMessage && (
+                                                    <p className="danger"> {errorMessage} </p>
+                                                )}
                                                     <div className="row">
                                                     <div className="form-group col-md-6 form-check">
                                                         <label className="form-check-label">
@@ -168,6 +176,7 @@ export default function Login(){
                                                     </div>
                                                 </div>
                                                 <div className="search_button">
+                                                
                                                     {/* <Link to="/student/student-dashboard"> */}
                                                         <button className="btn next_btn next_btn1" type="submit">
                                                             { loading ? "logging in" : "Log in" }

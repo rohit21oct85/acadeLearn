@@ -3,12 +3,46 @@ import Footer from '../components/common/Footer'
 import Foot from '../components/common/Foot'
 import { Link } from 'react-router-dom'
 import {useHistory, useParams, useLocation} from 'react-router-dom'
-import { baseUrl } from "../config/config";
+import { baseUrl, apiUrl, server_type } from "../config/config";
+import reactDom from 'react-dom'
+import react, {useEffect, useState} from 'react'
+import axios from 'axios';
 
 export default function SearchSchool(){
     const history = useHistory();
     const params  = useParams();
     const location = useLocation();
+
+    const [ searchedSchools, setSearchedSchools ] = useState(null);
+    const [ search, setSearch ] = useState(null);
+    const [display, setDisplay] = useState('none');
+
+    useEffect(() => {
+        const delayDebounceFn = setTimeout(() => {
+            if(search && search.length > 3 && search != ''){
+                setDisplay('block');
+                openSearch(search);
+            }else if(search === ""){
+                setDisplay('none');
+                setSearchedSchools(null)
+            }
+          }, 1000);
+        return () => clearTimeout(delayDebounceFn)
+    },[search]);
+
+    async function openSearch (e){
+        const data = await axios.post(apiUrl + 'v1/school/search-school',{search:search, limit:3});
+        if(data){
+            setSearchedSchools(data.data.schools);
+            if(data && data.data.schools.length == 0){
+                setDisplay('none');
+            }
+        }
+    }
+
+    const setNewPath = (domain) => {
+        window.location.href = domain+"."+baseUrl;
+    }
 
     return(
         <>
@@ -41,12 +75,28 @@ export default function SearchSchool(){
                                             <div className="bot-20">&nbsp;</div>
                                             <form className="school_name_form">
                                                 <div className="form-group floatlabel">
-                                                {/* <!-- <label className="label" for="school-name">Enter your school name</label>--> */}
-                                                    <input type="text" className="form-control" name="school-name" id="school-name" placeholder="Enter Your School Name"/>
+                                                    <input type="text" className="form-control" name="school-name" id="school-name" placeholder="Enter Your School Name" onChange={(e)=>{setSearch(e.target.value)}}/>
+                                                        <div className="search_list_bg" style={{display:`${display}`}}>
+                                                            {searchedSchools && searchedSchools.map((item,key)=>{
+                                                                return(
+                                                                    <div className="search_list_btm" key={key}>
+                                                                        <div className="school_name1" >
+                                                                        {/* onClick={() => setNewPath (item.sub_domain)}> */}
+                                                                            {/* <Link to={`http://${item.sub_domain}.${baseUrl}`}> */}
+                                                                            <a href={`http://${item.sub_domain}.${baseUrl}`}>
+                                                                                <span><img src={`https://drive.google.com/uc?export=view&id=${item.school_logo}`} className="img-fluid" alt="school Iocn"/> </span> 
+                                                                                <p>{item.school_name}</p>
+                                                                            </a>
+                                                                            {/* </Link> */}
+                                                                        </div>
+                                                                    </div>
+                                                                )
+                                                            })}
+                                                        </div>
                                                 </div>
-                                                <div className="search_button">
+                                                {/* <div className="search_button" style={{display:`${display}`}}>
                                                     <Link to={`subdomain.${baseUrl}/`}><button className="btn next_btn btn_school_next" type="button">Next</button></Link>
-                                                </div>
+                                                </div> */}
                                             </form>
                                         </div>
                                         

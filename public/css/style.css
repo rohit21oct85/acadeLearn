@@ -355,3 +355,25 @@ span#basic-addon2 {
     border-radius: 50px;
     box-shadow: 0 3px 1px rgb(0 0 0);}
 		.online_classes a:hover{ color: #fff;  box-shadow: 0 4px 5px rgb(0 0 0);}
+
+
+
+        .form-group.floatlabel{position:relative; }
+		.search_list_bg{display:inline-block; width:100%; background:#fff; box-shadow:0 0 2px rgba(0,0,0,0.5); padding:20px 0px;  position: absolute;
+    top: 30px;
+    z-index: -1;}
+		.search_list_btm{background:#fff; display:inline-block; width:100%; padding:0px 20px; max-height: 300px;
+    overflow: hidden;
+    overflow-y: scroll;}
+		.school_name1{display:inline-block; width:100%; border-bottom: 1px solid #ccc;
+    padding: 5px 0;}
+		.school_name1 p{color:#000; font-size:15px; padding-left:55px; font-weight:bold;}
+		.school_name1 span{float:left;}
+
+        .school_name1 span {
+            width: 50px;
+        }
+
+        div#root{
+            height: 100%;
+        }
