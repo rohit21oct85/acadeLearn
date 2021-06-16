@@ -6,16 +6,28 @@ import SubDomainApp from './SubDomainApp';
 import reportWebVitals from './reportWebVitals';
 import AuthProvider from './context/AuthContext';
 
+import { QueryClient, QueryClientProvider, } from 'react-query'
+const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            refetchOnWindowFocus: false,
+        },
+    },
+})
+
+
 const parsedData = window.location.host.split(".");
 console.log(parsedData)
 if(parsedData.length >= 3){
 	const subDomain = parsedData[0];
 	ReactDOM.render(
-		<AuthProvider>
-			<React.StrictMode>
-				<SubDomainApp subDomain={subDomain} />
-			</React.StrictMode>
-		</AuthProvider>, document.getElementById('root'));
+		<QueryClientProvider client={queryClient}>
+			<AuthProvider>
+				<React.StrictMode>
+					<SubDomainApp subDomain={subDomain} />
+				</React.StrictMode>
+			</AuthProvider>
+		</QueryClientProvider>, document.getElementById('root'));
 }else{
   	ReactDOM.render(
 		<React.StrictMode>

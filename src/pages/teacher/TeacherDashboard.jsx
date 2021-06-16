@@ -1,10 +1,14 @@
-import { useParams } from "react-router-dom";
+import {useHistory, useParams, useLocation} from 'react-router-dom'
 import Head from '../../components/common/Head'
 import Footer from '../../components/common/Footer'
 import Foot from '../../components/common/Foot'
 import HeaderNav from '../../components/common/HeaderNav'
 import { Link } from 'react-router-dom'
 import {useState, useEffect} from 'react'
+import AssignmentCard  from "../../components/teacher/AssignmentCard";
+import useClassList from '../../pages/teacher/hooks/useClassList'
+import useTeacherSubject from '../../pages/teacher/hooks/useTeacherSubject'
+import useUnitTestList from '../../pages/teacher/hooks/useUnitTestList'
 
 export default function TeacherDashboard(){
     const [section, setSection] = useState('tab1');
@@ -13,7 +17,15 @@ export default function TeacherDashboard(){
         setSection(value)
     }
     const params = useParams();
-    console.log(params)
+    const history = useHistory();
+
+    const {data:classes, classLoading} = useClassList();
+    const {data:teacherSubject, teacherSubjectLoading} = useTeacherSubject();
+    const {data:unitTests, unitTestLoading} = useUnitTestList();
+
+    const handleChange = (e) => {
+      history.push(`/teacher/teacher-dashboard/${params.school_id}/${e.target.value}`)
+    }
     return(
         <>
         <Head/>
@@ -23,7 +35,7 @@ export default function TeacherDashboard(){
             <div className="content-wrapper">
                 <div className="content-header row">
                     <div className="content-header-left col-md-6 col-12 mb-2 breadcrumb-new">
-                        <h3 className="content-header-title mb-0 d-inline-block">Teacher </h3>
+                        <h3 className="content-header-title mb-0 d-inline-block">Teacher - {localStorage.getItem('subject_name')}</h3>
                         <div className="row breadcrumbs-top d-inline-block">
                             <div className="breadcrumb-wrapper col-12">
                                 <ol className="breadcrumb">
@@ -77,18 +89,16 @@ export default function TeacherDashboard(){
                                                             <div className="form-body">
                                                                <div className="row">
                                                                <div className="form-group col-md-4 mb-0 ml-auto">
-                                                                  <select className="form-control">
-                                                                        <option value="">--Select ClassName-- </option>
-                                                                        <option value="">ClassName 6th </option>
-                                                                        <option value="">ClassName 7th </option>
-                                                                        <option value="">ClassName 8th </option>
-                                                                        <option value="">ClassName 9th </option>
-                                                                        <option value="">ClassName 10th </option>
-                                                                        <option value="">ClassName 11th </option>
-                                                                        <option value="">ClassName 12th </option>
+                                                                  <select className="form-control" onChange={handleChange} value={params.class_id ? params.class_id : 999}>
+                                                                        <option value="999">--Select ClassName-- </option>
+                                                                        {classes && classes.map((item,key)=>{
+                                                                           return(
+                                                                              <option value={item._id} data-class_name={item.class_name} key={key} >{item.class_name + ' th'} </option>
+                                                                           )
+                                                                        })}
                                                                      </select>
                                                                   </div>
-                                                                  <div className="form-group col-md-4 mb-0">
+                                                                  {/* <div className="form-group col-md-4 mb-0">
                                                                      <select className="form-control">
                                                                         <option value="">--Select Subject-- </option>
                                                                         <option value="">Science </option>
@@ -98,7 +108,7 @@ export default function TeacherDashboard(){
                                                                         <option value="">Chemistry</option>
                                                                         <option value="">Biology </option>
                                                                      </select>
-                                                                  </div>
+                                                                  </div> */}
                                                                   <div className="form-group col-md-3 mb-0">
                                                                      <button type="button" className="btn btn-warning btn-min-width sbmt_view_form btn_click2 mr-1 mb-1 mt-0">Search</button>
                                                                   </div>
@@ -106,87 +116,14 @@ export default function TeacherDashboard(){
                                                             </div>
                                                          </form>
                                                          </div>
-                                                         </div>
+                                                         </div>{console.log(unitTests)}
                                        <div className="row">
-                                          <div className="col-md-6 text1_w_dfine">
-                                             <div className="card pull-up attempt_text curser_not_allow">
-                                                <div className="card-header">
-                                                   <div className="float-left">
-                                                      <h4><span className="hding_text1">Full Test -2-MAT</span> <i className="fa fa-lock lock_icon"></i></h4>
-                                                   </div>
-                                                   <div className="float-right">
-                                                      <div className="countdown"></div>
-                                                   </div>
-                                                </div>
-                                                <div className="card-content live_text">
-                                                   <div className="card-body text_set_attemp container">
-                                                      <div className="row">
-                                                         <div className="col-md-8">
-                                                            <ul>
-                                                               <li><a href="#">Upcoming</a></li>
-                                                               <li className="one_linetext"><i className="fa fa-clock"></i> 120 MIN NTSE & Fundamentals of Engineering and Medical-2022</li>
-                                                            </ul>
-                                                         </div>
-                                                         <div className="col-md-4 text-right">
-                                                            <a href="#" className="btn btn-info attepts_text"> ASSIGN</a>
-                                                         </div>
-                                                      </div>
-                                                   </div>
-                                                </div>
-                                             </div>
-                                          </div>
-                                          <div className="col-md-6 text1_w_dfine">
-                                             <div className="card pull-up attempt_text curser_not_allow">
-                                                <div className="card-header">
-                                                   <div className="float-left">
-                                                      <h4><span className="hding_text1">Full Test -2-SCI</span> <i className="fa fa-lock lock_icon"></i></h4>
-                                                   </div>
-                                                   <div className="float-right">
-                                                      <div className="countdown"></div>
-                                                   </div>
-                                                </div>
-                                                <div className="card-content live_text">
-                                                   <div className="card-body text_set_attemp container">
-                                                      <div className="row">
-                                                         <div className="col-md-8">
-                                                            <ul>
-                                                               <li><a href="#">Upcoming </a></li>
-                                                               <li className="one_linetext"><i className="fa fa-clock"></i> 122 MIN NTSE & Fundamentals of Engineering and Medical-2022</li>
-                                                            </ul>
-                                                         </div>
-                                                         <div className="col-md-4 text-right">
-                                                            <a href="#" className="btn btn-info attepts_text"> ASSIGN</a>
-                                                         </div>
-                                                      </div>
-                                                   </div>
-                                                </div>
-                                             </div>
-                                          </div>
-                                          <div className="col-md-6 text1_w_dfine">
-                                             <div className="card pull-up attempt_text">
-                                                <div className="card-header">
-                                                   <div className="float-left">
-                                                      <a href="#" className="btn btn-info">07 May, 2021</a>
-                                                   </div>
-                                                </div>
-                                                <div className="card-content live_text">
-                                                   <div className="card-body text_set_attemp container">
-                                                      <div className="row">
-                                                         <div className="col-md-6">
-                                                            <ul>
-                                                               <li><a href="#">live</a></li>
-                                                               <li><i className="fa fa-clock"></i> 45 MIN Mathematics</li>
-                                                            </ul>
-                                                         </div>
-                                                         <div className="col-md-6 text-right">
-                                                            <a href="#" className="btn btn-outline-info mr-1" data-toggle="modal" data-target="#syllabus_modal"><i className="fa fa-eye"></i> SYLLABUS</a>
-                                                            <a href="#" className="btn btn-info"> ASSIGN</a>
-                                                         </div>
-                                                      </div>
-                                                   </div>
-                                                </div>
-                                             </div>
-                                          </div>
+                                          {unitTests && unitTests.map(test =>{
+                                             return(<>
+                                                {/* {console.log("item", test)} */}
+                                                <AssignmentCard test={test}/>
+                                             </>)
+                                          })}
                                        </div>
                                     </div>
                                     <div className={section == "tab2" ? "tab-pane container-fluid active" : 'tab-pane container-fluid'} id="tab2" aria-labelledby="base-tab2">
@@ -203,14 +140,12 @@ export default function TeacherDashboard(){
                                                                   <div className="form-group col-md-3 mb-2">
                                                                      {/* <!-- <label className="">Select ClassName </label>--> */}
                                                                      <select className="form-control">
-                                                                        <option value="">--Select ClassName-- </option>
-                                                                        <option value="">ClassName 6th </option>
-                                                                        <option value="">ClassName 7th </option>
-                                                                        <option value="">ClassName 8th </option>
-                                                                        <option value="">ClassName 9th </option>
-                                                                        <option value="">ClassName 10th </option>
-                                                                        <option value="">ClassName 11th </option>
-                                                                        <option value="">ClassName 12th </option>
+                                                                        <option value="999">--Select ClassName-- </option>
+                                                                        {classes && classes.map((item,key)=>{
+                                                                           return(
+                                                                              <option value={item._id} data-class_name={item.class_name} key={key}>{item.class_name + ' th'} </option>
+                                                                           )
+                                                                        })}
                                                                      </select>
                                                                   </div>
                                                                   <div className="form-group col-md-2 mb-2">
@@ -426,14 +361,12 @@ export default function TeacherDashboard(){
                                                                   <div className="form-group col-md-3 mb-2">
                                                                      {/* <!--<label className="">Select ClassName </label>--> */}
                                                                      <select className="form-control">
-                                                                        <option value="">--Select ClassName-- </option>
-                                                                        <option value="">ClassName 6th </option>
-                                                                        <option value="">ClassName 7th </option>
-                                                                        <option value="">ClassName 8th </option>
-                                                                        <option value="">ClassName 9th </option>
-                                                                        <option value="">ClassName 10th </option>
-                                                                        <option value="">ClassName 11th </option>
-                                                                        <option value="">ClassName 12th </option>
+                                                                        <option value="999">--Select ClassName-- </option>
+                                                                        {classes && classes.map((item,key)=>{
+                                                                           return(
+                                                                              <option value={item._id} data-class_name={item.class_name} key={key}>{item.class_name + ' th'} </option>
+                                                                           )
+                                                                        })}
                                                                      </select>
                                                                   </div>
                                                                   <div className="form-group col-md-3 mb-2">

@@ -1,23 +1,32 @@
-import { useHistory, useParams, useLocation } from 'react-router-dom'
-import React, { useState, useEffect, useRef, useContext } from 'react';
+import { useParams } from 'react-router-dom'
+import React, { useState } from 'react';
 import Head from '../../components/common/Head'
 import Footer from '../../components/common/Footer'
 import Foot from '../../components/common/Foot'
 import HeaderNav from '../../components/common/HeaderNav'
 import { Link } from 'react-router-dom'
 import { AuthContext } from '../../context/AuthContext';
+import AttemptCard from '../../components/student/AttemptCard'
+import LastTestScore from '../../components/student/LastTestScore'
+import CumilativeTestScore from '../../components/student/CumilativeTestScore'
+import useClassSubjectList from '../../pages/student/hooks/useClassSubjectList'
+import useTestList from '../../pages/student/hooks/useTestList'
 
 export default function StudentDashboard(){
     const [section, setSection] = useState('tab1');
     const changeSection = (value) => {
         setSection(value)
     }
+
     const params = useParams();
     
+    const {data:subjects, subjectLoading} = useClassSubjectList();
+    const {data:tests, testLoading} = useTestList();
+
     return(
         <>
         <Head/>
-        <HeaderNav/>
+        <HeaderNav/> {console.log(tests)}
         <div className="app-content content mt-5">
             <div className="content-overlay"></div>
             <div className="content-wrapper">
@@ -39,22 +48,21 @@ export default function StudentDashboard(){
             <div className="content-body">
                 <div className="row">
                     <div className="col-md-6">
-                        <h4 className="card-title"><strong>Class IX</strong></h4>
+                        <h4 className="card-title"><strong>Class {localStorage.getItem('class_name')} - {localStorage.getItem('section')}</strong></h4>
                     </div>
                     <div className="col-md-6">
                         <form className="form">
                             <div className="form-body">
                                 <div className="row">
-                                
+                                {console.log(subjects)}
                                 <div className="form-group col-md-4 mb-0 ml-auto"> 
                                     <select className="form-control">
-                                        <option value="">--Select Subject-- </option>
-                                        <option value="">Science </option>
-                                        <option value="">Mathematics </option>
-                                        <option value="">Social Science </option>
-                                        <option value="">Physics</option>
-                                        <option value="">Chemistry</option>
-                                        <option value="">Biology </option>
+                                        <option value="999">--Select Subject-- </option>
+                                        {subjects && subjects.map((subject, key)=>{
+                                            return (
+                                                <option value={subject._id} key={key}>{subject.subject_name} </option>
+                                            )
+                                        })}
                                     </select>
                                 </div>
                                 <div className="form-group col-md-3 mb-0"> 
@@ -64,6 +72,7 @@ export default function StudentDashboard(){
                             </div>
                         </form>
                     </div>
+                </div>
                     {/* <!-- Slaes & Purchase Order --> */}
                     <div className="row">
                         <div className="col-xl-12 col-lg-12 mt-2">
@@ -92,181 +101,24 @@ export default function StudentDashboard(){
                                     <div className="tab-content px-1 pt-1">
                                         <div role="tabpanel" className={section == "tab1" ? "tab-pane active" : 'tab-pane'} aria-expanded="true" aria-labelledby="base-tab41">
                                             <div className="tab-pane active" id="comp-order-tab" aria-expanded="true" role="tablist" aria-labelledby="complete-order">
-                                            <div className="card mb-0">
-                                                <div className="card-header">
-                                                    <h4 className="mb-0"><strong>  Attempt Test  </strong></h4>
-                                                </div>
-                                            </div>
-                                            <div className="row">
-                                                <div className="col-md-6">
-                                                    <div className="card pull-up attempt_text">
-                                                        <div className="card-header">
-                                                        <div className="float-left">
-                                                            <a href="#" className="btn btn-info">07 May, 2021</a>
-                                                        </div>
-                                                        </div>
-                                                        <div className="card-content live_text">
-                                                        <div className="card-body text_set_attemp container">
-                                                            <div className="row">
-                                                                <div className="col-md-6">
-                                                                    <ul>
-                                                                    <li><a href="#">live</a></li>
-                                                                    <li><i className="fa fa-clock"></i> 45 MIN Mathematics</li>
-                                                                    </ul>
-                                                                </div>
-                                                                <div className="col-md-6 text-right">
-                                                                    <a href="#" className="btn btn-outline-info mr-1"><i className="fa fa-eye"></i> SYLLABUS</a>
-                                                                    <a href="#" className="btn btn-info"> ATTEMPT</a> 
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        </div>
+                                                <div className="card mb-0">
+                                                    <div className="card-header">
+                                                        <h4 className="mb-0"><strong>  Attempt Test  </strong></h4>
                                                     </div>
                                                 </div>
-                                                <div className="col-md-6">
-                                                    <div className="card pull-up attempt_text">
-                                                        <div className="card-header">
-                                                        <div className="float-left">
-                                                            <a href="#" className="btn btn-info">07 May, 2021</a>
-                                                        </div>
-                                                        </div>
-                                                        <div className="card-content live_text">
-                                                        <div className="card-body text_set_attemp container">
-                                                            <div className="row">
-                                                                <div className="col-md-6">
-                                                                    <ul>
-                                                                    <li><a href="#">live</a></li>
-                                                                    <li><i className="fa fa-clock"></i> 45 MIN Mathematics</li>
-                                                                    </ul>
-                                                                </div>
-                                                                <div className="col-md-6 text-right">
-                                                                    <a href="#" className="btn btn-outline-info mr-1"><i className="fa fa-eye"></i> SYLLABUS</a>
-                                                                    <a href="#" className="btn btn-info"> ATTEMPT</a> 
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        </div>
-                                                    </div>
+                                                <div className="row">
+                                                    <AttemptCard />
                                                 </div>
-                                                <div className="col-md-6">
-                                                    <div className="card pull-up attempt_text">
-                                                        <div className="card-header">
-                                                        <div className="float-left">
-                                                            <a href="#" className="btn btn-info">07 May, 2021</a>
-                                                        </div>
-                                                        </div>
-                                                        <div className="card-content live_text">
-                                                        <div className="card-body text_set_attemp container">
-                                                            <div className="row">
-                                                                <div className="col-md-6">
-                                                                    <ul>
-                                                                    <li><a href="#">live</a></li>
-                                                                    <li><i className="fa fa-clock"></i> 45 MIN Mathematics</li>
-                                                                    </ul>
-                                                                </div>
-                                                                <div className="col-md-6 text-right">
-                                                                    <a href="#" className="btn btn-outline-info mr-1"><i className="fa fa-eye"></i> SYLLABUS</a>
-                                                                    <a href="#" className="btn btn-info"> ATTEMPT</a> 
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
                                             </div>
                                         </div>
                                         <div className={section == "tab2" ? "tab-pane active" : 'tab-pane'} aria-labelledby="base-tab42">
                                             <div className="card mb-0">
-                                            <div className="card-header">
-                                                <h4 className="mb-0"><strong>  Last Test Score    </strong></h4>
-                                            </div>
+                                                <div className="card-header">
+                                                    <h4 className="mb-0"><strong>  Last Test Score    </strong></h4>
+                                                </div>
                                             </div>
                                             <div className="row">
-                                            <div className="col-md-6">
-                                                <div className="card pull-up attempt_text">
-                                                    <div className="card-header">
-                                                        <div className="float-left">
-                                                        <a href="#" className="btn btn-info">07 May, 2021</a>
-                                                        </div>
-                                                        <div className="float-right">
-                                                        </div>
-                                                    </div>
-                                                    <div className="card-content">
-                                                        <div className="card-body py-0 text_set_attemp">
-                                                        <div className="d-flex justify-content-between lh-condensed">
-                                                            <div className="order-details">
-                                                                <h4 className="my-0">Total Score </h4>
-                                                                <p>0/72</p>
-                                                            </div>
-                                                            <div className="order-details">
-                                                                <h4 className="my-0">Total Time Taken</h4>
-                                                                <p className="text-muted">1 hr 30 min </p>
-                                                            </div>
-                                                            <div className="order-details">
-                                                                <a href="#" className="btn btn-outline-info mr-1"><i className="fa fa-eye"></i> View full result</a>
-                                                            </div>
-                                                        </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="col-md-6">
-                                                <div className="card pull-up attempt_text">
-                                                    <div className="card-header">
-                                                        <div className="float-left">
-                                                        <a href="#" className="btn btn-info">07 May, 2021</a>
-                                                        </div>
-                                                        <div className="float-right">
-                                                        </div>
-                                                    </div>
-                                                    <div className="card-content">
-                                                        <div className="card-body py-0 text_set_attemp">
-                                                        <div className="d-flex justify-content-between lh-condensed">
-                                                            <div className="order-details">
-                                                                <h4 className="my-0">Total Score </h4>
-                                                                <p>0/72</p>
-                                                            </div>
-                                                            <div className="order-details">
-                                                                <h4 className="my-0">Total Time Taken</h4>
-                                                                <p className="text-muted">1 hr 30 min </p>
-                                                            </div>
-                                                            <div className="order-details">
-                                                                <a href="#" className="btn btn-outline-info mr-1"><i className="fa fa-eye"></i> View full result</a>
-                                                            </div>
-                                                        </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="col-md-6">
-                                                <div className="card pull-up attempt_text">
-                                                    <div className="card-header">
-                                                        <div className="float-left">
-                                                        <a href="#" className="btn btn-info">07 May, 2021</a>
-                                                        </div>
-                                                        <div className="float-right">
-                                                        </div>
-                                                    </div>
-                                                    <div className="card-content">
-                                                        <div className="card-body py-0 text_set_attemp">
-                                                        <div className="d-flex justify-content-between lh-condensed">
-                                                            <div className="order-details">
-                                                                <h4 className="my-0">Total Score </h4>
-                                                                <p>0/72</p>
-                                                            </div>
-                                                            <div className="order-details">
-                                                                <h4 className="my-0">Total Time Taken</h4>
-                                                                <p className="text-muted">1 hr 30 min </p>
-                                                            </div>
-                                                            <div className="order-details">
-                                                                <a href="#" className="btn btn-outline-info mr-1"><i className="fa fa-eye"></i> View full result</a>
-                                                            </div>
-                                                        </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                                <LastTestScore/>
                                             </div>
                                         </div>
                                         <div className={section == "tab3" ? "tab-pane active" : 'tab-pane'} aria-labelledby="base-tab43">
@@ -276,81 +128,7 @@ export default function StudentDashboard(){
                                             </div>
                                             </div>
                                             <div className="row">
-                                            <div className="col-md-6">
-                                                <div className="card pull-up attempt_text">
-                                                    <div className="card-header">
-                                                        <div className="float-left">
-                                                        <a href="#" className="btn btn-info">07 May, 2021</a>
-                                                        </div>
-                                                    </div>
-                                                    <div className="card-content live_text">
-                                                        <div className="card-body text_set_attemp container">
-                                                        <div className="row">
-                                                            <div className="col-md-6">
-                                                                <ul>
-                                                                    <li><a href="#">Previous Tests</a></li>
-                                                                    <li><i className="fa fa-clock"></i> 45 MIN Mathematics</li>
-                                                                </ul>
-                                                            </div>
-                                                            <div className="col-md-6 text-right">
-                                                                {/* <!-- <a href="#" className="btn btn-outline-info mr-1"><i className="fa fa-eye"></i> SYLLABUS</a>--> */}
-                                                                <a href="#" className="btn btn-info"> Score: 0/72 <i className="fa fa-angle-double-right"></i> </a> 
-                                                            </div>
-                                                        </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="col-md-6">
-                                                <div className="card pull-up attempt_text">
-                                                    <div className="card-header">
-                                                        <div className="float-left">
-                                                        <a href="#" className="btn btn-info">07 May, 2021</a>
-                                                        </div>
-                                                    </div>
-                                                    <div className="card-content live_text">
-                                                        <div className="card-body text_set_attemp container">
-                                                        <div className="row">
-                                                            <div className="col-md-6">
-                                                                <ul>
-                                                                    <li><a href="#">Previous Tests</a></li>
-                                                                    <li><i className="fa fa-clock"></i> 45 MIN Mathematics</li>
-                                                                </ul>
-                                                            </div>
-                                                            <div className="col-md-6 text-right">
-                                                                {/* <!-- <a href="#" className="btn btn-outline-info mr-1"><i className="fa fa-eye"></i> SYLLABUS</a>--> */}
-                                                                <a href="#" className="btn btn-info"> Score: 0/72 <i className="fa fa-angle-double-right"></i> </a> 
-                                                            </div>
-                                                        </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="col-md-6">
-                                                <div className="card pull-up attempt_text">
-                                                    <div className="card-header">
-                                                        <div className="float-left">
-                                                        <a href="#" className="btn btn-info">07 May, 2021</a>
-                                                        </div>
-                                                    </div>
-                                                    <div className="card-content live_text">
-                                                        <div className="card-body text_set_attemp container">
-                                                        <div className="row">
-                                                            <div className="col-md-6">
-                                                                <ul>
-                                                                    <li><a href="#">Previous Tests</a></li>
-                                                                    <li><i className="fa fa-clock"></i> 45 MIN Mathematics</li>
-                                                                </ul>
-                                                            </div>
-                                                            <div className="col-md-6 text-right">
-                                                                {/* <!-- <a href="#" className="btn btn-outline-info mr-1"><i className="fa fa-eye"></i> SYLLABUS</a>--> */}
-                                                                <a href="#" className="btn btn-info"> Score: 0/72 <i className="fa fa-angle-double-right"></i> </a>
-                                                            </div>
-                                                        </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                                <CumilativeTestScore/>
                                             </div>
                                         </div>
                                     </div>
@@ -359,7 +137,6 @@ export default function StudentDashboard(){
                             </div>
                         </div>
                     </div>
-                </div>
             </div>
             </div>
         </div>

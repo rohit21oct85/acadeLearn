@@ -36,15 +36,16 @@ export default function HeaderNav(){
 
     const logout = () => {
         dispatch({ type: 'LOGOUT' })
-        if(state?.user_type === 'student'){
-            history.push('/student/login')
-        }
-        else if(state?.user_type === 'teacher'){
-            history.push('/teacher/login')
-        }
-        else if(state?.user_type === 'principal'){
-            history.push('/principal/login')
-        }
+        // if(state?.user_type === 'student'){
+        //     history.push('/student/login')
+        // }
+        // else if(state?.user_type === 'teacher'){
+        //     history.push('/teacher/login')
+        // }
+        // else if(state?.user_type === 'principal'){
+        //     history.push('/principal/login')
+        // }
+        history.push('/');
     }
 
     return(

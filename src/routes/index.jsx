@@ -7,6 +7,8 @@ import TeacherLogin from '../pages/teacher/TeacherLogin'
 import StudentDashboard from '../pages/student/StudentDashboard'
 import TeacherDashboard from '../pages/teacher/TeacherDashboard'
 import PrincipalDashboard from '../pages/principal/PrincipalDashboard'
+import StudentAttempt from '../pages/student/StudentAttempt'
+import Profile from '../pages/Profile'
 
 export const operRoutes =  [
     { 
@@ -32,15 +34,27 @@ export const openRoutesOnSubDomain = [
 
 export const studentRoutes = [
     {
-        path:'/:user_type?/student-dashboard',
+        path:'/:user_type?/student-dashboard/:class_id?/:class_name?/:subject_id?',
         component: StudentDashboard
+    },
+    {
+        path:'/:user_type?/student-attempt',
+        component: StudentAttempt
+    },
+    {
+        path:'/:user_type?/profile',
+        component: Profile
     },
 ]
 
 export const teacherRoutes = [
     {
-        path:'/:user_type?/teacher-dashboard',
+        path:'/:user_type?/teacher-dashboard/:school_id?/:class_id?',
         component: TeacherDashboard
+    },
+    {
+        path:'/:user_type?/profile',
+        component: Profile
     },
 ]
 

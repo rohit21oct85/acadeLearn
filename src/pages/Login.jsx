@@ -37,29 +37,44 @@ export default function Login(){
             const formData = {email: emailRef.current.value , password: passwordRef.current.value, sub_domain: subDomain};
             await axios.post(`${apiUrl}v1/${user_type}/login`, formData).then(
                 response=>{
-                    console.log(response)
                     if(response?.data?.status ===203){
                         setErrorMessage('Password Mismatch!');
                     }else if(response.status == 200){
                         let access_token = response?.data?.accessToken
                         let refresh_token = response?.data?.refreshToken
+                        let user_id = user_type == "student" ? response?.data?.student?._id : (user_type == "teacher") ? response?.data?.Teacher?._id : response?.data?.Principal?._id
                         let name = user_type == "student" ? response?.data?.student?.name : (user_type == "teacher") ? response?.data?.Teacher?.name : response?.data?.Principal?.name
                         let email = user_type == "student" ? response?.data?.student?.email : (user_type == "teacher") ? response?.data?.Teacher?.email : response?.data?.Principal?.email
                         let created_at = user_type == "student" ? response?.data?.student?.created_at : (user_type == "T") ? response?.data?.Teacher?.created_at : response?.data?.Principal?.created_at
                         let school_id = user_type == "student" ? response?.data?.student?.school_id : (user_type == "teacher") ? response?.data?.Teacher?.school_id : response?.data?.Principal?.school_id
+                        let class_name = user_type == "student" ? response?.data?.student?.class : response?.data?.Teacher?.class
+                        let class_id = user_type == "student" ? response?.data?.student?.class_id : response?.data?.Teacher?.class_id
+                        let section = user_type == "student" ? response?.data?.student?.section : response?.data?.Teacher?.section
                         let isLoggedIn = true;
+                        let role = "";
                         localStorage.setItem('access_token', access_token)
                         localStorage.setItem('refresh_token', refresh_token);
                         localStorage.setItem('name', name);
+                        localStorage.setItem('user_id', user_id);
                         localStorage.setItem('email', email);
+                        localStorage.setItem('school_id', school_id);
+                        localStorage.setItem('class_name', class_name);
+                        localStorage.setItem('class_id', class_id);
+                        localStorage.setItem('section', section);
                         localStorage.setItem('user_type', user_type);
                         localStorage.setItem('created_at', created_at);
                         localStorage.setItem('isLoggedIn', isLoggedIn);
                         const payloadData = {
                             isLoggedIn,
                             name,
+                            user_id,
                             email,
+                            role,
                             user_type,
+                            section,
+                            class_name,
+                            school_id,
+                            class_id,
                             created_at,
                             access_token,
                             refresh_token
@@ -67,20 +82,20 @@ export default function Login(){
                         if(isLoggedIn){
                             dispatch({type: 'LOGIN', payload: payloadData});
                             if(user_type=== 'student'){
-                                history.push('/student/student-dashboard')
+                                console.log(class_id, class_name);
+                                history.push(`/student/student-dashboard/${class_id}/${class_name}`)
                             }
                             else if(user_type === 'teacher'){
-                                history.push('/teacher/teacher-dashboard')
+                                history.push(`/teacher/teacher-dashboard/${school_id}`)
                             }
                             else if(user_type === 'principal'){
                                 history.push('/principal/principal-dashboard')
                             }
-                            // history.push('/student/student-dashboard');
                         }
                     }
             }).catch(error =>{
                 console.log(error.response)
-                if(error.response.status == 401){
+                if(error.response && error.response.status == 401){
                     // addToast(`${response?.data?.message}`, { appearance: 'error',autoDismiss: true });
                     setErrorMessage('Unauthorized!');
                 }
@@ -92,15 +107,18 @@ export default function Login(){
 
     useEffect(checkLoggedInUser,[state]);
     async function checkLoggedInUser(){
-        if(state?.isLoggedIn === true){
-            if(state?.user_type === "student"){
-                history.push(`/student/student-dashboard`)
-            }else if(state?.user_type === "teacher"){
-                history.push('/teacher/teacher-dashboard')
-            }else if(state?.user_type === "principal"){
-                history.push('/principal/principal-dashboard')
+        console.log(state.isLoggedIn)
+        if(state?.isLoggedIn == true){
+            // console.log("in if", state.isLoggedIn)
+            if(state?.user_type == "student"){
+                history.push(`/student/student-dashboard/${state.class_id}/${state.class_name}`)
+            }else if(state?.user_type == "teacher"){
+                history.push(`/teacher/teacher-dashboard/${state.school_id}`)
+            }else if(state?.user_type == "principal"){
+                history.push(`/principal/principal-dashboard`)
             }
-        }else{
+        }else if(state?.isLoggedIn != true){
+            // console.log("in else", state.isLoggedIn)
             if(params.user_type == "student"){
                 history.push('/student/login');
             }else if(params.user_type == "teacher"){

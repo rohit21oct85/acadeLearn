@@ -6,11 +6,11 @@ import { operRoutes } from './routes/index.jsx';
 function App() {
 	return (
 		<BrowserRouter>
-			<Switch>
-				{operRoutes && operRoutes.map((route => (
-					<Route exact={true} key={route.path} path={route.path} component={route.component} />
-				)))}
-			</Switch>
+				<Switch>
+					{operRoutes && operRoutes.map((route => (
+						<Route exact={true} key={route.path} path={route.path} component={route.component} />
+					)))}
+				</Switch>
 		</BrowserRouter>
 	);
 }

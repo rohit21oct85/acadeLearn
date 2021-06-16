@@ -23,7 +23,7 @@ export default function SelectLogin(){
         {/* <!-- BEGIN: Content--> */}
         <div className="app-content content">
             <div className="content-overlay"></div>
-            <div className="content-wrapper learningschool-wrapper bg_img1"> 
+            <div className="content-wrapper learningschool-wrapper bg_img1 bg_img3"> 
                 <div className="content-body">
                 <div id="crypto-stats-3" className="row">
                     <div className="col-xl-12">
