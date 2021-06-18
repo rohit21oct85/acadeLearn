@@ -15,18 +15,20 @@ import useCreateAttemptTest from '../student/hooks/useCreateAttemptTest'
 
 export default function StudentDashboard(){
     const [section, setSection] = useState('tab1');
+    const [formData, setFormData] = useState('');
     const changeSection = (value) => {
         setSection(value)
     }
     const history = useHistory();
 
     const params = useParams();
-    let id = ''; 
-    const createMutation = useCreateAttemptTest(id);
+    let form = ''; 
+    // let assign_test_id = ''; 
+    const createMutation = useCreateAttemptTest(form);
 
-    const handleAttempt = async(id,subject_id) => {
-        console.log("test id", id)
-        await createMutation.mutate(id);
+    const handleAttempt = async(id, subject_id, assign_test_id) => {
+        // console.log(id,subject_id, assign_test_id)
+        await createMutation.mutate({id:id, assign_test_id:assign_test_id});
         history.push(`/student/student-agreement/${subject_id}/${id}`)
     }
 
@@ -122,7 +124,7 @@ export default function StudentDashboard(){
                                                 <div className="row">
                                                     {tests && tests.map((test, key)=>{
                                                         return (
-                                                            <AttemptCard test={test} fun={()=>{ handleAttempt(test._id, test.subject_id) }}/>
+                                                            <AttemptCard test={test} fun={()=>{ handleAttempt(test.unit_table_id, test.subject_id, test.assign_table_id) }}/>
                                                         )
                                                     })}
                                                 </div>

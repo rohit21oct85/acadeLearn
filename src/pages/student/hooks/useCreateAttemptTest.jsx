@@ -5,7 +5,7 @@ import axios from 'axios'
 import {apiUrl} from '../../../config/config';
 import {AuthContext} from '../../../context/AuthContext';
 
-export default function useCreateModule(id) {
+export default function useCreateModule(form) {
       const queryClient = useQueryClient()
       const {state} = useContext(AuthContext);
       const params = useParams();
@@ -24,8 +24,8 @@ export default function useCreateModule(id) {
       const school_id = localStorage.getItem('school_id');
       const user_id = localStorage.getItem('user_id')
       const name = localStorage.getItem('name')
-      return useMutation(id => {
-                  return axios.post(`${apiUrl}v1/web/attempt-test`, {id:id, user_id:user_id,class_id:class_id,subject_id:subject_id,school_id:school_id,name:name}, options)
+      return useMutation(form => {
+                  return axios.post(`${apiUrl}v1/web/attempt-test`, {id:form.id, user_id:user_id,class_id:class_id,subject_id:subject_id,school_id:school_id,name:name,assign_test_id:form.assign_test_id}, options)
             },{
             onSuccess: () => {
                 queryClient.invalidateQueries('attempt-test')

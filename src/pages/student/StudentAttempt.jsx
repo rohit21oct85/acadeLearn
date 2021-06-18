@@ -15,6 +15,7 @@ export default function StudentAttempt(){
     const location = useLocation();
 
 	const [checked, setChecked] = useState('');
+	const [counts, setCounts] = useState(0);
 
 	const [formData, setFormData] = useState('');
 	let question_id = "";
@@ -23,12 +24,23 @@ export default function StudentAttempt(){
 	}
 
 	useEffect(()=>{
-		countdown();
+		// countdown();
 	},[])
 
+	var count = 0 ;
     const {data:question, questionLoading} = useRandomQuestion();
     const {data:questions, questionsLoading} = useQuestionList();
 	const updateMutation = useUpdateAttemptTest(formData);
+
+	useEffect(()=>{
+		// countdown();
+		let count = 0;
+		// console.log(questions)
+		questions && questions.map((item,key)=>{
+			item.answer && count++
+		})
+		setCounts(count)
+	},[questions])
 
 	const saveAnswerAndNext = async () => {
 		if(formData.answer == undefined){
@@ -60,7 +72,7 @@ export default function StudentAttempt(){
 	
     return(
         <>
-            <Head/>
+            <Head/>{console.log(counts,"asdas")}
             <HeaderNav/>
             <div className="app-content content mt-5">
          <div className="content-overlay"></div>
@@ -92,12 +104,12 @@ export default function StudentAttempt(){
                                  <div className="question bg-Not-select p-2 border-bottom">
                                     <div className="d-flex flex-row justify-content-between align-items-center mcq">
                                        <h4 className="mb-0">MCQ Quiz</h4>
-                                       <span>(1 of {questions?.length})</span>
+                                       <span>{counts + ' of ' +questions?.length}</span>
                                     </div>
                                  </div>
                                  <div className="question bg-Not-select p-2 border-bottom">
                                     <div className="d-flex flex-row question-title">
-                                       <span className="text-danger q_nsekected">Q 1.</span>
+                                       <span className="text-danger q_nsekected">Q.</span>
                                        <h5 className="ml-3"><div dangerouslySetInnerHTML={{ __html: question?.question }}/></h5>
                                     </div>
                                     <div className="ans ml-2">
@@ -133,21 +145,34 @@ export default function StudentAttempt(){
                      <a className="btn job-btn">All Attempt Question</a>
                      <div className="col-md-12 Attendence_dv  msq-o">
                         <ul>
+							
 							{questions && questions.map((item, key)=>{
 								if(item.answer){
+									count++
 									return(
 										<li className="ques-attemp" key={key}>
-											<a href="#" data-toggle="tooltip" title="" data-original-title="Not Attempt">{key + 1}</a>
+											<a href="#" data-toggle="tooltip" title="" data-original-title="Not Attempt">{count}</a>
 										</li>
 									)
-								}else{
+								}
+							})}
+							{questions && questions.map((item, key)=>{
+								if(!item.answer){
+									count++
+									return(
+										<li className="" key={key}>
+											<a href="#" data-toggle="tooltip" title="" data-original-title="Attempt">{count}</a>
+										</li>
+									)
+								}
+							})}
+							{/* if(!item.answer){
 									return(
 										<li className="not-attem" key={key}>
 											<a href="#" data-toggle="tooltip" title="" data-original-title="Attempt">{key + 1}</a>
 										</li>
 									)
-								}
-							})}
+								} */}
 							{/* <li className="ques-attemp"><a href="#" data-toggle="tooltip" title="" data-original-title="Attempt">2</a></li>
 							<li className="ques-attemp"><a href="#" data-toggle="tooltip" title="" data-original-title="Attempt">3</a></li>
 							<li className="not-attem"><a href="#" data-toggle="tooltip" title="" data-original-title="Not Attempt">4</a></li>
@@ -179,9 +204,9 @@ export default function StudentAttempt(){
                     {/* <!-- <div className="info-list text-center">
                         <a className="app-ends" href="#">Application ends in 2d 7h 6m</a>
                      </div>--> */}
-                     <div className="info-list text-center">
+                     {/* <div className="info-list text-center">
                         <a href="MCQ-question-submit.php"> <button className="btn btn-primary border-success align-items-center btn-success submit-sd" type="button">Submit</button></a>
-                     </div>
+                     </div> */}
                   </div>
                </div>
                                  </div>
