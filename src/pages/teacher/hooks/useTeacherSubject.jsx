@@ -9,10 +9,10 @@ import {useParams} from 'react-router-dom'
 export default function useTeacherSubjectList() {
     const {state } = useContext(AuthContext);
     const params = useParams();
-    const key = params.school_id ? `teacher-subject-${params.school_id}` : `teacher-subject`
-    return useQuery(key, async () => {
+    const school_id = localStorage.getItem('school_id')
+    return useQuery('teacher-subject', async () => {
         if(state.access_token ){
-            const result = await axios.get(`${apiUrl}v1/web/get-teacher-subject/${state.user_id}/${params.school_id}`,{
+            const result = await axios.get(`${apiUrl}v1/web/get-teacher-subject/${state.user_id}/${school_id}`,{
                 headers: {
                     'Content-Type': 'Application/json',
                     'Authorization':'Bearer '+ state.access_token

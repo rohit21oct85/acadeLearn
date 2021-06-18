@@ -403,7 +403,9 @@ span#basic-addon2 {
 }
 .question-title h5{color:#000; font-weight:bold; margin-bottom:20px; padding-top:4px;}
 .question-title h5 img{}	
-.job-widget span{font-weight:600;}
+.job-widget span{font-weight: 600;
+    display: inline-block;
+    padding-left: 10px;}
 .ans{margin-left:0px !important;}		
 		
 span.test-end {
@@ -626,11 +628,24 @@ content:"";  z-index:-1;
 .bg_img3 { 
     height: 100%;
     width: 100%;
-    position: absolute;
+    position: absolute; 
 }
 	.bg_img3 .content-body {
     top: 50%;
     position: absolute;
     left: 50%;
     transform: translate(-50%,-50%);
-} 
+}
+.logo_details {
+    position: absolute;
+    z-index: 9;
+    width: 100%;
+    top: 0px;
+    left: 0px;
+}
+button.disabled.start_now_btn.btn.btn-warning.btn-min-width.sbmt_view_form.btn_click2.mr-1.mb-1.mt-2{
+    display: block;
+}
+button.start_now_btn.btn.btn-warning.btn-min-width.sbmt_view_form.btn_click2.mr-1.mb-1.mt-2{
+    display: block;
+}

@@ -3,16 +3,16 @@ import{useParams} from 'react-router-dom'
 import {useQuery} from 'react-query';
 import axios from 'axios';
 import {AuthContext} from '../../../context/AuthContext.jsx';
-import  {apiUrl} from '../../../config/config' 
+import  {apiUrl, authAxios} from '../../../config/config' 
 
-export default function useTestList() {
+export default function useQuestionList() {
     const {state } = useContext(AuthContext);
     const params = useParams();
-    const subject_id = params?.subject_id
-    const school_id = localStorage.getItem('school_id')
-    return useQuery(`assigned-tests-${subject_id}`, async () => {
-        if(state?.access_token && subject_id !== undefined){
-            const result = await axios.get(`${apiUrl}v1/web/get-assigned-tests/${school_id}/${params.class_id}/${subject_id}`,{
+    const school_id = localStorage.getItem('school_id');
+    const student_id = localStorage.getItem('user_id');
+    return useQuery(`question-list`, async () => {
+        if(state?.access_token){
+            const result = await authAxios.post(`${apiUrl}v1/web/get-all-questions/${params.subject_id}/${params.test_id}`,{school_id:school_id,student_id:student_id},{
                 headers: {
                     'Content-Type': 'Application/json',
                     'Authorization':'Bearer '+state.access_token

@@ -8,6 +8,7 @@ import StudentDashboard from '../pages/student/StudentDashboard'
 import TeacherDashboard from '../pages/teacher/TeacherDashboard'
 import PrincipalDashboard from '../pages/principal/PrincipalDashboard'
 import StudentAttempt from '../pages/student/StudentAttempt'
+import StudentAgreement from '../pages/student/StudentAgreement'
 import Profile from '../pages/Profile'
 
 export const operRoutes =  [
@@ -38,7 +39,11 @@ export const studentRoutes = [
         component: StudentDashboard
     },
     {
-        path:'/:user_type?/student-attempt',
+        path:'/:user_type?/student-agreement/:subject_id?/:test_id?',
+        component: StudentAgreement
+    },
+    {
+        path:'/:user_type?/student-attempt/:subject_id?/:test_id?',
         component: StudentAttempt
     },
     {
@@ -49,7 +54,7 @@ export const studentRoutes = [
 
 export const teacherRoutes = [
     {
-        path:'/:user_type?/teacher-dashboard/:school_id?/:class_id?',
+        path:'/:user_type?/teacher-dashboard/:class_id?',
         component: TeacherDashboard
     },
     {

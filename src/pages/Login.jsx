@@ -82,11 +82,10 @@ export default function Login(){
                         if(isLoggedIn){
                             dispatch({type: 'LOGIN', payload: payloadData});
                             if(user_type=== 'student'){
-                                console.log(class_id, class_name);
                                 history.push(`/student/student-dashboard/${class_id}/${class_name}`)
                             }
                             else if(user_type === 'teacher'){
-                                history.push(`/teacher/teacher-dashboard/${school_id}`)
+                                history.push(`/teacher/teacher-dashboard/`)
                             }
                             else if(user_type === 'principal'){
                                 history.push('/principal/principal-dashboard')
@@ -94,7 +93,6 @@ export default function Login(){
                         }
                     }
             }).catch(error =>{
-                console.log(error.response)
                 if(error.response && error.response.status == 401){
                     // addToast(`${response?.data?.message}`, { appearance: 'error',autoDismiss: true });
                     setErrorMessage('Unauthorized!');
@@ -107,18 +105,15 @@ export default function Login(){
 
     useEffect(checkLoggedInUser,[state]);
     async function checkLoggedInUser(){
-        console.log(state.isLoggedIn)
         if(state?.isLoggedIn == true){
-            // console.log("in if", state.isLoggedIn)
             if(state?.user_type == "student"){
                 history.push(`/student/student-dashboard/${state.class_id}/${state.class_name}`)
             }else if(state?.user_type == "teacher"){
-                history.push(`/teacher/teacher-dashboard/${state.school_id}`)
+                history.push(`/teacher/teacher-dashboard`)
             }else if(state?.user_type == "principal"){
                 history.push(`/principal/principal-dashboard`)
             }
         }else if(state?.isLoggedIn != true){
-            // console.log("in else", state.isLoggedIn)
             if(params.user_type == "student"){
                 history.push('/student/login');
             }else if(params.user_type == "teacher"){
@@ -132,7 +127,7 @@ export default function Login(){
     return(
         <>  
             <Head/>
-            <section className="top-logo1">
+            <section className="top-logo1 logo_details">
             <div className="container-fluid">
                 <div className="row">
                 <div className="col-md-12">
@@ -144,7 +139,7 @@ export default function Login(){
         {/* <!-- BEGIN: Content--> */}
         <div className="app-content content">
             <div className="content-overlay"></div>
-            <div className="content-wrapper learningschool-wrapper">
+            <div className="content-wrapper learningschool-wrapper pt-5 m-2">
                 <div className="content-header row">
                 </div>
                 <div className="content-body">

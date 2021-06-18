@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom'
+import {useHistory, useParams, useLocation} from 'react-router-dom'
 import React, { useState } from 'react';
 import Head from '../../components/common/Head'
 import Footer from '../../components/common/Footer'
@@ -11,22 +11,36 @@ import LastTestScore from '../../components/student/LastTestScore'
 import CumilativeTestScore from '../../components/student/CumilativeTestScore'
 import useClassSubjectList from '../../pages/student/hooks/useClassSubjectList'
 import useTestList from '../../pages/student/hooks/useTestList'
+import useCreateAttemptTest from '../student/hooks/useCreateAttemptTest'
 
 export default function StudentDashboard(){
     const [section, setSection] = useState('tab1');
     const changeSection = (value) => {
         setSection(value)
     }
+    const history = useHistory();
 
     const params = useParams();
-    
+    let id = ''; 
+    const createMutation = useCreateAttemptTest(id);
+
+    const handleAttempt = async(id,subject_id) => {
+        console.log("test id", id)
+        await createMutation.mutate(id);
+        history.push(`/student/student-agreement/${subject_id}/${id}`)
+    }
+
+    const handleChangeSubject = (e) => {
+        history.push(`/student/student-dashboard/${params.class_id}/${params.class_name}/${e.target.value}`)
+    }
+
     const {data:subjects, subjectLoading} = useClassSubjectList();
     const {data:tests, testLoading} = useTestList();
 
     return(
         <>
         <Head/>
-        <HeaderNav/> {console.log(tests)}
+        <HeaderNav/>
         <div className="app-content content mt-5">
             <div className="content-overlay"></div>
             <div className="content-wrapper">
@@ -54,13 +68,12 @@ export default function StudentDashboard(){
                         <form className="form">
                             <div className="form-body">
                                 <div className="row">
-                                {console.log(subjects)}
                                 <div className="form-group col-md-4 mb-0 ml-auto"> 
-                                    <select className="form-control">
+                                    <select className="form-control" onChange={handleChangeSubject} value={params.subject_id ? params.subject_id : 999}>
                                         <option value="999">--Select Subject-- </option>
                                         {subjects && subjects.map((subject, key)=>{
                                             return (
-                                                <option value={subject._id} key={key}>{subject.subject_name} </option>
+                                                <option value={subject.subject_id} key={key}>{subject.subject_name} </option>
                                             )
                                         })}
                                     </select>
@@ -107,7 +120,11 @@ export default function StudentDashboard(){
                                                     </div>
                                                 </div>
                                                 <div className="row">
-                                                    <AttemptCard />
+                                                    {tests && tests.map((test, key)=>{
+                                                        return (
+                                                            <AttemptCard test={test} fun={()=>{ handleAttempt(test._id, test.subject_id) }}/>
+                                                        )
+                                                    })}
                                                 </div>
                                             </div>
                                         </div>

@@ -4,14 +4,19 @@ import Footer from '../../components/common/Footer'
 import Foot from '../../components/common/Foot'
 import HeaderNav from '../../components/common/HeaderNav'
 import { Link } from 'react-router-dom'
-import {useState, useEffect} from 'react'
+import {useState, useEffect, useContext} from 'react'
 import AssignmentCard  from "../../components/teacher/AssignmentCard";
 import useClassList from '../../pages/teacher/hooks/useClassList'
 import useTeacherSubject from '../../pages/teacher/hooks/useTeacherSubject'
 import useUnitTestList from '../../pages/teacher/hooks/useUnitTestList'
+import { apiUrl, authAxios } from '../../config/config'
+import {AuthContext} from '../../context/AuthContext'
+import useUpdateUnitTestList from '../../pages/teacher/hooks/useUpdateUnitTestList'
 
 export default function TeacherDashboard(){
     const [section, setSection] = useState('tab1');
+
+	const { state } = useContext(AuthContext);
 
     const changeSection = (value) => {
         setSection(value)
@@ -23,9 +28,19 @@ export default function TeacherDashboard(){
     const {data:teacherSubject, teacherSubjectLoading} = useTeacherSubject();
     const {data:unitTests, unitTestLoading} = useUnitTestList();
 
-    const handleChange = (e) => {
-      history.push(`/teacher/teacher-dashboard/${params.school_id}/${e.target.value}`)
+   const handleChange = (e) => {
+      if(e.target.value!=999){
+         history.push(`/teacher/teacher-dashboard/${e.target.value}`)
+      }
+   }
+   
+	let id = '';
+	const updateMutation = useUpdateUnitTestList(id);
+
+    const updateAssignment = async (id) => {
+		await updateMutation.mutate(id);
     }
+
     return(
         <>
         <Head/>
@@ -116,12 +131,11 @@ export default function TeacherDashboard(){
                                                             </div>
                                                          </form>
                                                          </div>
-                                                         </div>{console.log(unitTests)}
+                                                         </div>
                                        <div className="row">
                                           {unitTests && unitTests.map(test =>{
                                              return(<>
-                                                {/* {console.log("item", test)} */}
-                                                <AssignmentCard test={test}/>
+                                                <AssignmentCard test={test} fun={()=>updateAssignment(test.assign_table_id)}/>
                                              </>)
                                           })}
                                        </div>
