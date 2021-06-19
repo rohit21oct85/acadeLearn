@@ -28,10 +28,12 @@ export default function useUpdateAttemptTest(formData) {
       return useMutation(formData => {
                   return axios.patch(`${apiUrl}v1/web/save-answer/${params.subject_id}/${params.test_id}`,{school_id:school_id,student_id:student_id, question_id:formData.question_id, answer:formData.answer,option:formData.option}, options)
             },{
-            onSuccess: () => {
+            onSuccess: (data) => {
                   queryClient.invalidateQueries('single-question')
                   queryClient.invalidateQueries('question-list')
-                //   history.push('/admin/app-module');
+                  //history.push('/admin/app-module');
+                  console.log(data.data)
+                  return data.data
             },
             onError: () => {
             },

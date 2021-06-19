@@ -47,10 +47,18 @@ export default function StudentAttempt(){
 			alert('select an answer')
 			return;
 		}
-		await updateMutation.mutate(formData);
+		const d = await updateMutation.mutate(formData);
+		console.log(d)
+		
 		var ele = document.getElementsByName("option");
+		setFormData({})
 		for(var i=0;i<ele.length;i++)
 			ele[i].checked = false;
+		console.log(counts, questions?.length-1);
+		if(counts == questions?.length-1){
+			history.push(`/student/student-result/${params.subject_id}/${params.test_id}`);
+      	}
+
 	}
 
 	function countdown() {
@@ -72,7 +80,7 @@ export default function StudentAttempt(){
 	
     return(
         <>
-            <Head/>{console.log(counts,"asdas")}
+            <Head/>
             <HeaderNav/>
             <div className="app-content content mt-5">
          <div className="content-overlay"></div>
@@ -130,8 +138,8 @@ export default function StudentAttempt(){
                                  </div>
                                  <div className="p-2 bg-Not-select">
                                  <div className="row"> 
-                                 <div className="col-md-12 text-right"> 
-                                 <button className="btn nextqus_btn" type="button" onClick={()=>{saveAnswerAndNext(question?._id)}}>Next<i className="fa fa-angle-right ml-2"></i></button></div></div>
+                                 <div className="col-md-12 text-right">
+                                 <button className="btn nextqus_btn" type="button" onClick={()=>{saveAnswerAndNext(question?._id)}}>{counts == questions?.length-1 ? "Submit" : "Next"}<i className="fa fa-angle-right ml-2"></i></button></div></div>
                               </div>
                               </div>
                            </div>
