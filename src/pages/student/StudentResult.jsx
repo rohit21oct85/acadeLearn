@@ -4,11 +4,15 @@ import Footer from '../../components/common/Footer'
 import Foot from '../../components/common/Foot'
 import {useParams, Link} from 'react-router-dom'
 import useFetchResult from './hooks/useFetchResults'
+import { useEffect } from 'react'
 
 export default function StudentResult(){
     const params  = useParams();
     const {data: result, resultLoading} = useFetchResult();
 
+    useEffect(()=>{
+        localStorage.removeItem('COUNTER');
+    },[])
     return(
         <>
         <Head/>

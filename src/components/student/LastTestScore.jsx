@@ -19,7 +19,7 @@ export default function LastTestScore({score, fun}){
                             </div>
                             <div className="order-details">
                                 <h4 className="my-0">Total Time Taken</h4>
-                                <p className="text-muted">1 hr 30 min(static values yet to b done) </p>
+                                <p className="text-muted">{new Date(score?.time_taken * 1000)?.toISOString()?.substr(11, 8)}</p>
                             </div>
                             <div className="order-details">
                                 <a href="#" className="btn btn-outline-info mr-1" onClick={()=>fun(score._id)}><i className="fa fa-eye"></i> View full result</a>

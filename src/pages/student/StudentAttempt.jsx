@@ -58,12 +58,11 @@ export default function StudentAttempt(){
 		if(foo){
 			history.push(`/student/student-attempt/${params.class_id}/${params.class_name}/${params.subject_id}/${params.test_id}`);
 		}
-
+		
 		if(formData.answer == undefined){
 			alert('select an answer')
 			return;
 		}
-		localStorage.setItem('COUNTER',0);
 		await attempt.mutate(formData,{
 			onSuccess: (data, variables, context) => {
 				if(data?.data){
