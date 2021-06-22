@@ -9,10 +9,6 @@ export default function useCreateModule(form) {
       const queryClient = useQueryClient()
       const {state} = useContext(AuthContext);
       const params = useParams();
-      const location = useLocation();
-    //   const path = `/student/student-agreement/${id}`
-      const history = useHistory();
-      
       const options = {
             headers: {
                   'Content-Type': 'Application/json',

@@ -33,5 +33,5 @@ export default function useUnitTestList() {
                 return result.data.data; 
             }   
         }
-    });
+    },{enabled:!!subject_id});
 }

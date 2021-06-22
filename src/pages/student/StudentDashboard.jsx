@@ -4,14 +4,13 @@ import Head from '../../components/common/Head'
 import Footer from '../../components/common/Footer'
 import Foot from '../../components/common/Foot'
 import HeaderNav from '../../components/common/HeaderNav'
-import { Link } from 'react-router-dom'
-import { AuthContext } from '../../context/AuthContext';
 import AttemptCard from '../../components/student/AttemptCard'
 import LastTestScore from '../../components/student/LastTestScore'
 import CumilativeTestScore from '../../components/student/CumilativeTestScore'
 import useClassSubjectList from '../../pages/student/hooks/useClassSubjectList'
 import useTestList from '../../pages/student/hooks/useTestList'
 import useCreateAttemptTest from '../student/hooks/useCreateAttemptTest'
+import useLastTestScore from '../student/hooks/useLastTestScore'
 
 export default function StudentDashboard(){
     const [section, setSection] = useState('tab1');
@@ -27,18 +26,24 @@ export default function StudentDashboard(){
     const createMutation = useCreateAttemptTest(form);
 
     const handleAttempt = async(id, subject_id, assign_test_id) => {
-        // console.log(id,subject_id, assign_test_id)
         await createMutation.mutate({id:id, assign_test_id:assign_test_id});
-        history.push(`/student/student-agreement/${subject_id}/${id}`)
+        history.push(`/student/student-agreement/${params.class_id}/${params.class_name}/${subject_id}/${id}`)
     }
 
     const handleChangeSubject = (e) => {
-        history.push(`/student/student-dashboard/${params.class_id}/${params.class_name}/${e.target.value}`)
+        if(e.target.value != 999 ){
+            history.push(`/student/student-dashboard/${params.class_id}/${params.class_name}/${e.target.value}`)
+        }
+    }
+
+    const handleClick = (e) => {
+        history.push(`/student/student-last-report/${params.class_id}/${params.class_name}/${params.subject_id}/${e}`)
     }
 
     const {data:subjects, subjectLoading} = useClassSubjectList();
     const {data:tests, testLoading} = useTestList();
-
+    const {data:lastScore, lastScoreLoading} = useLastTestScore();
+    
     return(
         <>
         <Head/>
@@ -80,9 +85,9 @@ export default function StudentDashboard(){
                                         })}
                                     </select>
                                 </div>
-                                <div className="form-group col-md-3 mb-0"> 
+                                {/* <div className="form-group col-md-3 mb-0"> 
                                     <button type="button" className="btn btn-warning btn-min-width sbmt_view_form btn_click2 mr-1 mb-1 mt-0">Search</button> 
-                                </div>
+                                </div> */}
                                 </div>
                             </div>
                         </form>
@@ -137,7 +142,7 @@ export default function StudentDashboard(){
                                                 </div>
                                             </div>
                                             <div className="row">
-                                                <LastTestScore/>
+                                                {lastScore && <LastTestScore score={lastScore} fun={handleClick}/>}
                                             </div>
                                         </div>
                                         <div className={section == "tab3" ? "tab-pane active" : 'tab-pane'} aria-labelledby="base-tab43">

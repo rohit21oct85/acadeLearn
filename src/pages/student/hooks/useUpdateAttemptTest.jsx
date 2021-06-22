@@ -32,7 +32,6 @@ export default function useUpdateAttemptTest(formData) {
                   queryClient.invalidateQueries('single-question')
                   queryClient.invalidateQueries('question-list')
                   //history.push('/admin/app-module');
-                  console.log(data.data)
                   return data.data
             },
             onError: () => {

@@ -16,6 +16,7 @@ export default function StudentAttempt(){
 
 	const [checked, setChecked] = useState('');
 	const [counts, setCounts] = useState(0);
+	const [attemptId, setAttemptId] = useState();
 
 	const [formData, setFormData] = useState('');
 	let question_id = "";
@@ -24,55 +25,93 @@ export default function StudentAttempt(){
 	}
 
 	useEffect(()=>{
-		// countdown();
-	},[])
+		let search = window.location.search;
+		let query = new URLSearchParams(search);
+		let foo = query.get('query');
+		if(foo){
+			localStorage.removeItem('COUNTER');
+			history.push(`/student/student-attempt/${params.class_id}/${params.class_name}/${params.subject_id}/${params.test_id}`);
+		}
+		timer()
+	},[attemptId])
 
 	var count = 0 ;
-    const {data:question, questionLoading} = useRandomQuestion();
-    const {data:questions, questionsLoading} = useQuestionList();
-	const updateMutation = useUpdateAttemptTest(formData);
+	const {data: question, questionLoading} = useRandomQuestion();
+	const {data: questions, questionsLoading} = useQuestionList();
+	const attempt = useUpdateAttemptTest(formData);
+	// const updateMutation = useUpdateAttemptTest(formData);
 
 	useEffect(()=>{
 		// countdown();
 		let count = 0;
-		// console.log(questions)
-		questions && questions.map((item,key)=>{
+
+      	questions && questions.map((item,key) => {
 			item.answer && count++
 		})
 		setCounts(count)
 	},[questions])
 
 	const saveAnswerAndNext = async () => {
+		let search = window.location.search;
+		let query = new URLSearchParams(search);
+		let foo = query.get('query');
+		if(foo){
+			history.push(`/student/student-attempt/${params.class_id}/${params.class_name}/${params.subject_id}/${params.test_id}`);
+		}
+
 		if(formData.answer == undefined){
 			alert('select an answer')
 			return;
 		}
-		const d = await updateMutation.mutate(formData);
-		console.log(d)
-		
+		localStorage.setItem('COUNTER',0);
+		await attempt.mutate(formData,{
+			onSuccess: (data, variables, context) => {
+				if(data?.data){
+					setAttemptId(data?.data?.attemptId)
+				}
+			},
+		});
+
 		var ele = document.getElementsByName("option");
 		setFormData({})
 		for(var i=0;i<ele.length;i++)
 			ele[i].checked = false;
-		console.log(counts, questions?.length-1);
 		if(counts == questions?.length-1){
-			history.push(`/student/student-result/${params.subject_id}/${params.test_id}`);
+			history.push(`/student/student-result/${params.class_id}/${params.class_name}/${params.subject_id}/${params.test_id}/${attemptId}`);
       	}
-
 	}
 
-	function countdown() {
-		var seconds = 60;
+	// function countdown() {
+	// 	var seconds = 60;
+	// 	function tick() {
+	// 		var counter = document.getElementById("timer");
+	// 		seconds--;
+	// 		if(counter){
+	// 			counter.innerHTML = "0:" + (seconds < 10 ? "0" : "") + String(seconds);
+	// 			if( seconds > 0 ) {
+	// 				setTimeout(tick, 1000);
+	// 			} else {
+	// 				alert("Game over");
+	// 			}
+	// 		}
+	// 	}
+	// 	tick();
+	// }
+
+	function timer() {
+		const time = localStorage.getItem('COUNTER');
+		var sec = time != 0 && time != undefined && time != null ? time : 0;
 		function tick() {
 			var counter = document.getElementById("timer");
-			seconds--;
+			sec++;
+			localStorage.setItem('COUNTER', sec);
 			if(counter){
-				counter.innerHTML = "0:" + (seconds < 10 ? "0" : "") + String(seconds);
-				if( seconds > 0 ) {
+				counter.innerHTML = "0:" + (sec < 10 ? "0" : "") + String(sec);
+				// if( sec > 0 ) {
 					setTimeout(tick, 1000);
-				} else {
-					alert("Game over");
-				}
+				// } else {
+					// alert("Game over");
+				// }
 			}
 		}
 		tick();
@@ -115,7 +154,7 @@ export default function StudentAttempt(){
                                        <span>{counts + ' of ' +questions?.length}</span>
                                     </div>
                                  </div>
-                                 <div className="question bg-Not-select p-2 border-bottom">
+                                 {questionLoading ? <span>loading. ..</span> : <div className="question bg-Not-select p-2 border-bottom">
                                     <div className="d-flex flex-row question-title">
                                        <span className="text-danger q_nsekected">Q.</span>
                                        <h5 className="ml-3"><div dangerouslySetInnerHTML={{ __html: question?.question }}/></h5>
@@ -135,11 +174,11 @@ export default function StudentAttempt(){
                                        <label className="radio"> <input type="radio" name="option" value={question?.option_d} onChange={(e)=>{set(e,"option_d",question?._id)}}/> <span><div dangerouslySetInnerHTML={{ __html: question?.option_d }}/></span>
                                        </label>
                                     </div>
-                                 </div>
+                                 </div>}
                                  <div className="p-2 bg-Not-select">
                                  <div className="row"> 
                                  <div className="col-md-12 text-right">
-                                 <button className="btn nextqus_btn" type="button" onClick={()=>{saveAnswerAndNext(question?._id)}}>{counts == questions?.length-1 ? "Submit" : "Next"}<i className="fa fa-angle-right ml-2"></i></button></div></div>
+                                 <button className="btn nextqus_btn" type="button" onClick={()=>{saveAnswerAndNext(question?._id)}}>{!questionLoading ? counts == questions?.length-1 ? "Submit" : "Next" : "loading. .."}<i className="fa fa-angle-right ml-2"></i></button></div></div>
                               </div>
                               </div>
                            </div>

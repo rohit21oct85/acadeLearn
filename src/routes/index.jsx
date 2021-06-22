@@ -10,6 +10,7 @@ import PrincipalDashboard from '../pages/principal/PrincipalDashboard'
 import StudentAttempt from '../pages/student/StudentAttempt'
 import StudentAgreement from '../pages/student/StudentAgreement'
 import StudentResult from '../pages/student/StudentResult'
+import StudentLastTestScoreReport from '../pages/student/StudentLastTestScoreReport'
 import Profile from '../pages/Profile'
 
 export const operRoutes =  [
@@ -40,16 +41,20 @@ export const studentRoutes = [
         component: StudentDashboard
     },
     {
-        path:'/:user_type?/student-agreement/:subject_id?/:test_id?',
+        path:'/:user_type?/student-agreement/:class_id?/:class_name?/:subject_id?/:test_id?',
         component: StudentAgreement
     },
     {
-        path:'/:user_type?/student-attempt/:subject_id?/:test_id?',
+        path:'/:user_type?/student-attempt/:class_id?/:class_name?/:subject_id?/:test_id?',
         component: StudentAttempt
     },
     {
-        path:'/:user_type?/student-result/:subject_id?/:test_id?',
+        path:'/:user_type?/student-result/:class_id?/:class_name?/:subject_id?/:test_id?/:attempt_id?',
         component: StudentResult
+    },
+    {
+        path:'/:user_type?/student-last-report/:class_id?/:class_name?/:subject_id?/:attempt_id?',
+        component: StudentLastTestScoreReport
     },
     {
         path:'/:user_type?/profile',

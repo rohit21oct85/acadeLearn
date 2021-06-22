@@ -9,7 +9,7 @@ export default function AttemptCard({test, key, fun}){
                             <a href="#" className="btn"><b>Test Name: </b>{test?.test_name}</a>
                         </div>
                         <div className="float-right">
-                            <a href="#" className="btn btn-info">{test?.test_date?.substring(10,0)}</a>
+                            <a href="#" className="">{test?.test_date?.substring(10,0)}</a>
                         </div>
                         
                     </div>
@@ -18,7 +18,7 @@ export default function AttemptCard({test, key, fun}){
                             <div className="row">
                                 <div className="col-md-6">
                                     <ul>
-                                    <li><a href="#">live</a></li>
+                                    {/* <li><a href="#">live</a></li> */}
                                     <li><i className="fa fa-clock"></i>{test?.test_duration} MIN {test?.subject_name}</li>
                                     </ul>
                                 </div>

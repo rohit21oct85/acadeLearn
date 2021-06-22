@@ -1,11 +1,11 @@
-export default function LastTestScore(){
+export default function LastTestScore({score, fun}){
     return(
         <>
             <div className="col-md-6">
                 <div className="card pull-up attempt_text">
                     <div className="card-header">
                         <div className="float-left">
-                        <a href="#" className="btn btn-info">07 May, 2021</a>
+                        <a href="#" className="">{score?.create_at?.substr(0,10)}</a>
                         </div>
                         <div className="float-right">
                         </div>
@@ -15,14 +15,14 @@ export default function LastTestScore(){
                         <div className="d-flex justify-content-between lh-condensed">
                             <div className="order-details">
                                 <h4 className="my-0">Total Score </h4>
-                                <p>0/72</p>
+                                <p>{score?.correctAnswers}/{score?.totalQuestions}</p>
                             </div>
                             <div className="order-details">
                                 <h4 className="my-0">Total Time Taken</h4>
-                                <p className="text-muted">1 hr 30 min </p>
+                                <p className="text-muted">1 hr 30 min(static values yet to b done) </p>
                             </div>
                             <div className="order-details">
-                                <a href="#" className="btn btn-outline-info mr-1"><i className="fa fa-eye"></i> View full result</a>
+                                <a href="#" className="btn btn-outline-info mr-1" onClick={()=>fun(score._id)}><i className="fa fa-eye"></i> View full result</a>
                             </div>
                         </div>
                         </div>

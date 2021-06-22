@@ -37,8 +37,13 @@ export default function TeacherDashboard(){
 	let id = '';
 	const updateMutation = useUpdateUnitTestList(id);
 
-    const updateAssignment = async (id) => {
-		await updateMutation.mutate(id);
+    const updateAssignment = async (id, date) => {
+		var today = new Date();
+		if(today.toISOString().substring(0, 10) == date.substr(0,10)){
+			await updateMutation.mutate(id);
+		}else{
+			alert(`Tests can only be assigned on the same date of the test, Test Date: ${date.substr(0,10)}`);
+		}
     }
 
     return(
@@ -135,7 +140,7 @@ export default function TeacherDashboard(){
                                        <div className="row">
                                           {unitTests && unitTests.map(test =>{
                                              return(<>
-                                                <AssignmentCard test={test} fun={()=>updateAssignment(test.assign_table_id)}/>
+                                                <AssignmentCard test={test} fun={()=>updateAssignment(test.assign_table_id, test.test_date)}/>
                                              </>)
                                           })}
                                        </div>
