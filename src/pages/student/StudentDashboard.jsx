@@ -11,6 +11,7 @@ import useClassSubjectList from '../../pages/student/hooks/useClassSubjectList'
 import useTestList from '../../pages/student/hooks/useTestList'
 import useCreateAttemptTest from '../student/hooks/useCreateAttemptTest'
 import useLastTestScore from '../student/hooks/useLastTestScore'
+import useCumulativeScore from '../student/hooks/useCumulativeScore'
 
 export default function StudentDashboard(){
     const [section, setSection] = useState('tab1');
@@ -36,13 +37,14 @@ export default function StudentDashboard(){
         }
     }
 
-    const handleClick = (e) => {
-        history.push(`/student/student-last-report/${params.class_id}/${params.class_name}/${params.subject_id}/${e}`)
+    const handleClick = (attempt_id,t) => {
+        history.push(`/student/student-result/${params.class_id}/${params.class_name}/${params.subject_id}/${t}/${attempt_id}`)
     }
 
     const {data:subjects, subjectLoading} = useClassSubjectList();
     const {data:tests, testLoading} = useTestList();
     const {data:lastScore, lastScoreLoading} = useLastTestScore();
+    const {data:cumulativeScore, cumulativeScoreLoading} = useCumulativeScore();
     
     return(
         <>
@@ -151,9 +153,9 @@ export default function StudentDashboard(){
                                                 <h4 className="mb-0"><strong> Cumulative Test Score  </strong></h4>
                                             </div>
                                             </div>
-                                            <div className="row">
-                                                <CumilativeTestScore/>
-                                            </div>
+                                            {/* <div className="row"> */}
+                                            {cumulativeScore && <CumilativeTestScore score={cumulativeScore}/>}
+                                            {/* </div> */}
                                         </div>
                                     </div>
                                 </div>

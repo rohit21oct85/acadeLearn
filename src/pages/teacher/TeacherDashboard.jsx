@@ -7,11 +7,15 @@ import { Link } from 'react-router-dom'
 import {useState, useEffect, useContext} from 'react'
 import AssignmentCard  from "../../components/teacher/AssignmentCard";
 import useClassList from '../../pages/teacher/hooks/useClassList'
-import useTeacherSubject from '../../pages/teacher/hooks/useTeacherSubject'
+// import useTeacherSubject from '../../pages/teacher/hooks/useTeacherSubject'
 import useUnitTestList from '../../pages/teacher/hooks/useUnitTestList'
+import useStudentWiseReport from '../../pages/teacher/hooks/useStudentWiseReport'
 import { apiUrl, authAxios } from '../../config/config'
 import {AuthContext} from '../../context/AuthContext'
 import useUpdateUnitTestList from '../../pages/teacher/hooks/useUpdateUnitTestList'
+import useAssignedTestReport from '../../pages/teacher/hooks/useAssignedTestReport'
+import useSingleStudentTestReport from '../../pages/teacher/hooks/useSingleStudentTestReport'
+import CumilativeStudent from '../../components/teacher/CumulativeStudent'
 
 export default function TeacherDashboard(){
     const [section, setSection] = useState('tab1');
@@ -25,15 +29,25 @@ export default function TeacherDashboard(){
     const history = useHistory();
 
     const {data:classes, classLoading} = useClassList();
-    const {data:teacherSubject, teacherSubjectLoading} = useTeacherSubject();
+   //  const {data:teacherSubject, teacherSubjectLoading} = useTeacherSubject();
     const {data:unitTests, unitTestLoading} = useUnitTestList();
+    const {data:studentWiseReport, studentWiseReportLoading} = useStudentWiseReport();
+    const {data:assignedTests, assignedTestsLoading} = useAssignedTestReport();
+    const {data:singleStudentTests, singleStudentTestsLoading} = useSingleStudentTestReport();
+
 
    const handleChange = (e) => {
-      if(e.target.value!=999){
+      if(e.target.value != 999){
          history.push(`/teacher/teacher-dashboard/${e.target.value}`)
       }
    }
    
+   const handleChangeTest = (e) => {
+      if(e.target.value != 999){
+         history.push(`/teacher/teacher-dashboard/${params.class_id}/${e.target.value}`)
+      }
+   }
+
 	let id = '';
 	const updateMutation = useUpdateUnitTestList(id);
 
@@ -95,7 +109,7 @@ export default function TeacherDashboard(){
                                        <a className={section == "tab3" ? "nav-link active" : 'nav-link'} id="base-tab3" data-toggle="tab" aria-controls="tab3" href="#tab3" aria-expanded="false" onClick={()=>{changeSection('tab3')}}>Subject-wise Reports  </a>
                                     </li>
                                     <li className="nav-item">
-                                       <a className={section == "tab4" ? "nav-link active" : 'nav-link'} id="base-tab4" data-toggle="tab" aria-controls="tab4" href="#tab4" aria-expanded="false" onClick={()=>{changeSection('tab4')}}>ClassName-wise Reports  </a>
+                                       <a className={section == "tab4" ? "nav-link active" : 'nav-link'} id="base-tab4" data-toggle="tab" aria-controls="tab4" href="#tab4" aria-expanded="false" onClick={()=>{changeSection('tab4')}}>Class-wise Reports  </a>
                                     </li>
                                  </ul>
                                  <div className="tab-content px-1 pt-1">
@@ -129,9 +143,9 @@ export default function TeacherDashboard(){
                                                                         <option value="">Biology </option>
                                                                      </select>
                                                                   </div> */}
-                                                                  <div className="form-group col-md-3 mb-0">
+                                                                  {/* <div className="form-group col-md-3 mb-0">
                                                                      <button type="button" className="btn btn-warning btn-min-width sbmt_view_form btn_click2 mr-1 mb-1 mt-0">Search</button>
-                                                                  </div>
+                                                                  </div> */}
                                                                </div>
                                                             </div>
                                                          </form>
@@ -158,7 +172,7 @@ export default function TeacherDashboard(){
                                                                <div className="row">
                                                                   <div className="form-group col-md-3 mb-2">
                                                                      {/* <!-- <label className="">Select ClassName </label>--> */}
-                                                                     <select className="form-control">
+                                                                     <select className="form-control"  onChange={handleChange} value={params.class_id ? params.class_id : 999}>
                                                                         <option value="999">--Select ClassName-- </option>
                                                                         {classes && classes.map((item,key)=>{
                                                                            return(
@@ -169,199 +183,58 @@ export default function TeacherDashboard(){
                                                                   </div>
                                                                   <div className="form-group col-md-2 mb-2">
                                                                      {/* <!-- <label className="">Select Section </label>--> */}
-                                                                     <select className="form-control">
-                                                                        <option value="">--Select Section-- </option>
-                                                                        <option value="">ClassName 6th A</option>
-                                                                        <option value="">ClassName 6th B</option>
-                                                                        <option value="">ClassName 6th C</option>
-                                                                        <option value="">ClassName 6th D</option>
+                                                                     <select className="form-control" onChange={handleChangeTest} value={params.test_id ? params.test_id : 999}>
+                                                                        <option value="999">--Select Section-- </option>
+                                                                        {assignedTests && assignedTests.map((item,key)=>{
+                                                                           return(
+                                                                              <option value={item.test_id} key={key}>{"Test "+(key + 1)}</option>
+                                                                           )
+                                                                        })}
                                                                      </select>
                                                                   </div>
-                                                                  <div className="form-group col-md-3 mb-2">
-                                                                     {/* <!--  <label className="" >Select Subject  </label>--> */}
-                                                                     <select className="form-control">
-                                                                        <option value="">--Select Subject-- </option>
-                                                                        <option value="">Science </option>
-                                                                        <option value="">Mathematics </option>
-                                                                        <option value="">Social Science </option>
-                                                                        <option value="">Physics</option>
-                                                                        <option value="">Chemistry</option>
-                                                                        <option value="">Biology </option>
-                                                                     </select>
-                                                                  </div>
-                                                                  <div className="form-group col-md-3 mb-2">
+                                                                  
+                                                                  {/* <div className="form-group col-md-3 mb-2">
                                                                      <button type="button" className="btn btn-warning btn-min-width sbmt_view_form btn_click1 mr-1 mb-1 mt-0">Search</button>
-                                                                  </div>
+                                                                  </div> */}
                                                                </div>
                                                             </div>
                                                          </form>
                                                       </div>
                                                    </div>
                                                 </div>
-                                                <div className="table-responsive mt-2 thr_lbl_show" style={{display:"none"}}>
+                                                <div className="table-responsive mt-2 thr_lbl_show">
                                                    <table className="table table-striped table-bordered zero-configuration">
                                                       <thead>
                                                          <tr>
                                                                <th>Student Name </th>
-                                                               <th>Subject </th>
-                                                               <th>Last Test Performance</th>
+                                                               <th>Time Taken</th>
+                                                               <th>Marks</th>
                                                                <th>Cumulative Test Performance</th>
+                                                               <th>Action</th>
                                                          </tr>
                                                       </thead>
                                                       <tbody>
-                                                         <tr>
-                                                               <td className="text-truncate">
-                                                                  <span className="avatar avatar-xs">
-                                                                  <img className="box-shadow-2" src="/images/portrait/small/avatar-s-4.png" alt="avatar"/>
-                                                                  </span> <span>Rachna Thitte</span>
-                                                               </td>
-                                                               <td>Science   </td>
-                                                               <td> 65%   </td>
-                                                               <td>35% </td>
-                                                         </tr>
-                                                         <tr>
-                                                               <td className="text-truncate">
-                                                                  <span className="avatar avatar-xs">
-                                                                  <img className="box-shadow-2" src="/images/portrait/small/avatar-s-5.png" alt="avatar"/>
-                                                                  </span> <span>Pankaj Mittal</span>
-                                                               </td>
-                                                               <td>Science   </td>
-                                                               <td> 20%    </td>
-                                                               <td>45%   </td>
-                                                         </tr>
-                                                         <tr>
-                                                               <td className="text-truncate">
-                                                                  <span className="avatar avatar-xs">
-                                                                  <img className="box-shadow-2" src="/images/portrait/small/avatar-s-9.png" alt="avatar"/>
-                                                                  </span> <span>Amar Kaushik</span>
-                                                               </td>
-                                                               <td>Science   </td>
-                                                               <td> 30%      </td>
-                                                               <td>70%   </td>
-                                                         </tr>
-                                                         <tr>
-                                                               <td className="text-truncate">
-                                                                  <span className="avatar avatar-xs">
-                                                                  <img className="box-shadow-2" src="/images/portrait/small/avatar-s-4.png" alt="avatar"/>
-                                                                  </span> <span>Rachna Thitte</span>
-                                                               </td>
-                                                               <td>Science   </td>
-                                                               <td> 65%   </td>
-                                                               <td>35% </td>
-                                                         </tr>
-                                                         <tr>
-                                                               <td className="text-truncate">
-                                                                  <span className="avatar avatar-xs">
-                                                                  <img className="box-shadow-2" src="/images/portrait/small/avatar-s-5.png" alt="avatar"/>
-                                                                  </span> <span>Pankaj Mittal</span>
-                                                               </td>
-                                                               <td>Science   </td>
-                                                               <td> 20%    </td>
-                                                               <td>45%   </td>
-                                                         </tr>
-                                                         <tr>
-                                                               <td className="text-truncate">
-                                                                  <span className="avatar avatar-xs">
-                                                                  <img className="box-shadow-2" src="/images/portrait/small/avatar-s-9.png" alt="avatar"/>
-                                                                  </span> <span>Amar Kaushik</span>
-                                                               </td>
-                                                               <td>Science   </td>
-                                                               <td> 30%      </td>
-                                                               <td>70%   </td>
-                                                         </tr>
-                                                         <tr>
-                                                               <td className="text-truncate">
-                                                                  <span className="avatar avatar-xs">
-                                                                  <img className="box-shadow-2" src="/images/portrait/small/avatar-s-4.png" alt="avatar"/>
-                                                                  </span> <span>Rachna Thitte</span>
-                                                               </td>
-                                                               <td>Science   </td>
-                                                               <td> 65%   </td>
-                                                               <td>35% </td>
-                                                         </tr>
-                                                         <tr>
-                                                               <td className="text-truncate">
-                                                                  <span className="avatar avatar-xs">
-                                                                  <img className="box-shadow-2" src="/images/portrait/small/avatar-s-5.png" alt="avatar"/>
-                                                                  </span> <span>Pankaj Mittal</span>
-                                                               </td>
-                                                               <td>Science   </td>
-                                                               <td> 20%    </td>
-                                                               <td>45%   </td>
-                                                         </tr>
-                                                         <tr>
-                                                               <td className="text-truncate">
-                                                                  <span className="avatar avatar-xs">
-                                                                  <img className="box-shadow-2" src="/images/portrait/small/avatar-s-9.png" alt="avatar"/>
-                                                                  </span> <span>Amar Kaushik</span>
-                                                               </td>
-                                                               <td>Science   </td>
-                                                               <td> 30%      </td>
-                                                               <td>70%   </td>
-                                                         </tr>
-                                                         <tr>
-                                                               <td className="text-truncate">
-                                                                  <span className="avatar avatar-xs">
-                                                                  <img className="box-shadow-2" src="/images/portrait/small/avatar-s-4.png" alt="avatar"/>
-                                                                  </span> <span>Rachna Thitte</span>
-                                                               </td>
-                                                               <td>Science   </td>
-                                                               <td> 65%   </td>
-                                                               <td>35% </td>
-                                                         </tr>
-                                                         <tr>
-                                                               <td className="text-truncate">
-                                                                  <span className="avatar avatar-xs">
-                                                                  <img className="box-shadow-2" src="/images/portrait/small/avatar-s-5.png" alt="avatar"/>
-                                                                  </span> <span>Pankaj Mittal</span>
-                                                               </td>
-                                                               <td>Science   </td>
-                                                               <td> 20%    </td>
-                                                               <td>45%   </td>
-                                                         </tr>
-                                                         <tr>
-                                                               <td className="text-truncate">
-                                                                  <span className="avatar avatar-xs">
-                                                                  <img className="box-shadow-2" src="/images/portrait/small/avatar-s-9.png" alt="avatar"/>
-                                                                  </span> <span>Amar Kaushik</span>
-                                                               </td>
-                                                               <td>Science   </td>
-                                                               <td> 30%      </td>
-                                                               <td>70%   </td>
-                                                         </tr>
-                                                         <tr>
-                                                               <td className="text-truncate">
-                                                                  <span className="avatar avatar-xs">
-                                                                  <img className="box-shadow-2" src="/images/portrait/small/avatar-s-4.png" alt="avatar"/>
-                                                                  </span> <span>Rachna Thitte</span>
-                                                               </td>
-                                                               <td>Science   </td>
-                                                               <td> 65%   </td>
-                                                               <td>35% </td>
-                                                         </tr>
-                                                         <tr>
-                                                               <td className="text-truncate">
-                                                                  <span className="avatar avatar-xs">
-                                                                  <img className="box-shadow-2" src="/images/portrait/small/avatar-s-5.png" alt="avatar"/>
-                                                                  </span> <span>Pankaj Mittal</span>
-                                                               </td>
-                                                               <td>Science   </td>
-                                                               <td> 20%    </td>
-                                                               <td>45%   </td>
-                                                         </tr>
-                                                         <tr>
-                                                               <td className="text-truncate">
-                                                                  <span className="avatar avatar-xs">
-                                                                  <img className="box-shadow-2" src="/images/portrait/small/avatar-s-9.png" alt="avatar"/>
-                                                                  </span> <span>Amar Kaushik</span>
-                                                               </td>
-                                                               <td>Science   </td>
-                                                               <td> 30%      </td>
-                                                               <td>70%   </td>
-                                                         </tr>
-                                                      </tbody>
+                                                         {studentWiseReport && studentWiseReport.map((item,key)=>{
+                                                               return(
+                                                               <tr key={key}>
+                                                                  <td className="text-truncate">
+                                                                     {/* <span className="avatar avatar-xs">
+                                                                     <img className="box-shadow-2" src="/images/portrait/small/avatar-s-4.png" alt="avatar"/>
+                                                                     </span>  */}
+                                                                     <span>{item.student_name}</span>
+                                                                  </td>
+                                                                  <td>{item && item.time_taken && new Date(item?.time_taken * 1000)?.toISOString()?.substr(11, 8)} </td>
+                                                                  <td>{item.correctAnswers}/{item.totalMarks} </td>
+                                                                  <td width="10%">{item.cScorePercentage} %  </td>
+                                                                  <td><Link to={`/teacher/teacher-dashboard/${params.class_id}/${params.test_id}/${item.student_id}`}>View</Link></td>
+                                                               </tr>
+                                                               )
+                                                            })}
+                                                         </tbody>
                                                    </table>
                                                 </div>
+                                                {singleStudentTests && <CumilativeStudent score={singleStudentTests} heading={singleStudentTests[0].student_name}/>}
+
                                              </div>
                                           </div>
                                        </div>
@@ -379,7 +252,7 @@ export default function TeacherDashboard(){
                                                                <div className="row">
                                                                   <div className="form-group col-md-3 mb-2">
                                                                      {/* <!--<label className="">Select ClassName </label>--> */}
-                                                                     <select className="form-control">
+                                                                     <select className="form-control"  onChange={handleChange} value={params.class_id ? params.class_id : 999}>
                                                                         <option value="999">--Select ClassName-- </option>
                                                                         {classes && classes.map((item,key)=>{
                                                                            return(
@@ -388,8 +261,7 @@ export default function TeacherDashboard(){
                                                                         })}
                                                                      </select>
                                                                   </div>
-                                                                  <div className="form-group col-md-3 mb-2">
-                                                                     {/* <!--  <label className="" >Select Subject  </label>--> */}
+                                                                  {/* <div className="form-group col-md-3 mb-2">
                                                                      <select className="form-control">
                                                                         <option value="">--Select Subject-- </option>
                                                                         <option value="">Science </option>
@@ -399,17 +271,17 @@ export default function TeacherDashboard(){
                                                                         <option value="">Chemistry</option>
                                                                         <option value="">Biology </option>
                                                                      </select>
-                                                                  </div>
-                                                                  <div className="form-group col-md-3 mb-2">
+                                                                  </div> */}
+                                                                  {/* <div className="form-group col-md-3 mb-2">
                                                                      <button type="button" className="btn btn-warning btn-min-width sbmt_view_form btn_click2 mr-1 mb-1 mt-0">Search</button>
-                                                                  </div>
+                                                                  </div> */}
                                                                </div>
                                                             </div>
                                                          </form>
                                                       </div>
                                                    </div>
                                                 </div>
-                                                <div className="table-responsive first_lbl_show"  style={{display:"none"}}>
+                                                <div className="table-responsive first_lbl_show" >
                                                    <h4><strong>First Level</strong></h4>
                                                    <table className="table table-striped table-bordered lavel_select_sction">
                                                       {/* <!--zero-configuration--> */}
@@ -428,22 +300,11 @@ export default function TeacherDashboard(){
                                                                <td>34/50 </td>
                                                                <td>35% </td>
                                                          </tr>
-                                                         <tr>
-                                                               <td><a href="#" className="sbject_sw">B </a></td>
-                                                               <td>60  </td>
-                                                               <td>25/60 </td>
-                                                               <td>45%</td>
-                                                         </tr>
-                                                         <tr>
-                                                               <td><a href="#" className="sbject_sw">C </a></td>
-                                                               <td>40 </td>
-                                                               <td>36/40</td>
-                                                               <td>70%</td>
-                                                         </tr>
+                                                         
                                                       </tbody>
                                                    </table>
                                                 </div>
-                                                <div className="table-responsive mt-2 second_lbl_show" style={{display:"none"}}>
+                                                <div className="table-responsive mt-2 second_lbl_show" >
                                                    <h4 className="pb-2"><strong>Second Level</strong></h4>
                                                    <table className="table table-striped table-bordered zero-configuration">
                                                       <thead>
@@ -465,136 +326,7 @@ export default function TeacherDashboard(){
                                                                <td> 65%   </td>
                                                                <td>35% </td>
                                                          </tr>
-                                                         <tr>
-                                                               <td className="text-truncate">
-                                                                  <span className="avatar avatar-xs">
-                                                                  <img className="box-shadow-2" src="/images/portrait/small/avatar-s-5.png" alt="avatar"/>
-                                                                  </span> <span>Pankaj Mittal</span>
-                                                               </td>
-                                                               <td>Science   </td>
-                                                               <td> 20%    </td>
-                                                               <td>45%   </td>
-                                                         </tr>
-                                                         <tr>
-                                                               <td className="text-truncate">
-                                                                  <span className="avatar avatar-xs">
-                                                                  <img className="box-shadow-2" src="/images/portrait/small/avatar-s-9.png" alt="avatar"/>
-                                                                  </span> <span>Amar Kaushik</span>
-                                                               </td>
-                                                               <td>Science   </td>
-                                                               <td> 30%      </td>
-                                                               <td>70%   </td>
-                                                         </tr>
-                                                         <tr>
-                                                               <td className="text-truncate">
-                                                                  <span className="avatar avatar-xs">
-                                                                  <img className="box-shadow-2" src="/images/portrait/small/avatar-s-4.png" alt="avatar"/>
-                                                                  </span> <span>Rachna Thitte</span>
-                                                               </td>
-                                                               <td>Science   </td>
-                                                               <td> 65%   </td>
-                                                               <td>35% </td>
-                                                         </tr>
-                                                         <tr>
-                                                               <td className="text-truncate">
-                                                                  <span className="avatar avatar-xs">
-                                                                  <img className="box-shadow-2" src="/images/portrait/small/avatar-s-5.png" alt="avatar"/>
-                                                                  </span> <span>Pankaj Mittal</span>
-                                                               </td>
-                                                               <td>Science   </td>
-                                                               <td> 20%    </td>
-                                                               <td>45%   </td>
-                                                         </tr>
-                                                         <tr>
-                                                               <td className="text-truncate">
-                                                                  <span className="avatar avatar-xs">
-                                                                  <img className="box-shadow-2" src="/images/portrait/small/avatar-s-9.png" alt="avatar"/>
-                                                                  </span> <span>Amar Kaushik</span>
-                                                               </td>
-                                                               <td>Science   </td>
-                                                               <td> 30%      </td>
-                                                               <td>70%   </td>
-                                                         </tr>
-                                                         <tr>
-                                                               <td className="text-truncate">
-                                                                  <span className="avatar avatar-xs">
-                                                                  <img className="box-shadow-2" src="/images/portrait/small/avatar-s-4.png" alt="avatar"/>
-                                                                  </span> <span>Rachna Thitte</span>
-                                                               </td>
-                                                               <td>Science   </td>
-                                                               <td> 65%   </td>
-                                                               <td>35% </td>
-                                                         </tr>
-                                                         <tr>
-                                                               <td className="text-truncate">
-                                                                  <span className="avatar avatar-xs">
-                                                                  <img className="box-shadow-2" src="/images/portrait/small/avatar-s-5.png" alt="avatar"/>
-                                                                  </span> <span>Pankaj Mittal</span>
-                                                               </td>
-                                                               <td>Science   </td>
-                                                               <td> 20%    </td>
-                                                               <td>45%   </td>
-                                                         </tr>
-                                                         <tr>
-                                                               <td className="text-truncate">
-                                                                  <span className="avatar avatar-xs">
-                                                                  <img className="box-shadow-2" src="/images/portrait/small/avatar-s-9.png" alt="avatar"/>
-                                                                  </span> <span>Amar Kaushik</span>
-                                                               </td>
-                                                               <td>Science   </td>
-                                                               <td> 30%      </td>
-                                                               <td>70%   </td>
-                                                         </tr>
-                                                         <tr>
-                                                               <td className="text-truncate">
-                                                                  <span className="avatar avatar-xs">
-                                                                  <img className="box-shadow-2" src="/images/portrait/small/avatar-s-4.png" alt="avatar"/>
-                                                                  </span> <span>Rachna Thitte</span>
-                                                               </td>
-                                                               <td>Science   </td>
-                                                               <td> 65%   </td>
-                                                               <td>35% </td>
-                                                         </tr>
-                                                         <tr>
-                                                               <td className="text-truncate">
-                                                                  <span className="avatar avatar-xs">
-                                                                  <img className="box-shadow-2" src="/images/portrait/small/avatar-s-5.png" alt="avatar"/>
-                                                                  </span> <span>Pankaj Mittal</span>
-                                                               </td>
-                                                               <td>Science   </td>
-                                                               <td> 20%    </td>
-                                                               <td>45%   </td>
-                                                         </tr>
-                                                         <tr>
-                                                               <td className="text-truncate">
-                                                                  <span className="avatar avatar-xs">
-                                                                  <img className="box-shadow-2" src="/images/portrait/small/avatar-s-9.png" alt="avatar"/>
-                                                                  </span> <span>Amar Kaushik</span>
-                                                               </td>
-                                                               <td>Science   </td>
-                                                               <td> 30%      </td>
-                                                               <td>70%   </td>
-                                                         </tr>
-                                                         <tr>
-                                                               <td className="text-truncate">
-                                                                  <span className="avatar avatar-xs">
-                                                                  <img className="box-shadow-2" src="/images/portrait/small/avatar-s-4.png" alt="avatar"/>
-                                                                  </span> <span>Rachna Thitte</span>
-                                                               </td>
-                                                               <td>Science   </td>
-                                                               <td> 65%   </td>
-                                                               <td>35% </td>
-                                                         </tr>
-                                                         <tr>
-                                                               <td className="text-truncate">
-                                                                  <span className="avatar avatar-xs">
-                                                                  <img className="box-shadow-2" src="/images/portrait/small/avatar-s-5.png" alt="avatar"/>
-                                                                  </span> <span>Pankaj Mittal</span>
-                                                               </td>
-                                                               <td>Science   </td>
-                                                               <td> 20%    </td>
-                                                               <td>45%   </td>
-                                                         </tr>
+                                                         
                                                          <tr>
                                                                <td className="text-truncate">
                                                                   <span className="avatar avatar-xs">
@@ -617,7 +349,7 @@ export default function TeacherDashboard(){
                                           <div className="col-md-12">
                                              <div className="card">
                                                 <div className="card-header">
-                                                   <strong>ClassName-wise Reports</strong>
+                                                   <strong>Class-wise Reports</strong>
                                                 </div>
                                                 <div className="card-content collapse show">
                                                    <div className="">
@@ -634,61 +366,14 @@ export default function TeacherDashboard(){
                                                                </tr>
                                                             </thead>
                                                             <tbody>
-                                                               <tr>
-                                                                  <td>1</td>
-                                                                  <td>ClassName 6th</td>
-                                                                  <td>5</td>
-                                                                  <td>200</td>
-                                                                  <td>01/05/2021</td>
-                                                                  <td><a href="className-report.php">View</a></td>
-                                                               </tr>
-                                                               <tr>
-                                                                  <td>2</td>
-                                                                  <td>ClassName 7th</td>
-                                                                  <td>3</td>
-                                                                  <td>160</td>
-                                                                  <td>02/05/2021</td>
-                                                                  <td><a href="className-report.php">View</a></td>
-                                                               </tr>
-                                                               <tr>
-                                                                  <td>3</td>
-                                                                  <td>ClassName 8th</td>
-                                                                  <td>4	</td>
-                                                                  <td>160</td>
-                                                                  <td>02/05/2021</td>
-                                                                  <td><a href="className-report.php">View</a></td>
-                                                               </tr>
-                                                               <tr>
-                                                                  <td>4</td>
-                                                                  <td>ClassName 9th</td>
-                                                                  <td>5	</td>
-                                                                  <td>200</td>
-                                                                  <td>02/05/2021</td>
-                                                                  <td><a href="className-report.php">View</a></td>
-                                                               </tr>
-                                                               <tr>
-                                                                  <td>5</td>
-                                                                  <td>ClassName 10th</td>
-                                                                  <td>3</td>
-                                                                  <td>120</td>
-                                                                  <td>02/05/2021</td>
-                                                                  <td><a href="className-report.php">View</a></td>
-                                                               </tr>
-                                                               <tr>
-                                                                  <td>6</td>
-                                                                  <td>ClassName 11th</td>
-                                                                  <td>4	</td>
-                                                                  <td>160</td>
-                                                                  <td>02/05/2021</td>
-                                                                  <td><a href="className-report.php">View</a></td>
-                                                               </tr>
+                                                               
                                                                <tr>
                                                                   <td>7</td>
                                                                   <td>ClassName 12th</td>
                                                                   <td>3	</td>
                                                                   <td>120</td>
                                                                   <td>02/05/2021</td>
-                                                                  <td><a href="className-report.php">View</a></td>
+                                                                  <td><Link to="/teacher/teacher-class-report">View</Link></td>
                                                                </tr>
                                                             </tbody>
                                                             <tfoot>

@@ -6,7 +6,11 @@ import PrincipalLogin from '../pages/principal/PrincipalLogin'
 import TeacherLogin from '../pages/teacher/TeacherLogin'
 import StudentDashboard from '../pages/student/StudentDashboard'
 import TeacherDashboard from '../pages/teacher/TeacherDashboard'
+import TeacherClassReport from '../pages/teacher/TeacherClassReport'
+import TeacherClassSectionReport from '../pages/teacher/TeacherClassSectionReport'
 import PrincipalDashboard from '../pages/principal/PrincipalDashboard'
+import TeacherWiseSectionReport from '../pages/principal/TeacherWiseSectionReport'
+import TeacherWiseReport from '../pages/principal/TeacherWiseReport'
 import StudentAttempt from '../pages/student/StudentAttempt'
 import StudentAgreement from '../pages/student/StudentAgreement'
 import StudentResult from '../pages/student/StudentResult'
@@ -64,8 +68,16 @@ export const studentRoutes = [
 
 export const teacherRoutes = [
     {
-        path:'/:user_type?/teacher-dashboard/:class_id?',
+        path:'/:user_type?/teacher-dashboard/:class_id?/:test_id?/:student_id?',
         component: TeacherDashboard
+    },
+    {
+        path:'/:user_type?/teacher-class-report',
+        component: TeacherClassReport
+    },
+    {
+        path:'/:user_type?/teacher-class-section-report',
+        component: TeacherClassSectionReport
     },
     {
         path:'/:user_type?/profile',
@@ -75,7 +87,15 @@ export const teacherRoutes = [
 
 export const principalRoutes = [
     {
-        path:'/:user_type?/principal-dashboard',
+        path:'/:user_type?/principal-dashboard/:school_id?/:subject_id?',
         component: PrincipalDashboard
+    },
+    {
+        path:'/:user_type?/principal-teacher-wise-report/:school_id?',
+        component: TeacherWiseReport
+    },
+    {
+        path:'/:user_type?/principal-teacher-wise-section-report/:school_id?',
+        component: TeacherWiseSectionReport
     },
 ]

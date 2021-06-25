@@ -1,17 +1,39 @@
-import { useParams } from "react-router-dom";
+import { useParams, Link, useHistory } from "react-router-dom";
 import Head from '../../components/common/Head'
 import Footer from '../../components/common/Footer'
 import Foot from '../../components/common/Foot'
 import HeaderNav from '../../components/common/HeaderNav'
-import { Link } from 'react-router-dom'
-import {useState, useEffect} from 'react'
+import {useState} from 'react'
+import useClassWiseList from '../../pages/principal/hooks/useClassWiseList'
+import useTeacherWiseList from '../../pages/principal/hooks/useTeacherWiseList'
+import useSubjectList from '../../pages/principal/hooks/useSubjectList'
+
 
 export default function PrincipalDashboard(){
+    const params = useParams();
+    const history = useHistory();
+
     const [section, setSection] = useState('tab1');
 
     const changeSection = (value) => {
         setSection(value)
     }
+
+    const handleSubject = (e) => {
+        if(e.target.value!=999){
+            if(e.target.value==9999){
+                history.push(`/principal/principal-dashboard/${params.school_id}`)
+            }else{
+                history.push(`/principal/principal-dashboard/${params.school_id}/${e.target.value}`)
+            }
+        }
+    }
+
+    let totalStudents = 0;
+    const {data:classWise, classWiseLoading} = useClassWiseList();
+    const {data:teacherWise, teacherWiseLoading} = useTeacherWiseList();
+    const {data:subjects, subjectListLoading} = useSubjectList();
+
     return(
         <>
         <Head/>
@@ -79,76 +101,33 @@ export default function PrincipalDashboard(){
                                                                     <th>ClassName	</th>
                                                                     <th>No. of Sections	</th>
                                                                     <th>No. of Students</th>
-                                                                    <th>Last Updated</th>
+                                                                    {/* <th>Last Updated</th> */}
                                                                     <th>Details</th>
                                                                 </tr>
                                                                 </thead>
                                                                 <tbody>
-                                                                <tr>
-                                                                    <td>1</td>
-                                                                    <td>ClassName 6th</td>
-                                                                    <td>5</td>
-                                                                    <td>200</td>
-                                                                    <td>01/05/2021</td>
-                                                                    <td><a href="className-report1.php">View</a></td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>2</td>
-                                                                    <td>ClassName 7th</td>
-                                                                    <td>3</td>
-                                                                    <td>160</td>
-                                                                    <td>02/05/2021</td>
-                                                                    <td><a href="className-report1.php">View</a></td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>3</td>
-                                                                    <td>ClassName 8th</td>
-                                                                    <td>4	</td>
-                                                                    <td>160</td>
-                                                                    <td>02/05/2021</td>
-                                                                    <td><a href="className-report1.php">View</a></td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>4</td>
-                                                                    <td>ClassName 9th</td>
-                                                                    <td>5	</td>
-                                                                    <td>200</td>
-                                                                    <td>02/05/2021</td>
-                                                                    <td><a href="className-report1.php">View</a></td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>5</td>
-                                                                    <td>ClassName 10th</td>
-                                                                    <td>3</td>
-                                                                    <td>120</td>
-                                                                    <td>02/05/2021</td>
-                                                                    <td><a href="className-report1.php">View</a></td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>6</td>
-                                                                    <td>ClassName 11th</td>
-                                                                    <td>4	</td>
-                                                                    <td>160</td>
-                                                                    <td>02/05/2021</td>
-                                                                    <td><a href="className-report1.php">View</a></td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>7</td>
-                                                                    <td>ClassName 12th</td>
-                                                                    <td>3	</td>
-                                                                    <td>120</td>
-                                                                    <td>02/05/2021</td>
-                                                                    <td><a href="className-report1.php">View</a></td>
-                                                                </tr>
+                                                                {classWise && classWise.map((item,key)=>{
+                                                                    totalStudents = totalStudents + item.student_count;
+                                                                    return(
+                                                                        <tr key={key}>
+                                                                            <td>{key+1}</td>
+                                                                            <td>{item.class_name}th</td>
+                                                                            <td>3 (static data)	</td>
+                                                                            <td>{item.student_count}</td>
+                                                                            {/* <td>02/05/2021</td> */}
+                                                                            <td><Link to={`/principal/principal-teacher-wise-report/${params.school_id}`}>View</Link></td>
+                                                                        </tr>
+                                                                    )
+                                                                })}
+                                                                
                                                                 </tbody>
                                                                 <tfoot>
                                                                 <tr>
                                                                     <th>Total</th>
                                                                     <th></th>
-                                                                    <th>27</th>
-                                                                    <th>1120 </th>
-                                                                    <th> </th>
-                                                                    <th> </th>
+                                                                    <th>27(static data)</th>
+                                                                    <th>{totalStudents} </th>
+                                                                        <th> </th>
                                                                 </tr>
                                                                 </tfoot>
                                                             </table>
@@ -170,14 +149,14 @@ export default function PrincipalDashboard(){
                                                     <div className="input-group">
                                                         <div className="input-group-prepend">
                                                             <span className="input-group-text slt_sbjt">
-                                                                <select className="form-control">
-                                                                <option>-Select Subject-</option>
-                                                                <option value="">Science </option>
-                                                                <option value="">Mathematics </option>
-                                                                <option value="">Social Science </option>
-                                                                <option value="">Physics</option>
-                                                                <option value="">Chemistry</option>
-                                                                <option value="">Biology </option>
+                                                                <select className="form-control" onChange={handleSubject}>
+                                                                <option value="999">-Select Subject-</option>
+                                                                <option value="9999">All</option>
+                                                                    {subjects && subjects.map((item, key)=>{
+                                                                        return(
+                                                                            <option value={item._id}>{item.subject_name}</option>
+                                                                        )
+                                                                    })}                                                         
                                                                 </select>
                                                             </span>
                                                         </div>
@@ -189,76 +168,21 @@ export default function PrincipalDashboard(){
                                                     </fieldset>
                                                 </div>
                                             </div>
-                                            <div className="col-md-3 text-center">
-                                                <div className="profile-widget">
-                                                    <div className="profile-img">
-                                                    <a href="#" className="avatar"><img alt="" src="/images/avatar-19.jpg"/></a>
+                                            {teacherWise && teacherWise.map((item,key)=>{
+                                                return (
+                                                    <div className="col-md-3 text-center">
+                                                        <div className="profile-widget">
+                                                            <div className="profile-img">
+                                                            <a href="#" className="avatar"><img alt="" src="/images/portrait/small/avatar-s-19.png"/></a>
+                                                            </div>
+                                                            <p className="user-name m-t-10 mb-0 text-teachet1">{item.name} </p>({item.EmpID})
+                                                            <h5 className="user-name m-t-10 mb-0 text-subject"><a href="#">{item.subject_name} </a></h5>
+                                                            <div className="View_Detail text-muted"><Link to={`/principal/principal-teacher-wise-report/${params.school_id}`}>View Details </Link></div>
+                                                        </div>
                                                     </div>
-                                                    <p className="user-name m-t-10 mb-0 text-teachet1">Teacher 1</p>
-                                                    <h5 className="user-name m-t-10 mb-0 text-subject"><a href="#">Science  </a></h5>
-                                                    <div className="View_Detail text-muted"><a href="teacher-wise-reports.php">View Details </a></div>
-                                                </div>
-                                            </div>
-                                            <div className="col-md-3 text-center">
-                                                <div className="profile-widget">
-                                                    <div className="profile-img">
-                                                    <a href="#" className="avatar"><img alt="" src="/images/avatar-16.jpg"/></a>
-                                                    </div>
-                                                    <p className="user-name m-t-10 mb-0 text-teachet1">Teacher 2</p>
-                                                    <h5 className="user-name m-t-10 mb-0 text-subject"><a href="#">Mathematics </a></h5>
-                                                    <div className="View_Detail text-muted"><a href="teacher-wise-reports.php">View Details </a></div>
-                                                </div>
-                                            </div>
-                                            <div className="col-md-3 text-center">
-                                                <div className="profile-widget">
-                                                    <div className="profile-img">
-                                                    <a href="#" className="avatar"><img src="/images/avatar-07.jpg" alt=""/></a>
-                                                    </div>
-                                                    <p className="user-name m-t-10 mb-0 text-teachet1">Teacher 3</p>
-                                                    <h5 className="user-name m-t-10 mb-0 text-subject"><a href="#">Social Science</a></h5>
-                                                    <div className="View_Detail text-muted"><a href="teacher-wise-reports.php">View Details </a></div>
-                                                </div>
-                                            </div>
-                                            <div className="col-md-3 text-center">
-                                                <div className="profile-widget">
-                                                    <div className="profile-img">
-                                                    <a href="#" className="avatar"><img src="/images/avatar-06.jpg" alt=""/></a>
-                                                    </div>
-                                                    <p className="user-name m-t-10 mb-0 text-teachet1">Teacher 4</p>
-                                                    <h5 className="user-name m-t-10 mb-0 text-subject"><a href="#">Physics </a></h5>
-                                                    <div className="View_Detail text-muted"><a href="teacher-wise-reports.php">View Details </a></div>
-                                                </div>
-                                            </div>
-                                            <div className="col-md-3 text-center">
-                                                <div className="profile-widget">
-                                                    <div className="profile-img">
-                                                    <a href="#" className="avatar"><img src="/images/avatar-06.jpg" alt=""/></a>
-                                                    </div>
-                                                    <p className="user-name m-t-10 mb-0 text-teachet1">Teacher 5</p>
-                                                    <h5 className="user-name m-t-10 mb-0 text-subject"><a href="#">Chemistry </a></h5>
-                                                    <div className="View_Detail text-muted"><a href="teacher-wise-reports.php">View Details </a></div>
-                                                </div>
-                                            </div>
-                                            <div className="col-md-3 text-center">
-                                                <div className="profile-widget">
-                                                    <div className="profile-img">
-                                                    <a href="#" className="avatar"><img src="/images/avatar-06.jpg" alt=""/></a>
-                                                    </div>
-                                                    <p className="user-name m-t-10 mb-0 text-teachet1">Teacher 6</p>
-                                                    <h5 className="user-name m-t-10 mb-0 text-subject"><a href="#">Math  </a></h5>
-                                                    <div className="View_Detail text-muted"><a href="teacher-wise-reports.php">View Details </a></div>
-                                                </div>
-                                            </div>
-                                            <div className="col-md-3 text-center">
-                                                <div className="profile-widget">
-                                                    <div className="profile-img">
-                                                    <a href="#" className="avatar"><img src="/images/avatar-06.jpg" alt=""/></a>
-                                                    </div>
-                                                    <p className="user-name m-t-10 mb-0 text-teachet1">Teacher 7</p>
-                                                    <h5 className="user-name m-t-10 mb-0 text-subject"><a href="#">Biology  </a></h5>
-                                                    <div className="View_Detail text-muted"><a href="teacher-wise-reports.php">View Details </a></div>
-                                                </div>
-                                            </div>
+                                                )
+                                            })}
+                                            
                                         </div>
                                         </div>
                                         <div className={section == "tab3" ? "tab-pane container-fluid active" : 'tab-pane container-fluid'} id="tab43" aria-labelledby="base-tab43">
@@ -305,7 +229,7 @@ export default function PrincipalDashboard(){
                                                         </div>
                                                     </div>
                                                     </div>
-                                                    <div className="table-responsive first_lbl_show"  style={{display:"none"}}>
+                                                    <div className="table-responsive first_lbl_show"  style={{display:"block"}}>
                                                     <h4><strong>First Level</strong></h4>
                                                     <table className="table table-striped table-bordered lavel_select_sction">
                                                         {/* <!--zero-configuration--> */}
@@ -339,7 +263,7 @@ export default function PrincipalDashboard(){
                                                             </tbody>
                                                     </table>
                                                     </div>
-                                                    <div className="table-responsive mt-2 second_lbl_show" style={{display:"none"}}>
+                                                    <div className="table-responsive mt-2 second_lbl_show" style={{display:"block"}}>
                                                     <h4><strong>Second Level</strong></h4>
                                                     <table className="table table-striped table-bordered">
                                                         {/* <!--zero-configuration--> */}

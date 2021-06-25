@@ -72,7 +72,7 @@ export default function StudentLastTestScoreReport(){
                                                     <ul>
                                                     {options && options.map((it,key)=>{
                                                         return(
-                                                            <li>{it.value}: <span dangerouslySetInnerHTML={{__html: item[it?.key]}} ></span>{item.option == it?.key && item.correct_option != item.option ? <i className="fa fa-times"></i> : ""}{item.correct_option == item.option && item.option == it?.key ? <i className="fa fa-check"></i> : ""} </li>
+                                                            <li key={key}>{it.value}: <span dangerouslySetInnerHTML={{__html: item[it?.key]}} ></span>{item.option == it?.key && item.correct_option != item.option ? <i className="fa fa-times"></i> : ""}{item.correct_option == item.option && item.option == it?.key ? <i className="fa fa-check"></i> : ""} </li>
                                                         )
                                                     })}
                                                     {/* <li>B: <span dangerouslySetInnerHTML={{__html: item?.option_b}}></span></li>
@@ -86,7 +86,7 @@ export default function StudentLastTestScoreReport(){
                                     )
                                 })}
                                 </div>
-                                <div className="col-md-12 text-center"> <Link to={`/student/student-dashboard/${params.class_id}/${params.class_name}`} className="btn btn-info"> Go To Dashboard</Link></div>
+                                <div className="col-md-12 text-center"> <Link to={`/student/student-dashboard/${params.class_id}/${params.class_name}/${params.subject_id}`} className="btn btn-info"> Go To Dashboard</Link></div>
                             </div>
                             </div>
                         </div>

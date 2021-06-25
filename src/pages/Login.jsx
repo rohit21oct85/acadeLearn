@@ -37,6 +37,7 @@ export default function Login(){
             const formData = {email: emailRef.current.value , password: passwordRef.current.value, sub_domain: subDomain};
             await axios.post(`${apiUrl}v1/${user_type}/login`, formData).then(
                 response=>{
+                    console.log(response)
                     if(response?.data?.status ===203){
                         setErrorMessage('Password Mismatch!');
                     }else if(response.status == 200){
@@ -50,6 +51,8 @@ export default function Login(){
                         let class_name = user_type == "student" ? response?.data?.student?.class : response?.data?.Teacher?.class
                         let class_id = user_type == "student" ? response?.data?.student?.class_id : response?.data?.Teacher?.class_id
                         let section = user_type == "student" ? response?.data?.student?.section : response?.data?.Teacher?.section
+                        let subject_id = user_type == "teacher" && response?.data?.Teacher?.subject_id
+                        let subject_name = user_type == "teacher" && response?.data?.Teacher?.subject_name
                         let isLoggedIn = true;
                         let role = "";
                         localStorage.setItem('access_token', access_token)
@@ -64,6 +67,8 @@ export default function Login(){
                         localStorage.setItem('user_type', user_type);
                         localStorage.setItem('created_at', created_at);
                         localStorage.setItem('isLoggedIn', isLoggedIn);
+                        localStorage.setItem('subject_name',subject_name);
+                        localStorage.setItem('subject_id',subject_id);
                         const payloadData = {
                             isLoggedIn,
                             name,
@@ -88,7 +93,7 @@ export default function Login(){
                                 history.push(`/teacher/teacher-dashboard/`)
                             }
                             else if(user_type === 'principal'){
-                                history.push('/principal/principal-dashboard')
+                                history.push(`/principal/principal-dashboard/${school_id}`)
                             }
                         }
                     }
@@ -104,6 +109,7 @@ export default function Login(){
     }
 
     useEffect(checkLoggedInUser,[state]);
+    
     async function checkLoggedInUser(){
         if(state?.isLoggedIn == true){
             if(state?.user_type == "student"){
@@ -111,7 +117,7 @@ export default function Login(){
             }else if(state?.user_type == "teacher"){
                 history.push(`/teacher/teacher-dashboard`)
             }else if(state?.user_type == "principal"){
-                history.push(`/principal/principal-dashboard`)
+                history.push(`/principal/principal-dashboard/${state.school_id}`)
             }
         }else if(state?.isLoggedIn != true){
             if(params.user_type == "student"){

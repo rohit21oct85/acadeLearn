@@ -60,7 +60,7 @@ export default function StudentResult(){
                                     </div>
                                 </div>
                                 </div>
-                                <div className="col-md-12 text-center"> <Link to={`/student/student-dashboard/${params.class_id}/${params.class_name}`} className="btn btn-info"> Go To Dashboard</Link><Link to={`/student/student-last-report/${params.class_id}/${params.class_name}/${params.subject_id}/${params.attempt_id}`} className="btn btn-info ml-1"> View Details</Link></div>
+                                <div className="col-md-12 text-center"> <Link to={`/student/student-dashboard/${params.class_id}/${params.class_name}/${params.subject_id}`} className="btn btn-info"> Go To Dashboard</Link><Link to={`/student/student-last-report/${params.class_id}/${params.class_name}/${params.subject_id}/${params.attempt_id}`} className="btn btn-info ml-1"> View Details</Link></div>
                             </div>
                             </div>
                         </div>

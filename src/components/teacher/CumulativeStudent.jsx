@@ -1,4 +1,4 @@
-export default function CumilativeTestScore({score}){
+export default function CumilativeStudent({score, heading}){
     let averageResult = 0;
     let totalMarks = 0;
     return(
@@ -30,8 +30,9 @@ export default function CumilativeTestScore({score}){
             </div> */}
 
             {/* <div class="row">  */}
-            <div className="card pull-up attempt_text pt-1">
-                <div className="table-responsive col-md-12 mt-0">
+            {/* <div className="card pull-up attempt_text pt-1"> */}
+                <div className="table-responsive col-md-12 pl-0 pr-0 mt-2">
+                <h4 className="pb-1"><strong>{heading && heading}</strong></h4>
                     <table className="table table-striped table-bordered "> 
                         <thead>
                             <tr>
@@ -69,7 +70,7 @@ export default function CumilativeTestScore({score}){
                         </tbody>
                     </table>
                 </div>
-            </div>
+            {/* </div> */}
             {/* </div> */}
         </>
     )

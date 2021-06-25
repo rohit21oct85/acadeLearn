@@ -9,7 +9,7 @@ export default function AssignmentCard({test, key, fun}){
                         <a href="#" className="btn"><b>Test Name: </b>{test?.test_name}</a>
                         </div>
                         <div className="float-left">
-                            <a href="#" className="btn btn-info">{test?.test_date?.substring(10,0)}</a>
+                            <a href="#" className="">{test?.test_date?.substring(10,0)}</a>
                         </div>
                     </div>
                     <div className="card-content live_text">
