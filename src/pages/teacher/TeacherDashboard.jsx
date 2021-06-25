@@ -35,7 +35,6 @@ export default function TeacherDashboard(){
     const {data:assignedTests, assignedTestsLoading} = useAssignedTestReport();
     const {data:singleStudentTests, singleStudentTestsLoading} = useSingleStudentTestReport();
 
-
    const handleChange = (e) => {
       if(e.target.value != 999){
          history.push(`/teacher/teacher-dashboard/${e.target.value}`)

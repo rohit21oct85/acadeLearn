@@ -11,6 +11,8 @@ import TeacherClassSectionReport from '../pages/teacher/TeacherClassSectionRepor
 import PrincipalDashboard from '../pages/principal/PrincipalDashboard'
 import TeacherWiseSectionReport from '../pages/principal/TeacherWiseSectionReport'
 import TeacherWiseReport from '../pages/principal/TeacherWiseReport'
+import ClassWiseReport from '../pages/principal/ClassWiseReport'
+import ClassWiseSectionReport from '../pages/principal/ClassWiseSectionReport'
 import StudentAttempt from '../pages/student/StudentAttempt'
 import StudentAgreement from '../pages/student/StudentAgreement'
 import StudentResult from '../pages/student/StudentResult'
@@ -89,6 +91,14 @@ export const principalRoutes = [
     {
         path:'/:user_type?/principal-dashboard/:school_id?/:subject_id?',
         component: PrincipalDashboard
+    },
+    {
+        path:'/:user_type?/principal-class-wise-report/:school_id?',
+        component: ClassWiseReport
+    },
+    {
+        path:'/:user_type?/principal-class-wise-section-report/:school_id?',
+        component: ClassWiseSectionReport
     },
     {
         path:'/:user_type?/principal-teacher-wise-report/:school_id?',

@@ -5,6 +5,8 @@ import Foot from '../../components/common/Foot'
 import HeaderNav from '../../components/common/HeaderNav'
 
 export default function TeacherWiseReport(){
+    const params = useParams();
+    
     return(
         <>
             <Head/>
@@ -66,7 +68,7 @@ export default function TeacherWiseReport(){
                                                         </td>
                                                         <td>Science  </td>
                                                         <td>Class 6th</td>
-                                                        <td><Link to="principal-teacher-wise-section-report">View</Link></td>
+                                                        <td><Link to={`/principal/principal-teacher-wise-section-report/${params.school_id}`}>View</Link></td>
                                                         </tr>
                                                         <tr>
                                                         <th scope="row">2</th>
@@ -77,7 +79,7 @@ export default function TeacherWiseReport(){
                                                         </td>
                                                         <td>Science  </td>
                                                         <td>Class 7th	</td>
-                                                        <td><Link to="principal-teacher-wise-section-report">View</Link></td>
+                                                        <td><Link to={`/principal/principal-teacher-wise-section-report/${params.school_id}`}>View</Link></td>
                                                         </tr>
                                                         <tr>
                                                         <th scope="row">3</th>
@@ -88,7 +90,7 @@ export default function TeacherWiseReport(){
                                                         </td>
                                                         <td>Science  </td>
                                                         <td>Class 8th	</td>
-                                                        <td><Link to="principal-teacher-wise-section-report">View</Link></td>
+                                                        <td><Link to={`/principal/principal-teacher-wise-section-report/${params.school_id}`}>View</Link></td>
                                                         </tr>
                                                         <tr>
                                                         <th scope="row">4</th>
@@ -99,7 +101,7 @@ export default function TeacherWiseReport(){
                                                         </td>
                                                         <td>Science  </td>
                                                         <td>Class 9th	</td>
-                                                        <td><Link to="principal-teacher-wise-section-report">View</Link></td>
+                                                        <td><Link to={`/principal/principal-teacher-wise-section-report/${params.school_id}`}>View</Link></td>
                                                         </tr>
                                                         <tr>
                                                         <th scope="row">5</th>
@@ -110,7 +112,7 @@ export default function TeacherWiseReport(){
                                                         </td>
                                                         <td>Science  </td>
                                                         <td>Class 10th	</td>
-                                                        <td><Link to="principal-teacher-wise-section-report">View</Link></td>
+                                                        <td><Link to={`/principal/principal-teacher-wise-section-report/${params.school_id}`}>View</Link></td>
                                                         </tr>
                                                         <tr>
                                                         <th scope="row">6</th>
@@ -121,7 +123,7 @@ export default function TeacherWiseReport(){
                                                         </td>
                                                         <td>Science  </td>
                                                         <td>Class 11th	</td>
-                                                        <td><Link to="principal-teacher-wise-section-report">View</Link></td>
+                                                        <td><Link to={`/principal/principal-teacher-wise-section-report/${params.school_id}`}>View</Link></td>
                                                         </tr>
                                                         <tr>
                                                         <th scope="row">7</th>
@@ -132,7 +134,7 @@ export default function TeacherWiseReport(){
                                                         </td>
                                                         <td>Science  </td>
                                                         <td>Class 12th	</td>
-                                                        <td><Link to="principal-teacher-wise-section-report">View</Link></td>
+                                                        <td><Link to={`/principal/principal-teacher-wise-section-report/${params.school_id}`}>View</Link></td>
                                                         </tr>
                                                     </tbody>
                                                 </table>

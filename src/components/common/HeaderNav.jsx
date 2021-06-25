@@ -1,4 +1,4 @@
-import { useHistory, useParams, useLocation } from 'react-router-dom'
+import { useHistory, useParams, useLocation, Link } from 'react-router-dom'
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import { AuthContext } from '../../context/AuthContext';
 
@@ -79,7 +79,7 @@ export default function HeaderNav(){
                                 <div className={`dropdown-menu ${showLang}`} aria-labelledby="dropdown-flag"><a className="dropdown-item" href="#" data-language="en"><i className="flag-icon flag-icon-us"></i> English</a><a className="dropdown-item" href="#" data-language="fr"><i className="flag-icon flag-icon-fr"></i> French</a><a className="dropdown-item" href="#" data-language="pt"><i className="flag-icon flag-icon-pt"></i> Portuguese</a><a className="dropdown-item" href="#" data-language="de"><i className="flag-icon flag-icon-de"></i> German</a></div>
                             </li>
                             <li className={`dropdown dropdown-user nav-item ${showDrop}`} onClick={changeDrop}><a className="dropdown-toggle nav-link dropdown-user-link" href="#" data-toggle="dropdown"><span className="mr-1 user-name text-bold-700">{localStorage.getItem('name')}</span><span className="avatar avatar-online"><img src="/images/portrait/small/avatar-s-19.png" alt="avatar"/><i></i></span></a>
-                                <div className={`dropdown-menu dropdown-menu-right ${showDrop}`}><a className="dropdown-item" href="#"><i className="ft-user"></i> Edit Profile</a>
+                                <div className={`dropdown-menu dropdown-menu-right ${showDrop}`}><Link className="dropdown-item" to="/student/profile"><i className="ft-user"></i> Edit Profile</Link>
                                 {/* <!--<a className="dropdown-item" href="#"><i className="ft-clipboard"></i> Todo</a><a className="dropdown-item" href="#"><i className="ft-check-square"></i> Task</a>--> */}
                                 <div className="dropdown-divider" ></div><a className="dropdown-item" href="#" onClick={logout}><i className="ft-power"></i> Logout</a>
                                 </div>

@@ -115,7 +115,7 @@ export default function PrincipalDashboard(){
                                                                             <td>3 (static data)	</td>
                                                                             <td>{item.student_count}</td>
                                                                             {/* <td>02/05/2021</td> */}
-                                                                            <td><Link to={`/principal/principal-teacher-wise-report/${params.school_id}`}>View</Link></td>
+                                                                            <td><Link to={`/principal/principal-class-wise-report/${params.school_id}`}>View</Link></td>
                                                                         </tr>
                                                                     )
                                                                 })}

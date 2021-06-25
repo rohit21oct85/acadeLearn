@@ -24,6 +24,14 @@ export default function StudentAttempt(){
 		setFormData({...formData, ['answer'] : e.target.value, ['option']: option, question_id:id});		
 	}
 
+	useEffect(() => {
+        const script = document.createElement("script");
+        script.id = 'editor';
+        script.src = "https://www.wiris.net/demo/plugins/app/WIRISplugins.js?viewer=image";
+        script.async = true;
+        document.body.appendChild(script);
+    },[attemptId])
+
 	useEffect(()=>{
 		let search = window.location.search;
 		let query = new URLSearchParams(search);

@@ -36,7 +36,7 @@ export default function TeacherWiseSectionReport(){
                             <div className="card">
                             <div className="col-xl-12 col-lg-12 left-arrow1">
                     <ul>
-                    <li><a href="teacher-wise-reports.php"><img src="../images/left-arrow.png" className="img-fluid" alt="back-arrow"/> Back</a></li>
+                    <li><a href="teacher-wise-reports.php"><img src="/images/left-arrow.png" className="img-fluid" alt="back-arrow"/> Back</a></li>
                     </ul>
                     </div>
                                 <div className="card-content">
@@ -61,7 +61,7 @@ export default function TeacherWiseSectionReport(){
 
                                                         <td className="text-truncate sorting_1">
                                                             <span className="avatar avatar-xs">
-                                                            <img className="box-shadow-2" src="../images/portrait/small/avatar-s-9.png" alt="avatar"/>
+                                                            <img className="box-shadow-2" src="/images/portrait/small/avatar-s-9.png" alt="avatar"/>
                                                             </span> <span>Amar Kaushik</span>
                                                         </td>
                                                         <td>Science  </td>
@@ -72,7 +72,7 @@ export default function TeacherWiseSectionReport(){
 
                                                         <td className="text-truncate sorting_1">
                                                             <span className="avatar avatar-xs">
-                                                            <img className="box-shadow-2" src="../images/portrait/small/avatar-s-9.png" alt="avatar"/>
+                                                            <img className="box-shadow-2" src="/images/portrait/small/avatar-s-9.png" alt="avatar"/>
                                                             </span> <span>Amar Kaushik</span>
                                                         </td>
                                                         <td>Science  </td>
@@ -83,7 +83,7 @@ export default function TeacherWiseSectionReport(){
 
                                                         <td className="text-truncate sorting_1">
                                                             <span className="avatar avatar-xs">
-                                                            <img className="box-shadow-2" src="../images/portrait/small/avatar-s-9.png" alt="avatar"/>
+                                                            <img className="box-shadow-2" src="/images/portrait/small/avatar-s-9.png" alt="avatar"/>
                                                             </span> <span>Amar Kaushik</span>
                                                         </td>
                                                         <td>Science  </td>
@@ -94,7 +94,7 @@ export default function TeacherWiseSectionReport(){
 
                                                         <td className="text-truncate sorting_1">
                                                             <span className="avatar avatar-xs">
-                                                            <img className="box-shadow-2" src="../images/portrait/small/avatar-s-9.png" alt="avatar"/>
+                                                            <img className="box-shadow-2" src="/images/portrait/small/avatar-s-9.png" alt="avatar"/>
                                                             </span> <span>Amar Kaushik</span>
                                                         </td>
                                                         <td>Science  </td>
