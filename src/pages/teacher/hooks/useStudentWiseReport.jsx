@@ -13,7 +13,6 @@ export default function useUnitTestList() {
     const school_id = localStorage.getItem('school_id')
     return useQuery(key, async () => {
         if(state.access_token ){
-            console.log(params.test_id)
             if(params.test_id){
                 const result = await axios.get(`${apiUrl}v1/web/get-student-wise-report/${school_id}/${params.class_id}/${subject_id}/${params.test_id}`,{
                     headers: {

@@ -5,7 +5,7 @@ import axios from 'axios'
 import {apiUrl, authAxios} from '../../../config/config'
 import {AuthContext} from '../../../context/AuthContext';
 
-export default function useUpdateUnitTestList(id) {
+export default function useUpdateUnitTestList(formData) {
       const params = useParams();
       const location = useLocation();
       const path = location.pathname;
@@ -18,8 +18,8 @@ export default function useUpdateUnitTestList(id) {
                   'Authorization':'Bearer '+state.access_token
             }
       }      
-      const status =  useMutation((id) => {
-            return authAxios.put(`${apiUrl}v1/web/update-assigned-test/${id}`,options);
+      const status =  useMutation((formData) => {
+            return authAxios.put(`${apiUrl}v1/web/update-assigned-test/${formData.id}`, formData, options);
             // return axios.patch(`${API_URL}v1/principal/update/${principal_id}`, formData, options)
         },{
         onSuccess: () => {

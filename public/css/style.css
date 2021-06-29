@@ -658,7 +658,7 @@ button.start_now_btn.btn.btn-warning.btn-min-width.sbmt_view_form.btn_click2.mr-
 .bg_qus_ans1{padding:15px;}
  .bg_qus_ans1 h4{line-height:24px;}
  .options_ans h4{font-weight:bold;}
- .options_ans ul{max-width:500px;}
+ .options_ans ul{max-width:100%;}
  .options_ans ul li{display:inline-block; width:49%; font-weight:bold; margin-bottom:10px;}
  .options_ans ul li i.fa-check{color:#fff; margin-left:10px; background:#017b30; border-radius:30px; height:20px; width:20px; text-align: center;
   line-height: 20px;}
@@ -693,3 +693,56 @@ button.start_now_btn.btn.btn-warning.btn-min-width.sbmt_view_form.btn_click2.mr-
 .card-title.Scores{font-size: 30px;
     font-weight: 600;
     color: #f13d4b;}
+    .options_ans ul li{position:relative;}
+    .options_ans ul li span.crchater {
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        font-size:18px;
+    }
+    .options_ans ul li span.crchater-text{padding-left:24px;}
+
+    .bg_qus_ans1 ol, .bg_qus_ans1 ul {
+        padding: 0 20px;
+    }
+
+    /* tr.head {
+        background-color: #f1414b !important;
+    }
+    tr.headtwo {
+        background-color: #169832 !important;
+    } */
+
+    /* th.head-result, th.head-pass {
+        font-size: 26px;
+        color: #fff;
+        border:none;
+    } */
+
+    .percent{
+        color: #f1414b;
+        font-size: 16px;
+    }
+
+    .bg_qus_ans1 p {
+        font-size: 18px;
+        font-weight: 600;
+    }
+    .datetime ul li {
+        padding: 0px 15px;
+        vertical-align: top;
+        display: inline-block;
+        width: 49%;
+    }
+    .datetime ul li input {
+        height: 38px;
+        padding: 10px;
+        width: 100%;
+    }
+    .date_one1 a{font-weight:bold;}
+    .datetime .react-datepicker-wrapper {
+        width: 100%;
+    }
+    .att_border{
+            border: 1px solid #fb7a49;
+    }

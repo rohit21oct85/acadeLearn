@@ -18,7 +18,6 @@ export default function useTeacherSubjectList() {
                     'Authorization':'Bearer '+ state.access_token
                 }
             });
-            // console.log(result.data.data[0].subject_id,result.data.data[0].subject_name)
             localStorage.setItem('subject_name',result.data.data[0].subject_name);
             localStorage.setItem('subject_id',result.data.data[0].subject_id);
             return result.data.data; 

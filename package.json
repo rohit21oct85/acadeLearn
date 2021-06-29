@@ -1,5 +1,4 @@
 {
-  "homepage": ".",
   "name": "acade-learn",
   "version": "0.1.0",
   "private": true,
@@ -14,6 +13,7 @@
     "axios": "^0.21.1",
     "bootstrap": "^4.2.1",
     "react": "^17.0.2",
+    "react-datepicker": "^4.1.1",
     "react-dom": "^17.0.2",
     "react-query": "^3.17.0",
     "react-router-dom": "^5.2.0",

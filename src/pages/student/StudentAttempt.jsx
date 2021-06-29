@@ -12,16 +12,19 @@ import useUpdateAttemptTest from '../../pages/student/hooks/useUpdateAttemptTest
 export default function StudentAttempt(){
     const history = useHistory();
     const params  = useParams();
-    const location = useLocation();
 
-	const [checked, setChecked] = useState('');
 	const [counts, setCounts] = useState(0);
 	const [attemptId, setAttemptId] = useState();
-
+	const [duration, setDuration] = useState();
 	const [formData, setFormData] = useState('');
-	let question_id = "";
-	const set = (e, option,id) => {
-		setFormData({...formData, ['answer'] : e.target.value, ['option']: option, question_id:id});		
+	const [loading, setLoading] = useState(false);
+
+	const set = (e, option,id) => {		
+		if(counts-1 == questions?.length-1){
+			setFormData({...formData,  ['answer'] : e.target.value, ['option']: option, ['question_id']:id, ['completion_status'] : "completed" });
+		}else{
+			setFormData({...formData, ['answer'] : e.target.value, ['option']: option, ['question_id']:id});
+		}
 	}
 
 	useEffect(() => {
@@ -33,12 +36,32 @@ export default function StudentAttempt(){
     },[attemptId])
 
 	useEffect(()=>{
+		const current_time = new Date();
+		const sTime = new Date(localStorage.getItem('test_test_time'));
+		const attemptTime = localStorage.getItem('test_test_attempt_time');
+		const tWindow = localStorage.getItem('test_test_window')
+		let tDuration = localStorage.getItem('test_test_duration')
+		let allowedTime = new Date(localStorage.getItem('test_test_time'));
+		allowedTime.setMinutes( allowedTime.getMinutes() + parseInt(tWindow));
+		if(current_time > allowedTime){
+			alert("Test is over")
+		}else{
+			const difference = (Math.abs(allowedTime  - new Date(attemptTime))/1000)/60
+			if(difference < tDuration){
+				tDuration = difference;
+				localStorage.setItem('test_test_duration', difference)
+			}
+			setDuration(parseFloat(tDuration)?.toFixed(3));
+		}
+	},[])
+
+	useEffect(()=>{
 		let search = window.location.search;
 		let query = new URLSearchParams(search);
 		let foo = query.get('query');
 		if(foo){
 			localStorage.removeItem('COUNTER');
-			history.push(`/student/student-attempt/${params.class_id}/${params.class_name}/${params.subject_id}/${params.test_id}`);
+			history.push(`/student/student-attempt/${params.class_id}/${params.class_name}/${params.test_id}`);
 		}
 		timer()
 	},[attemptId])
@@ -50,21 +73,20 @@ export default function StudentAttempt(){
 	// const updateMutation = useUpdateAttemptTest(formData);
 
 	useEffect(()=>{
-		// countdown();
 		let count = 0;
-
       	questions && questions.map((item,key) => {
 			item.answer && count++
 		})
-		setCounts(count)
+		setCounts(count+1)
 	},[questions])
 
 	const saveAnswerAndNext = async () => {
+		setLoading(true)
 		let search = window.location.search;
 		let query = new URLSearchParams(search);
 		let foo = query.get('query');
 		if(foo){
-			history.push(`/student/student-attempt/${params.class_id}/${params.class_name}/${params.subject_id}/${params.test_id}`);
+			history.push(`/student/student-attempt/${params.class_id}/${params.class_name}/${params.test_id}`);
 		}
 		
 		if(formData.answer == undefined){
@@ -75,50 +97,46 @@ export default function StudentAttempt(){
 			onSuccess: (data, variables, context) => {
 				if(data?.data){
 					setAttemptId(data?.data?.attemptId)
+					var ele = document.getElementsByName("option");
+					setFormData({})
+					for(var i=0;i<ele.length;i++)
+						ele[i].checked = false;
 				}
+				setLoading(false)
+			if(counts-1 == questions?.length-1){
+				history.push(`/student/student-result/${params.class_id}/${params.class_name}/${params.test_id}/${data?.data?.attemptId}`);
+			}
 			},
 		});
-
-		var ele = document.getElementsByName("option");
-		setFormData({})
-		for(var i=0;i<ele.length;i++)
-			ele[i].checked = false;
-		if(counts == questions?.length-1){
-			history.push(`/student/student-result/${params.class_id}/${params.class_name}/${params.subject_id}/${params.test_id}/${attemptId}`);
-      	}
 	}
-
-	// function countdown() {
-	// 	var seconds = 60;
-	// 	function tick() {
-	// 		var counter = document.getElementById("timer");
-	// 		seconds--;
-	// 		if(counter){
-	// 			counter.innerHTML = "0:" + (seconds < 10 ? "0" : "") + String(seconds);
-	// 			if( seconds > 0 ) {
-	// 				setTimeout(tick, 1000);
-	// 			} else {
-	// 				alert("Game over");
-	// 			}
-	// 		}
-	// 	}
-	// 	tick();
-	// }
 
 	function timer() {
 		const time = localStorage.getItem('COUNTER');
 		var sec = time != 0 && time != undefined && time != null ? time : 0;
-		function tick() {
+		async function tick() {
 			var counter = document.getElementById("timer");
 			sec++;
 			localStorage.setItem('COUNTER', sec);
+			const test_duration = localStorage.getItem('test_test_duration');
+			if(sec > test_duration*60){ //*60 converts to seconds
+				// setFormData({...formData, ['completion_status'] : "timeover" });
+				await attempt.mutate(formData,{
+					onSuccess: (data, variables, context) => {
+						if(data?.data){
+							setAttemptId(data?.data?.attemptId)
+							var ele = document.getElementsByName("option");
+							setFormData({})
+							for(var i=0;i<ele.length;i++)
+								ele[i].checked = false;
+						}
+						history.push(`/student/student-result/${params.class_id}/${params.class_name}/${params.test_id}/${data?.data?.attemptId}`);
+					},
+				});
+				
+			}
 			if(counter){
 				counter.innerHTML = "0:" + (sec < 10 ? "0" : "") + String(sec);
-				// if( sec > 0 ) {
 					setTimeout(tick, 1000);
-				// } else {
-					// alert("Game over");
-				// }
 			}
 		}
 		tick();
@@ -142,9 +160,12 @@ export default function StudentAttempt(){
                               <div className="container-fluid">
                                  <div className="row">
                                     <div className="col-xl-12 col-lg-12">
-                                       <div className="timer-s">
-                                       <span className="test-end">Ends in </span><span className="" id="timer">1:00</span>
-                                    </div>
+                                       <div className="timer-s" >
+                                       <span className="test-end">Total time taken:</span><span className="" id="timer">1:00</span> secs
+                                    	</div>
+                                       <div className="timer-s" style={{"float":"left"}}>
+                                       <span className="test-end">Time Left:</span><span className="">{duration} min</span>
+                                    	</div>
                                     </div>
                                     <div className="col-md-8">
                   <div className="job-info job-widget">
@@ -161,7 +182,7 @@ export default function StudentAttempt(){
                                        <span>{counts + ' of ' +questions?.length}</span>
                                     </div>
                                  </div>
-                                 {questionLoading ? <span>loading. ..</span> : <div className="question bg-Not-select p-2 border-bottom">
+                                 {loading ? <span>loading next question. ..</span> : <div className="question bg-Not-select p-2 border-bottom">
                                     <div className="d-flex flex-row question-title">
                                        <span className="text-danger q_nsekected">Q.</span>
                                        <h5 className="ml-3"><div dangerouslySetInnerHTML={{ __html: question?.question }}/></h5>
@@ -185,7 +206,7 @@ export default function StudentAttempt(){
                                  <div className="p-2 bg-Not-select">
                                  <div className="row"> 
                                  <div className="col-md-12 text-right">
-                                 <button className="btn nextqus_btn" type="button" onClick={()=>{saveAnswerAndNext(question?._id)}}>{!questionLoading ? counts == questions?.length-1 ? "Submit" : "Next" : "loading. .."}<i className="fa fa-angle-right ml-2"></i></button></div></div>
+                                 <button className={"btn nextqus_btn"} type="button" onClick={()=>{saveAnswerAndNext(question?._id)}}>{!loading ? counts-1 == questions?.length-1 ? "Submit" : "Next" : "please wait. .."}<i className="fa fa-angle-right ml-2"></i></button></div></div>
                               </div>
                               </div>
                            </div>
@@ -220,32 +241,7 @@ export default function StudentAttempt(){
 									)
 								}
 							})}
-							{/* if(!item.answer){
-									return(
-										<li className="not-attem" key={key}>
-											<a href="#" data-toggle="tooltip" title="" data-original-title="Attempt">{key + 1}</a>
-										</li>
-									)
-								} */}
-							{/* <li className="ques-attemp"><a href="#" data-toggle="tooltip" title="" data-original-title="Attempt">2</a></li>
-							<li className="ques-attemp"><a href="#" data-toggle="tooltip" title="" data-original-title="Attempt">3</a></li>
-							<li className="not-attem"><a href="#" data-toggle="tooltip" title="" data-original-title="Not Attempt">4</a></li>
-							<li className="not-attem"><a href="#" data-toggle="tooltip" title="" data-original-title="Not Attempt">5</a></li>
-							<li className="not-attem"><a href="#" data-toggle="tooltip" title="" data-original-title="Not Attempt">6</a></li>
-							<li className="not-attem"><a href="#" data-toggle="tooltip" title="" data-original-title="Absent">7</a></li>
-							<li className="not-attem"><a href="#" data-toggle="tooltip" title="" data-original-title="Not Attempt">8</a></li>
-							<li className="not-attem"><a href="#" data-toggle="tooltip" title="" data-original-title="Not Attempt">9</a></li>
-							<li className="ques-attemp"><a href="#" data-toggle="tooltip" title="" data-original-title="Attempt">10</a></li>
-							<li className="ques-attemp"><a href="#" data-toggle="tooltip" title="" data-original-title="Attempt">11</a></li>
-							<li className="ques-attemp"><a href="#" data-toggle="tooltip" title="" data-original-title="Attempt">12</a></li>
-							<li className="ques-attemp"><a href="#" data-toggle="tooltip" title="" data-original-title="Attempt">13</a></li>
-							<li className="ques-attemp"><a href="#" data-toggle="tooltip" title="" data-original-title="Attempt">14</a></li>
-							<li className="ques-attemp"><a href="#" data-toggle="tooltip" title="" data-original-title="Attempt">15</a></li>
-							<li className=""><a href="#" data-toggle="tooltip" title="" data-original-title="Not Attempt">16</a></li>
-							<li className=""><a href="#" data-toggle="tooltip" title="" data-original-title="Not Attempt">17</a></li>
-							<li className=""><a href="#" data-toggle="tooltip" title="" data-original-title="Not Attempt">18</a></li>
-							<li className=""><a href="#" data-toggle="tooltip" title="" data-original-title="Not Attempt">19</a></li>
-							<li className=""><a href="#" data-toggle="tooltip" title="" data-original-title="Not Attempt">20</a></li> */}
+							
                         </ul>
                      </div>
                      <div className="Quiz_reviewLegend">

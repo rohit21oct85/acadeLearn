@@ -47,16 +47,20 @@ export default function TeacherDashboard(){
       }
    }
 
-	let id = '';
-	const updateMutation = useUpdateUnitTestList(id);
+	let formData = '';
+	const updateMutation = useUpdateUnitTestList(formData);
 
-    const updateAssignment = async (id, date) => {
-		var today = new Date();
-		if(today.toISOString().substring(0, 10) == date.substr(0,10)){
-			await updateMutation.mutate(id);
-		}else{
-			alert(`Tests can only be assigned on the same date of the test, Test Date: ${date.substr(0,10)}`);
-		}
+    const updateAssignment = async (id, testduration, startDate, testWindow) => {
+
+      // const s = startDate.toISOString()
+      // var s = new Date(startDate).toLocaleString(undefined, {timeZone: 'Asia/Kolkata'});
+      await updateMutation.mutate({id:id,testduration:testduration,startDate:startDate,testWindow:testWindow});
+		// var today = new Date();
+		// if(today.toISOString().substring(0, 10) == date.substr(0,10)){
+			
+		// }else{
+			// alert(`Tests can only be assigned on the same date of the test, Test Date: ${date.substr(0,10)}`);
+		// }
     }
 
     return(
@@ -86,17 +90,17 @@ export default function TeacherDashboard(){
                   <div className="col-xl-12 col-lg-12">
                      <div className="card">
                            <div className="card-header">
-                              <h4 className="card-title rpt1">Assign Tests </h4>
-                              {/* <h4 className="card-title rpt2" style="display:none">Student-wise Reports</h4>
-                              <h4 className="card-title rpt3" style="display:none">Subject-wise Reports</h4>
-                              <h4 className="card-title rpt4" style="display:none">ClassName-wise Reports</h4> */}
+                              <h4 className="card-title rpt1" style={{display: section == "tab1" ? "block" : 'none'}}>Assign Tests </h4>
+                              <h4 className="card-title rpt2" style={{display: section == "tab2" ? "block" : 'none'}}>Student-wise Reports</h4>
+                              <h4 className="card-title rpt3" style={{display: section == "tab3" ? "block" : 'none'}}>Subject-wise Reports</h4>
+                              <h4 className="card-title rpt4" style={{display: section == "tab4" ? "block" : 'none'}}>Class-wise Reports</h4>
                            </div>
                            <div className="card-content">
                               <div className="card-body pt-0">
-                                 <p className="rpt1">Select a particular className and subject to assign test to your students.</p>
-                                 {/* <p className="rpt2" style="display:none">Select the className, section, and subject to view the performance of each of your students.</p>
-                                 <p className="rpt3" style="display:none">Select a className and subject to view a detailed report of the subject-wise performance of your className.</p>
-                                 <p className="rpt4" style="display:none">This section will show you the overall performance of all the classNamees.</p> */}
+                                 <p className="rpt1" style={{display: section == "tab1" ? "block" : 'none'}}>Select a class to assign a test to your students.</p>
+                                 <p className="rpt2" style={{display: section == "tab2" ? "block" : 'none'}}>Select the class and test for which you wish to analyze the performance of the students.</p>
+                                 <p className="rpt3" style={{display: section == "tab3" ? "block" : 'none'}}>Select a className and subject to view a detailed report of the subject-wise performance of your className.</p>
+                                 <p className="rpt4" style={{display: section == "tab4" ? "block" : 'none'}}>It will show the overall performance of all the classes. By clicking on 'View', you can examine the detailed performace report of each class.</p>
                                  <ul className="nav nav-tabs nav-linetriangle no-hover-bg">
                                     <li className="nav-item">
                                        <a className={section == "tab1" ? "nav-link active" : 'nav-link'} id="base-tab1" data-toggle="tab" aria-controls="tab1" href="#tab1" aria-expanded="true" onClick={()=>{changeSection('tab1')}}> Assign Test  </a>
@@ -104,9 +108,9 @@ export default function TeacherDashboard(){
                                     <li className="nav-item">
                                        <a className={section == "tab2" ? "nav-link active" : 'nav-link'} id="base-tab2" data-toggle="tab" aria-controls="tab2" href="#tab2" aria-expanded="false" onClick={()=>{changeSection('tab2')}}>Student-wise Reports  </a>
                                     </li>
-                                    <li className="nav-item">
+                                    {/* <li className="nav-item">
                                        <a className={section == "tab3" ? "nav-link active" : 'nav-link'} id="base-tab3" data-toggle="tab" aria-controls="tab3" href="#tab3" aria-expanded="false" onClick={()=>{changeSection('tab3')}}>Subject-wise Reports  </a>
-                                    </li>
+                                    </li> */}
                                     <li className="nav-item">
                                        <a className={section == "tab4" ? "nav-link active" : 'nav-link'} id="base-tab4" data-toggle="tab" aria-controls="tab4" href="#tab4" aria-expanded="false" onClick={()=>{changeSection('tab4')}}>Class-wise Reports  </a>
                                     </li>
@@ -123,7 +127,7 @@ export default function TeacherDashboard(){
                                                                <div className="row">
                                                                <div className="form-group col-md-4 mb-0 ml-auto">
                                                                   <select className="form-control" onChange={handleChange} value={params.class_id ? params.class_id : 999}>
-                                                                        <option value="999">--Select ClassName-- </option>
+                                                                        <option value="999">--Select Class-- </option>
                                                                         {classes && classes.map((item,key)=>{
                                                                            return(
                                                                               <option value={item._id} data-class_name={item.class_name} key={key} >{item.class_name + ' th'} </option>
@@ -153,7 +157,7 @@ export default function TeacherDashboard(){
                                        <div className="row">
                                           {unitTests && unitTests.map(test =>{
                                              return(<>
-                                                <AssignmentCard test={test} fun={()=>updateAssignment(test.assign_table_id, test.test_date)}/>
+                                                <AssignmentCard test={test} fun={(startDate,testWindow)=>updateAssignment(test.assign_table_id, test.test_duration, startDate, testWindow)}/>
                                              </>)
                                           })}
                                        </div>
@@ -186,7 +190,7 @@ export default function TeacherDashboard(){
                                                                         <option value="999">--Select Section-- </option>
                                                                         {assignedTests && assignedTests.map((item,key)=>{
                                                                            return(
-                                                                              <option value={item.test_id} key={key}>{"Test "+(key + 1)}</option>
+                                                                              <option value={item?.test_id} key={key}>{item?.test_name}</option>
                                                                            )
                                                                         })}
                                                                      </select>
@@ -224,7 +228,7 @@ export default function TeacherDashboard(){
                                                                   </td>
                                                                   <td>{item && item.time_taken && new Date(item?.time_taken * 1000)?.toISOString()?.substr(11, 8)} </td>
                                                                   <td>{item.correctAnswers}/{item.totalMarks} </td>
-                                                                  <td width="10%">{item.cScorePercentage} %  </td>
+                                                                  <td width="10%">{item.cScorePercentage?.toFixed(2)} %  </td>
                                                                   <td><Link to={`/teacher/teacher-dashboard/${params.class_id}/${params.test_id}/${item.student_id}`}>View</Link></td>
                                                                </tr>
                                                                )
@@ -232,7 +236,7 @@ export default function TeacherDashboard(){
                                                          </tbody>
                                                    </table>
                                                 </div>
-                                                {singleStudentTests && <CumilativeStudent score={singleStudentTests} heading={singleStudentTests[0].student_name}/>}
+                                                {singleStudentTests && <CumilativeStudent score={singleStudentTests} heading={singleStudentTests[0]?.student_name}/>}
 
                                              </div>
                                           </div>

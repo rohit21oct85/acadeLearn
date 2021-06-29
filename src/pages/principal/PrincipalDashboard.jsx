@@ -62,19 +62,18 @@ export default function PrincipalDashboard(){
                         <div className="col-xl-12 col-lg-12">
                             <div className="card">
                             <div className="card-header">
-                                <h4 className="card-title rpt1">ClassName-wise Reports</h4>
-                                {/* <h4 className="card-title rpt2" style="display:none;">Teacher-wise Reports</h4>
-                                <h4 className="card-title rpt3" style="display:none;">Subject-wise Reports</h4> */}
+                                <h4 className="card-title rpt1" style={{display: section == "tab1" ? "block" : 'none'}}>Class-wise Reports</h4>
+                                <h4 className="card-title rpt2" style={{display: section == "tab2" ? "block" : 'none'}}>Teacher-wise Reports</h4>
+                                <h4 className="card-title rpt3" style={{display: section == "tab3" ? "block" : 'none'}}>Subject-wise Reports</h4>
                             </div>
                             <div className="card-content">
                                 <div className="card-body pt-0">
-                                    <p className="rpt1">Here you can view the performance of your entire school. </p>
-                                    <p className="rpt2" style={{display:"none"}}>Here you can analyze the performance of all the teachers in your institute.<br/> 
-                                    Select a subject and enter the name of the teacher to view the details. </p>
-                                    <p className="rpt3" style={{display:"none"}}>Here you can view a detailed analysis of the performance of students across different subjects.<br/> Select a particular className and subject to access the report.</p>
+                                    <p className="rpt1" style={{display: section == "tab1" ? "block" : 'none'}}>Here you can view the class-wise reports of the cummulative performance of all your students.</p>
+                                    <p className="rpt2" style={{display: section == "tab2" ? "block" : 'none'}}>Here, you will receive a detailed report of the performance of teachers in your institute.<br/> Click on view to find out the tests assigned by them and analyse the results.</p>
+                                    <p className="rpt3" style={{display: section == "tab3" ? "block" : 'none'}}>Here, you can view the cummulative performance of your students in different subjects.<br/> Select a particular className and subject to access the report.</p>
                                     <ul className="nav nav-tabs nav-linetriangle no-hover-bg">
                                         <li className="nav-item">
-                                        <a className={section == "tab1" ? "nav-link active" : 'nav-link'} id="base-tab41" data-toggle="tab" aria-controls="tab41" href="#tab41" aria-expanded="true" onClick={()=>{changeSection('tab1')}}> ClassName-wise Reports </a>
+                                        <a className={section == "tab1" ? "nav-link active" : 'nav-link'} id="base-tab41" data-toggle="tab" aria-controls="tab41" href="#tab41" aria-expanded="true" onClick={()=>{changeSection('tab1')}}> Class-wise Reports </a>
                                         </li>
                                         <li className="nav-item">
                                         <a className={section == "tab2" ? "nav-link active" : 'nav-link'} id="base-tab42" data-toggle="tab" aria-controls="tab42" href="#tab42" aria-expanded="false" onClick={()=>{changeSection('tab2')}}>Teacher-wise Reports </a>
@@ -111,7 +110,7 @@ export default function PrincipalDashboard(){
                                                                     return(
                                                                         <tr key={key}>
                                                                             <td>{key+1}</td>
-                                                                            <td>{item.class_name}th</td>
+                                                                            <td>{item.class_name}</td>
                                                                             <td>3 (static data)	</td>
                                                                             <td>{item.student_count}</td>
                                                                             {/* <td>02/05/2021</td> */}

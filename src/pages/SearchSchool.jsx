@@ -83,7 +83,6 @@ export default function SearchSchool(){
                                                                         <div className="school_name1" >
                                                                         {/* onClick={() => setNewPath (item.sub_domain)}> */}
                                                                             {/* <Link to={`http://${item.sub_domain}.${baseUrl}`}> */}
-                                                                            {console.log("in search school", server_type,baseUrl,apiUrl)}
                                                                             <a href={`${server_type}://${item.sub_domain}.${baseUrl}`}>
                                                                                 <span><img src={`https://drive.google.com/uc?export=view&id=${item.school_logo}`} className="img-fluid" alt="school Iocn"/> </span> 
                                                                                 <p>{item.school_name}</p>

@@ -12,7 +12,12 @@ export default function StudentResult(){
 
     useEffect(()=>{
         localStorage.removeItem('COUNTER');
+        localStorage.removeItem('test_test_duration');
+        localStorage.removeItem('test_test_window');
+        localStorage.removeItem('test_test_time');
+        localStorage.removeItem('test_test_attempt_time');
     },[])
+    
     return(
         <>
         <Head/>
@@ -37,7 +42,7 @@ export default function StudentResult(){
                                     <table className="table table-striped table-bordered ">
                                         <tbody>
                                         <tr>
-                                            <th colSpan="2">Result</th>
+                                            <th colSpan="2" className="head-result">Result</th>
                                         </tr>
                                         <tr>
                                                 <th>Total Questions </th>
@@ -47,20 +52,28 @@ export default function StudentResult(){
                                                 <th>Attempted Questions </th>
                                                 <td>{result?.attemptedQuestions}</td>
                                             </tr>
-                                            <tr>
+                                            {/* <tr>
                                                 <th>Correct Answers </th>
                                                 <td>{result?.correctAnswers}</td>
                                             </tr>
                                             <tr>
                                                 <th>Wrong Answers </th>
                                                 <td> {result?.wrongAnswers}</td>
+                                            </tr> */}
+                                            <tr>
+                                                <th>Score </th>
+                                                <td> {result?.correctAnswers}/{result?.totalQuestions}</td>
+                                            </tr>
+                                            <tr>
+                                                <th className="percent">Percentage </th>
+                                                <th className="percent"> {((result?.correctAnswers/result?.totalQuestions)*100).toFixed(2)} %</th>
                                             </tr>
                                         </tbody>
                                     </table>
                                     </div>
                                 </div>
                                 </div>
-                                <div className="col-md-12 text-center"> <Link to={`/student/student-dashboard/${params.class_id}/${params.class_name}/${params.subject_id}`} className="btn btn-info"> Go To Dashboard</Link><Link to={`/student/student-last-report/${params.class_id}/${params.class_name}/${params.subject_id}/${params.attempt_id}`} className="btn btn-info ml-1"> View Details</Link></div>
+                                <div className="col-md-12 text-center"> <Link to={`/student/student-dashboard/${params.class_id}/${params.class_name}`} className="btn btn-info"> Go To Dashboard</Link><Link to={`/student/student-last-report/${params.class_id}/${params.class_name}/${params.attempt_id}`} className="btn btn-info ml-1"> View Details</Link></div>
                             </div>
                             </div>
                         </div>

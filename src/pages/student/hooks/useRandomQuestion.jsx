@@ -9,7 +9,7 @@ export default function useRandomQuestion() {
     const {state } = useContext(AuthContext);
     const params = useParams();
     const test_id = params?.test_id
-    const subject_id = params?.subject_id
+    // const subject_id = params?.subject_id
     const school_id = localStorage.getItem('school_id')
     const student_id = localStorage.getItem('user_id')
     const options = {
@@ -20,8 +20,7 @@ export default function useRandomQuestion() {
     }
     return useQuery(`single-question`, async () => {
         if(state?.access_token){
-            const result = await authAxios.post(`${apiUrl}v1/web/get-question/${params.subject_id}/${params.test_id}`,{school_id:school_id,student_id:student_id});
-            // console.log(result.data)
+            const result = await authAxios.post(`${apiUrl}v1/web/get-question/${params.test_id}`,{school_id:school_id,student_id:student_id});
             return result.data; 
         }
     });

@@ -29,15 +29,15 @@ export default function Home(){
                                                 <div className="col-md-6 text-center">
                                                     <div className="online_classes">
                                                         <span><img src="/images/learning-online-class2.jpg" className="img-fluid" alt="learning-online-className"/></span> 
-                                                            <h2>Learning online classNamees together even <span>when we're apart</span></h2>
+                                                            <h2>Let us learn together online even <span>though we are apart!</span></h2>
                                                         <Link to="">Get Start</Link>
                                                     </div>
                                                 </div> 
                                                 <div className="col-md-6 text-center">
                                                     <div className="online_classes">
                                                         <span><img src="/images/online-assessment2.jpg" className="img-fluid" alt="learning-online-className"/></span> 
-                                                            <h2>A Guide to choosing the right online  <span>assessment platform</span></h2>
-                                                        <Link to="/search-school">Get Start</Link>
+                                                            <h2>Assign and attempt assessments online! <span></span></h2>
+                                                        <Link to="/search-school">Get Started</Link>
                                                     </div>
                                                 </div> 
                                             </div>

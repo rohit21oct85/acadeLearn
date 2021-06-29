@@ -16,12 +16,12 @@ export default function useCreateModule(form) {
             }
       }
       const class_id = params.class_id;
-      const subject_id = params.subject_id;
+      // const subject_id = params.subject_id;
       const school_id = localStorage.getItem('school_id');
       const user_id = localStorage.getItem('user_id')
       const name = localStorage.getItem('name')
       return useMutation(form => {
-                  return axios.post(`${apiUrl}v1/web/attempt-test`, {id:form.id, user_id:user_id,class_id:class_id,subject_id:subject_id,school_id:school_id,name:name,assign_test_id:form.assign_test_id}, options)
+                  return axios.post(`${apiUrl}v1/web/attempt-test`, {id:form.id, user_id:user_id,class_id:class_id,school_id:school_id,name:name,assign_test_id:form.assign_test_id}, options)
             },{
             onSuccess: () => {
                 queryClient.invalidateQueries('attempt-test')

@@ -26,19 +26,29 @@ export default function StudentDashboard(){
     // let assign_test_id = ''; 
     const createMutation = useCreateAttemptTest(form);
 
-    const handleAttempt = async(id, subject_id, assign_test_id) => {
+    const handleAttempt = async(id, assign_test_id, start_time, test_window, test_duration) => {
+        localStorage.setItem('test_test_time',start_time)
+        localStorage.setItem('test_test_window',test_window)
+        localStorage.setItem('test_test_duration',test_duration)
+        localStorage.setItem('test_test_attempt_time',new Date())
         await createMutation.mutate({id:id, assign_test_id:assign_test_id});
-        history.push(`/student/student-agreement/${params.class_id}/${params.class_name}/${subject_id}/${id}`)
+        // await createMutation.mutate({id:id, assign_test_id:assign_test_id, subject_id:subject_id});
+        // history.push(`/student/student-agreement/${params.class_id}/${params.class_name}/${subject_id}/${id}`)
+        history.push(`/student/student-agreement/${params.class_id}/${params.class_name}/${id}`)
     }
 
     const handleChangeSubject = (e) => {
         if(e.target.value != 999 ){
-            history.push(`/student/student-dashboard/${params.class_id}/${params.class_name}/${e.target.value}`)
+            if(e.target.value==9999){
+                history.push(`/student/student-dashboard/${params.class_id}/${params.class_name}`)
+            }else{
+                history.push(`/student/student-dashboard/${params.class_id}/${params.class_name}/${e.target.value}`)
+            }
         }
     }
 
     const handleClick = (attempt_id,t) => {
-        history.push(`/student/student-result/${params.class_id}/${params.class_name}/${params.subject_id}/${t}/${attempt_id}`)
+        history.push(`/student/student-result/${params.class_id}/${params.class_name}/${t}/${attempt_id}`)
     }
 
     const {data:subjects, subjectLoading} = useClassSubjectList();
@@ -59,7 +69,7 @@ export default function StudentDashboard(){
                     <div className="row breadcrumbs-top d-inline-block">
                         <div className="breadcrumb-wrapper col-12">
                             <ol className="breadcrumb">
-                                <li className="breadcrumb-item"><a href="index.html">Home</a>
+                                <li className="breadcrumb-item"><a href="">Home</a>
                                 </li>
                                 <li className="breadcrumb-item"><a href="#">Dashboard</a>
                                 </li>
@@ -77,16 +87,17 @@ export default function StudentDashboard(){
                         <form className="form">
                             <div className="form-body">
                                 <div className="row">
-                                <div className="form-group col-md-4 mb-0 ml-auto"> 
-                                    <select className="form-control" onChange={handleChangeSubject} value={params.subject_id ? params.subject_id : 999}>
-                                        <option value="999">--Select Subject-- </option>
+                                {section == "tab3" && <div className="form-group col-md-4 mb-0 ml-auto"> 
+                                    <select className="form-control" onChange={handleChangeSubject} value={params.subject_id ? params.subject_id : 9999}>
+                                        {/* <option value="999">--Select Subject-- </option> */}
+                                        <option value="9999">All</option>
                                         {subjects && subjects.map((subject, key)=>{
                                             return (
                                                 <option value={subject.subject_id} key={key}>{subject.subject_name} </option>
                                             )
                                         })}
                                     </select>
-                                </div>
+                                </div>}
                                 {/* <div className="form-group col-md-3 mb-0"> 
                                     <button type="button" className="btn btn-warning btn-min-width sbmt_view_form btn_click2 mr-1 mb-1 mt-0">Search</button> 
                                 </div> */}
@@ -100,15 +111,15 @@ export default function StudentDashboard(){
                         <div className="col-xl-12 col-lg-12 mt-2">
                             <div className="card">
                                 <div className="card-header">
-                                <h4 className="card-title rpt1">Attempt Tests </h4>
-                                {/* <h4 className="card-title rpt2" style={{display:"none"}}>Last Test Score </h4>
-                                <h4 className="card-title rpt3" style={{display:"none"}}>Cumulative Test Scores</h4> */}
+                                <h4 className="card-title rpt1" style={{display: section == "tab1" ? "block" : 'none'}}>Attempt Tests </h4>
+                                <h4 className="card-title rpt2" style={{display: section == "tab2" ? "block" : 'none'}}>Last Test Score </h4>
+                                <h4 className="card-title rpt3" style={{display: section == "tab3" ? "block" : 'none'}}>Cumulative Test Scores</h4>
                                 </div>
                                 <div className="card-content">
                                 <div className="card-body pt-0">
-                                    <p className="rpt1">Here, select a subject to view the test assigned by your teacher.</p>
-                                    {/* <p className="rpt2" style={{display:"none"}}>Here, select a subject to view the score of the last test that you have attempted.</p>
-                                    <p className="rpt3" style={{display:"none"}}    >Here, select a subject to find out your average performance.</p> */}
+                                    <p className="rpt1" style={{display: section == "tab1" ? "block" : 'none'}}>Here, select a subject to view the test assigned by your teacher.</p>
+                                    <p className="rpt2" style={{display: section == "tab2" ? "block" : 'none'}}>Here you can view the scores of all the previous tests that you attempted.</p>
+                                    <p className="rpt3" style={{display: section == "tab3" ? "block" : 'none'}}>Here, you can view the average score of all the tests you have attempted for the different subjects.</p>
                                     <ul className="nav nav-tabs nav-linetriangle no-hover-bg">
                                         <li className="nav-item">
                                             <a className={section == "tab1" ? "nav-link active" : 'nav-link'}  data-toggle="tab" aria-controls="tab41" href="#tab41" aria-expanded="true" onClick={()=>{changeSection('tab1')}}>  Attempt Test  </a>
@@ -131,7 +142,7 @@ export default function StudentDashboard(){
                                                 <div className="row">
                                                     {tests && tests.map((test, key)=>{
                                                         return (
-                                                            <AttemptCard test={test} fun={()=>{ handleAttempt(test.unit_table_id, test.subject_id, test.assign_table_id) }}/>
+                                                            <AttemptCard test={test} key={key} fun={()=>{ handleAttempt(test.unit_table_id, test.assign_table_id, test.start_date, test.test_window, test.test_duration) }}/>
                                                         )
                                                     })}
                                                 </div>
@@ -154,7 +165,7 @@ export default function StudentDashboard(){
                                             </div>
                                             </div>
                                             {/* <div className="row"> */}
-                                            {cumulativeScore && <CumilativeTestScore score={cumulativeScore}/>}
+                                            {cumulativeScore?.length>0 && <CumilativeTestScore score={cumulativeScore}/>}
                                             {/* </div> */}
                                         </div>
                                     </div>

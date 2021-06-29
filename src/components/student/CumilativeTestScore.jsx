@@ -35,6 +35,7 @@ export default function CumilativeTestScore({score}){
                     <table className="table table-striped table-bordered "> 
                         <thead>
                             <tr>
+                                <th>Test Name </th>
                                 <th>Attempted test date </th>
                                 <th> Total Time Taken   </th>
                                 <th> Obtained Marks </th>
@@ -46,8 +47,9 @@ export default function CumilativeTestScore({score}){
                                 averageResult =  averageResult + item.marksScored
                                 totalMarks = totalMarks + item.totalMarks
                                 return(
-                                    <tr>
-                                        <th>{item?.created_at?.substr(0,10)} </th>
+                                    <tr key={key}>
+                                        <th>{item.test_name}</th>
+                                        <td>{item?.created_at?.substr(0,10)} </td>
                                         <td> 
                                             {item.time_taken && new Date(item?.time_taken * 1000)?.toISOString()?.substr(11, 8)} 
                                         </td>
@@ -57,12 +59,12 @@ export default function CumilativeTestScore({score}){
                                 )
                             })}
                             <tr>
-                            <th colSpan="2">Average score</th>  
-                                <th> {averageResult}  </th>
+                            <th colSpan="3">Average score</th>  
+                                <th> {(averageResult/score?.length)?.toFixed(2)}  </th>
                                 <th>{totalMarks}</th>
                             </tr>
                             <tr>
-                            <th colSpan="2">Average in percentage</th>  
+                            <th colSpan="3">Average in percentage</th>  
                                 <th> {(averageResult/totalMarks * 100).toFixed(2)} %   </th>
                                 <th>100 %</th>
                             </tr>

@@ -1,5 +1,6 @@
-import {BrowserRouter as Router,Switch, Route,} from "react-router-dom";
+import {BrowserRouter as Router, Switch, Route,} from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import "react-datepicker/dist/react-datepicker.css";
 
 import { operRoutes } from './routes/index.jsx';
 

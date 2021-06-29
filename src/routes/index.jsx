@@ -47,19 +47,19 @@ export const studentRoutes = [
         component: StudentDashboard
     },
     {
-        path:'/:user_type?/student-agreement/:class_id?/:class_name?/:subject_id?/:test_id?',
+        path:'/:user_type?/student-agreement/:class_id?/:class_name?/:test_id?',
         component: StudentAgreement
     },
     {
-        path:'/:user_type?/student-attempt/:class_id?/:class_name?/:subject_id?/:test_id?',
+        path:'/:user_type?/student-attempt/:class_id?/:class_name?/:test_id?',
         component: StudentAttempt
     },
     {
-        path:'/:user_type?/student-result/:class_id?/:class_name?/:subject_id?/:test_id?/:attempt_id?',
+        path:'/:user_type?/student-result/:class_id?/:class_name?/:test_id?/:attempt_id?',
         component: StudentResult
     },
     {
-        path:'/:user_type?/student-last-report/:class_id?/:class_name?/:subject_id?/:attempt_id?',
+        path:'/:user_type?/student-last-report/:class_id?/:class_name?/:attempt_id?',
         component: StudentLastTestScoreReport
     },
     {

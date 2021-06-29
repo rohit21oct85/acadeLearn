@@ -21,12 +21,12 @@ export default function useUpdateAttemptTest(formData) {
 	}
 
 	const test_id = params?.test_id
-	const subject_id = params?.subject_id
+	// const subject_id = params?.subject_id
 	const school_id = localStorage.getItem('school_id')
 	const student_id = localStorage.getItem('user_id')
 
 	return useMutation(formData => {
-			return axios.patch(`${apiUrl}v1/web/save-answer/${params.subject_id}/${params.test_id}`,{school_id:school_id,student_id:student_id, question_id:formData.question_id, answer:formData.answer,option:formData.option,time_taken:localStorage.getItem('COUNTER')}, options)
+			return axios.patch(`${apiUrl}v1/web/save-answer/${params.test_id}`,{school_id:school_id,student_id:student_id, question_id:formData.question_id, answer:formData.answer,option:formData.option,time_taken:localStorage.getItem('COUNTER'),completion_status:formData.completion_status}, options)
 		},{
 		onSuccess: (data) => {
 				queryClient.invalidateQueries('single-question')

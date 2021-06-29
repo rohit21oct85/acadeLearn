@@ -29,8 +29,8 @@ export default function StudentLastTestScoreReport(){
                     <div className="row breadcrumbs-top d-inline-block">
                     <div className="breadcrumb-wrapper col-12">
                         <ol className="breadcrumb">
-                        <li className="breadcrumb-item"><a href="index.html">Home</a> </li>
-                        <li className="breadcrumb-item"><a href="#">Dashboard</a> </li>
+                        <li className="breadcrumb-item"><Link to={`/student/student-dashboard/${params.class_id}/${params.class_name}`}>Home</Link> </li>
+                        <li className="breadcrumb-item"><a href="#">Last Report</a> </li>
                         </ol>
                     </div>
                     </div>
@@ -72,21 +72,22 @@ export default function StudentLastTestScoreReport(){
                                                     <ul>
                                                     {options && options.map((it,key)=>{
                                                         return(
-                                                            <li key={key}>{it.value}: <span dangerouslySetInnerHTML={{__html: item[it?.key]}} ></span>{item.option == it?.key && item.correct_option != item.option ? <i className="fa fa-times"></i> : ""}{item.correct_option == item.option && item.option == it?.key ? <i className="fa fa-check"></i> : ""} </li>
+                                                            <li key={key}><span className="crchater">{it.value}:</span> <span dangerouslySetInnerHTML={{__html: item[it?.key]}} className="crchater-text" ></span>{item.option == it?.key && item.correct_option != item.option ? <i className="fa fa-times"></i> : ""}{item.correct_option == item.option && item.option == it?.key ? <i className="fa fa-check"></i> : ""} </li>
                                                         )
                                                     })}
                                                     {/* <li>B: <span dangerouslySetInnerHTML={{__html: item?.option_b}}></span></li>
                                                     <li>C: <span dangerouslySetInnerHTML={{__html: item?.option_c}}></span></li>
                                                     <li>D: <span dangerouslySetInnerHTML={{__html: item?.option_d}}></span></li> */}
                                                     </ul>
-                                                    <p>Correct Answer: <span dangerouslySetInnerHTML={{__html: item?.correct_answer}}></span> <i className="fa fa-check"></i></p>
+                                                    <p>User Answer: <span dangerouslySetInnerHTML={{__html: item?.answer}}></span></p>
+                                                    <p className="border-0">Correct Answer: <span dangerouslySetInnerHTML={{__html: item?.correct_answer}}></span> <i className="fa fa-check"></i></p>
                                                 </div>
                                             </div>
                                         </div>
                                     )
                                 })}
                                 </div>
-                                <div className="col-md-12 text-center"> <Link to={`/student/student-dashboard/${params.class_id}/${params.class_name}/${params.subject_id}`} className="btn btn-info"> Go To Dashboard</Link></div>
+                                <div className="col-md-12 text-center"> <Link to={`/student/student-dashboard/${params.class_id}/${params.class_name}`} className="btn btn-info"> Go To Dashboard</Link></div>
                             </div>
                             </div>
                         </div>

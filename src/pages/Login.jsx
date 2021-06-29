@@ -37,7 +37,6 @@ export default function Login(){
             const formData = {email: emailRef.current.value , password: passwordRef.current.value, sub_domain: subDomain};
             await axios.post(`${apiUrl}v1/${user_type}/login`, formData).then(
                 response=>{
-                    console.log(response)
                     if(response?.data?.status ===203){
                         setErrorMessage('Password Mismatch!');
                     }else if(response.status == 200){
@@ -166,7 +165,12 @@ export default function Login(){
                                             Fill in your details
                                         </h2>
                                         
-                                        <p className="next_btn1">Welcome to Acadelearn. To log in, enter your username and password assigned by your school.</p>
+                                        <p className="next_btn1">
+                                            {params.user_type == "student" ? 
+                                            "Welcome to Acadelearn. To log in, enter your username and password assigned by your school."
+                                            : params.user_type == "teacher" ? "Welcome to Acadelearn. Please enter your username and password to log in and assign tests.":
+                                            "We welcome you to Acadelearn. Please enter your username and password to log in to the assessment portal that solves all test needs of your school."}
+                                            </p>
                                         
                                         <div className="">
                                             <div className="bot-20">&nbsp;</div>

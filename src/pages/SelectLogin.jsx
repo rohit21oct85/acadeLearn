@@ -32,9 +32,9 @@ export default function SelectLogin(){
                             <div className="card-body pb-0">
                                 <div className="row mt-0">
                                     <div className="col-md-12 text-center select_you_are">
-                                    <h2>Customize your Login Page  
-                                    <span>Make Moodle look good Inside and Out</span></h2>
-                                    <p>Login As</p>
+                                    <h2>Welcome to the online assessment portal of AcadeLearn!
+                                    <span>Here, you can Log In as </span></h2>
+                                    {/* <p>Login As</p> */}
                                     <ul>
                                         <li><Link to="/student/login"><img src="/images/student-img1.png" className=""/><span> Student</span></Link></li> 
                                         <li><Link to="/teacher/login"><img src="/images/teacher-img1.png" className=""/> <span>Teacher</span></Link></li>

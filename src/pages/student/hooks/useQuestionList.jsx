@@ -12,7 +12,7 @@ export default function useQuestionList() {
     const student_id = localStorage.getItem('user_id');
     return useQuery(`question-list`, async () => {
         if(state?.access_token){
-            const result = await authAxios.post(`${apiUrl}v1/web/get-all-questions/${params.subject_id}/${params.test_id}`,{school_id:school_id,student_id:student_id},{
+            const result = await authAxios.post(`${apiUrl}v1/web/get-all-questions/${params.test_id}`,{school_id:school_id,student_id:student_id},{
                 headers: {
                     'Content-Type': 'Application/json',
                     'Authorization':'Bearer '+state.access_token
