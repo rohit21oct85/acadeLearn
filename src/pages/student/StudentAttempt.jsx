@@ -18,6 +18,7 @@ export default function StudentAttempt(){
 	const [duration, setDuration] = useState();
 	const [formData, setFormData] = useState('');
 	const [loading, setLoading] = useState(false);
+	const [questLoading, setQuestLoading] = useState(false);
 
 	const set = (e, option,id) => {		
 		if(counts-1 == questions?.length-1){
@@ -73,6 +74,10 @@ export default function StudentAttempt(){
 	// const updateMutation = useUpdateAttemptTest(formData);
 
 	useEffect(()=>{
+		setQuestLoading(false)
+	},[question])
+
+	useEffect(()=>{
 		let count = 0;
       	questions && questions.map((item,key) => {
 			item.answer && count++
@@ -82,6 +87,7 @@ export default function StudentAttempt(){
 
 	const saveAnswerAndNext = async () => {
 		setLoading(true)
+		setQuestLoading(true)
 		let search = window.location.search;
 		let query = new URLSearchParams(search);
 		let foo = query.get('query');
@@ -182,7 +188,7 @@ export default function StudentAttempt(){
                                        <span>{counts + ' of ' +questions?.length}</span>
                                     </div>
                                  </div>
-                                 {loading ? <span>loading next question. ..</span> : <div className="question bg-Not-select p-2 border-bottom">
+                                 {questLoading ? <span>loading next question. ..</span> : <div className="question bg-Not-select p-2 border-bottom">
                                     <div className="d-flex flex-row question-title">
                                        <span className="text-danger q_nsekected">Q.</span>
                                        <h5 className="ml-3"><div dangerouslySetInnerHTML={{ __html: question?.question }}/></h5>
