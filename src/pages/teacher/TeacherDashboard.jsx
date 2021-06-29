@@ -187,7 +187,7 @@ export default function TeacherDashboard(){
                                                                   <div className="form-group col-md-2 mb-2">
                                                                      {/* <!-- <label className="">Select Section </label>--> */}
                                                                      <select className="form-control" onChange={handleChangeTest} value={params.test_id ? params.test_id : 999}>
-                                                                        <option value="999">--Select Section-- </option>
+                                                                        <option value="999">--Select Test-- </option>
                                                                         {assignedTests && assignedTests.map((item,key)=>{
                                                                            return(
                                                                               <option value={item?.test_id} key={key}>{item?.test_name}</option>
