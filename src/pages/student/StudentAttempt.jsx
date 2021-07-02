@@ -101,6 +101,7 @@ export default function StudentAttempt(){
 		
 		if(formData.answer == undefined){
 			alert('select an answer')
+			setLoading(false)
 			return;
 		}
 		await attempt.mutate(formData,{
@@ -113,9 +114,9 @@ export default function StudentAttempt(){
 						ele[i].checked = false;
 				}
 				setLoading(false)
-			if(counts-1 == questions?.length-1){
-				history.push(`/student/student-result/${params.class_id}/${params.class_name}/${params.test_id}/${data?.data?.attemptId}`);
-			}
+				if(counts-1 == questions?.length-1){
+					history.push(`/student/student-result/${params.class_id}/${params.class_name}/${params.test_id}/${data?.data?.attemptId}`);
+				}
 			},
 		});
 	}
@@ -179,7 +180,7 @@ export default function StudentAttempt(){
                                     </div>
                                     <div className="col-md-8">
                   <div className="job-info job-widget">
-                     <h3 className="job-title">{questLoading ? "loading. .." : question?.chapter_name +" - "+ question?.unit_name }</h3>
+                     <h3 className="job-title">{localStorage.getItem('test_test_name')}</h3>
                   </div>
                   <div className="job-content job-widget mcq-start">
                      <div className="container">
@@ -192,8 +193,8 @@ export default function StudentAttempt(){
                                        <span>{counts + ' of ' +questions?.length}</span>
                                     </div>
                                  </div>
-                                 {questLoading ? <span>loading next question. ..</span> : <div className="question bg-Not-select p-2 border-bottom">
-                                    <div className="d-flex flex-row question-title">
+                                 <div className="question bg-Not-select p-2 border-bottom">
+                                    <div className="flex-row question-title">
                                        <span className="text-danger q_nsekected">Q.</span>
                                        <h5 className="ml-3"><div style={{fontSize :"20px"}} dangerouslySetInnerHTML={{ __html: question?.question }}/></h5>
                                     </div>
@@ -212,11 +213,11 @@ export default function StudentAttempt(){
                                        <label className={"radio " + (opt == 'option_d' ? 'active' :'')}> <input type="radio" name="option" value={question?.option_d} onChange={(e)=>{set(e,"option_d",question?._id)}}/><span class="checkmark"></span> <span><div dangerouslySetInnerHTML={{ __html: question?.option_d }}/></span>
                                        </label>
                                     </div>
-                                 </div>}
+                                 </div>
                                  <div className="p-2 bg-Not-select">
                                  <div className="row"> 
                                  <div className="col-md-12 text-right">
-                                 <button className={"btn nextqus_btn"} type="button" onClick={()=>{saveAnswerAndNext(question?._id)}}>{!loading ? counts-1 == questions?.length-1 ? "Submit" : "Next" : "please wait. .."}<i className="fa fa-angle-right ml-2"></i></button></div></div>
+                                 <button className={"btn nextqus_btn "} disabled={loading} type="button" onClick={()=>{saveAnswerAndNext(question?._id)}}>{!loading ? counts-1 == questions?.length-1 ? "Submit" : "Next" : "please wait. .."}<i className="fa fa-angle-right ml-2"></i></button></div></div>
                               </div>
                               </div>
                            </div>
@@ -257,7 +258,7 @@ export default function StudentAttempt(){
                      <div className="Quiz_reviewLegend">
                         <ol>
 							<li> <span className="Quiz_reviewColor" style={{backgroundColor: "#00ab54"}}></span> <span className="Quiz_reviewText">Answered</span></li>
-							<li> <span className="Quiz_reviewColor" style={{backgroundColor: "white",border:"1px solid black"}}></span> <span className="Quiz_reviewText">Not Attempt</span></li>
+							{/* <li> <span className="Quiz_reviewColor" style={{backgroundColor: "white",border:"1px solid black"}}></span> <span className="Quiz_reviewText">Not Attempt</span></li> */}
                         </ol>
                         <div style={{clear: "both"}}></div>
                      </div>

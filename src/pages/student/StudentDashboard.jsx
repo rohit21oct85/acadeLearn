@@ -26,7 +26,8 @@ export default function StudentDashboard(){
     // let assign_test_id = ''; 
     const createMutation = useCreateAttemptTest(form);
 
-    const handleAttempt = async(id, assign_test_id, start_time, test_window, test_duration) => {
+    const handleAttempt = async(id, assign_test_id, start_time, test_window, test_duration,test_name) => {
+        localStorage.setItem('test_test_name',test_name)
         localStorage.setItem('test_test_time',start_time)
         localStorage.setItem('test_test_window',test_window)
         localStorage.setItem('test_test_duration',test_duration)
@@ -142,8 +143,9 @@ export default function StudentDashboard(){
                                                 </div>
                                                 <div className="row">
                                                     {tests && tests.map((test, key)=>{
+                                                        console.log(test)
                                                         return (
-                                                            <AttemptCard test={test} key={key} fun={()=>{ handleAttempt(test.unit_table_id, test.assign_table_id, test.start_date, test.test_window, test.test_duration) }}/>
+                                                            <AttemptCard test={test} key={key} fun={()=>{ handleAttempt(test.unit_table_id, test.assign_table_id, test.start_date, test.test_window, test.test_duration,test.test_name) }}/>
                                                         )
                                                     })}
                                                 </div>

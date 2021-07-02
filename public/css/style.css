@@ -779,6 +779,7 @@ button.start_now_btn.btn.btn-warning.btn-min-width.sbmt_view_form.btn_click2.mr-
    text-align: left;
    box-shadow: 0 0 5px rgb(0 0 0 / 20%);
    border-radius:8px;
+   vertical-align: top;
 } 
 
 /* Hide the browser's default radio button */
@@ -843,3 +844,21 @@ button.start_now_btn.btn.btn-warning.btn-min-width.sbmt_view_form.btn_click2.mr-
    border-radius: 8px;}
    
    @media (max-width:991px){.ans{width:100%;}}
+
+
+
+
+label.radio p {
+    margin: 0;
+}
+
+.flex-row.question-title .image {
+    max-width: 500px;
+}
+.flex-row.question-title .image img{
+    width:100%;
+}
+.flex-row.question-title .table td, .flex-row.question-title .table th {
+    font-size: 15px;
+    padding: 10px 20px;
+}
