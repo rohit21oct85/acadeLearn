@@ -457,6 +457,7 @@ span.test-end {
     display: inline-block;
     text-align: center;
     margin-bottom: 10px;
+    margin-right: 5px;
 }
   
 .Attendence_dv ul li.Not-select a {
@@ -746,3 +747,99 @@ button.start_now_btn.btn.btn-warning.btn-min-width.sbmt_view_form.btn_click2.mr-
     .att_border{
             border: 1px solid #fb7a49;
     }
+    .react-datepicker__time-box ul li {
+        display: block;
+        width: 100%;
+    }
+    .logo_school{
+        width: 100px;
+        display: inline-block;
+        height: 100px;
+    }
+    .logo_school img{display: inline-block; width:100%; border-radius: 100px;}
+
+
+
+
+    /* studnet attemp page css */
+ /* The container */
+ .radio {
+    display: inline-block;
+   position: relative;
+   padding-left: 0;
+   margin-bottom: 0;
+   cursor: pointer; 
+   font-size: 16px;
+   -webkit-user-select: none;
+   -moz-user-select: none;
+   -ms-user-select: none;
+   user-select: none; 
+   width: 100%; 
+   padding: 20px;
+   text-align: left;
+   box-shadow: 0 0 5px rgb(0 0 0 / 20%);
+   border-radius:8px;
+} 
+
+/* Hide the browser's default radio button */
+.radio input {
+ position: absolute;
+ opacity: 0;
+ cursor: pointer; 
+}
+.radio span{font-size:16px; width:100%;     padding-left: 40px;
+   text-align: left;
+   display: inline-block;}
+/* Create a custom radio button */
+.radio .checkmark { 
+   position: absolute; 
+   height: 25px;
+   width: 25px;
+   background-color: #eee;
+   border-radius: 50%;
+   margin: 0; 
+   display: block; 
+   padding-left:0px; 
+}
+
+/* On mouse-over, add a grey background color */
+.radio:hover input ~ .checkmark {
+ background-color: #ccc;
+}
+
+/* When the radio button is checked, add a blue background */
+.radio input:checked ~ .checkmark {
+ background-color: #fff;
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.radio .checkmark:after {
+ content: "";
+ position: absolute;
+ display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.radio input:checked ~ .checkmark:after {
+ display: block;
+}
+
+/* Style the indicator (dot/circle) */
+.radio .checkmark:after {
+    top: 6px;
+   left: 6px;
+   width: 13px;
+   height: 13px;
+   border-radius: 50%;
+   background: #f44f4a;
+}
+
+.ans{margin-left: 0px !important;
+   display: inline-block; 
+   width:49%;
+   padding: 10px; }
+   
+   .radio.active {background:rgb(202 234 255); color:#000; box-shadow: 0 4px 20px rgb(0 0 0 / 20%);
+   border-radius: 8px;}
+   
+   @media (max-width:991px){.ans{width:100%;}}

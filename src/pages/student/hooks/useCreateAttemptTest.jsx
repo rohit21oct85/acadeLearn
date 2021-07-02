@@ -20,8 +20,9 @@ export default function useCreateModule(form) {
       const school_id = localStorage.getItem('school_id');
       const user_id = localStorage.getItem('user_id')
       const name = localStorage.getItem('name')
+      const section = localStorage.getItem('section')
       return useMutation(form => {
-                  return axios.post(`${apiUrl}v1/web/attempt-test`, {id:form.id, user_id:user_id,class_id:class_id,school_id:school_id,name:name,assign_test_id:form.assign_test_id}, options)
+                  return axios.post(`${apiUrl}v1/web/attempt-test`, {id:form.id, user_id:user_id,class_id:class_id,school_id:school_id,name:name,assign_test_id:form.assign_test_id, section:section}, options)
             },{
             onSuccess: () => {
                 queryClient.invalidateQueries('attempt-test')

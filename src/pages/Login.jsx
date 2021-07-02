@@ -158,13 +158,11 @@ export default function Login(){
                                         <span className="education1"><img src="/images/education.png" className="img-fluid" alt=""/></span>  
                                     </div>
                                     <div className="col-md-6 mt-4"> 
-                                        
                                         <div className="school_text login_as login_as3">
                                         <div className="back_page back_page2  mb-1"><Link to="/"><i className="fas fa-reply"></i> Back</Link></div>
                                         <h2 className="next_btn1">
                                             Fill in your details
                                         </h2>
-                                        
                                         <p className="next_btn1">
                                             {params.user_type == "student" ? 
                                             "Welcome to Acadelearn. To log in, enter your username and password assigned by your school."

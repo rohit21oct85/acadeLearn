@@ -16,6 +16,8 @@ import useUpdateUnitTestList from '../../pages/teacher/hooks/useUpdateUnitTestLi
 import useAssignedTestReport from '../../pages/teacher/hooks/useAssignedTestReport'
 import useSingleStudentTestReport from '../../pages/teacher/hooks/useSingleStudentTestReport'
 import CumilativeStudent from '../../components/teacher/CumulativeStudent'
+import useClassWiseList from '../../pages/principal/hooks/useClassWiseList'
+
 
 export default function TeacherDashboard(){
     const [section, setSection] = useState('tab1');
@@ -34,6 +36,7 @@ export default function TeacherDashboard(){
     const {data:studentWiseReport, studentWiseReportLoading} = useStudentWiseReport();
     const {data:assignedTests, assignedTestsLoading} = useAssignedTestReport();
     const {data:singleStudentTests, singleStudentTestsLoading} = useSingleStudentTestReport();
+    const {data:classWise, classWiseLoading} = useClassWiseList();
 
    const handleChange = (e) => {
       if(e.target.value != 999){
@@ -46,15 +49,25 @@ export default function TeacherDashboard(){
          history.push(`/teacher/teacher-dashboard/${params.class_id}/${e.target.value}`)
       }
    }
-
+   let totalStudents = 0;
 	let formData = '';
 	const updateMutation = useUpdateUnitTestList(formData);
-
     const updateAssignment = async (id, testduration, startDate, testWindow) => {
 
       // const s = startDate.toISOString()
       // var s = new Date(startDate).toLocaleString(undefined, {timeZone: 'Asia/Kolkata'});
-      await updateMutation.mutate({id:id,testduration:testduration,startDate:startDate,testWindow:testWindow});
+      if(!params.class_id){
+         alert('Please select a class first')
+      }else{
+         await updateMutation.mutate({id:id,testduration:testduration,startDate:startDate,testWindow:testWindow,teacher_id:localStorage.getItem('user_id')},{
+            onError: (error) => {
+               if(error.response.status == 405){
+                  alert('Test cant be assigned at this time\n Some test with the same timing already assigned.\n Change test timing and assign again')
+               }
+            }
+         });
+
+      }
 		// var today = new Date();
 		// if(today.toISOString().substring(0, 10) == date.substr(0,10)){
 			
@@ -264,20 +277,7 @@ export default function TeacherDashboard(){
                                                                         })}
                                                                      </select>
                                                                   </div>
-                                                                  {/* <div className="form-group col-md-3 mb-2">
-                                                                     <select className="form-control">
-                                                                        <option value="">--Select Subject-- </option>
-                                                                        <option value="">Science </option>
-                                                                        <option value="">Mathematics </option>
-                                                                        <option value="">Social Science </option>
-                                                                        <option value="">Physics</option>
-                                                                        <option value="">Chemistry</option>
-                                                                        <option value="">Biology </option>
-                                                                     </select>
-                                                                  </div> */}
-                                                                  {/* <div className="form-group col-md-3 mb-2">
-                                                                     <button type="button" className="btn btn-warning btn-min-width sbmt_view_form btn_click2 mr-1 mb-1 mt-0">Search</button>
-                                                                  </div> */}
+                                                            
                                                                </div>
                                                             </div>
                                                          </form>
@@ -362,33 +362,33 @@ export default function TeacherDashboard(){
                                                                <tr>
                                                                   <th>S.No</th>
                                                                   <th>ClassName	</th>
-                                                                  <th>No. of Sections	</th>
                                                                   <th>No. of Students</th>
-                                                                  <th>Last Updated</th>
                                                                   <th>Details</th>
                                                                </tr>
                                                             </thead>
                                                             <tbody>
+                                                            {classWise && classWise.map((item,key)=>{
+                                                                  totalStudents = totalStudents + item.student_count;
+                                                                  return(
+                                                                     <tr key={key}>
+                                                                           <td>{key+1}</td>
+                                                                           <td>{item.class_name}</td>
+                                                                           <td>{item.student_count}</td>
+                                                                           {/* <td>02/05/2021</td> */}
+                                                                           <td><Link to={`/teacher/teacher-class-report/${item._id}/${item.class_name}`}>View</Link></td>
+                                                                     </tr>
+                                                                  )
+                                                               })}
                                                                
-                                                               <tr>
-                                                                  <td>7</td>
-                                                                  <td>ClassName 12th</td>
-                                                                  <td>3	</td>
-                                                                  <td>120</td>
-                                                                  <td>02/05/2021</td>
-                                                                  <td><Link to="/teacher/teacher-class-report">View</Link></td>
-                                                               </tr>
-                                                            </tbody>
-                                                            <tfoot>
+                                                               </tbody>
+                                                               <tfoot>
                                                                <tr>
                                                                   <th>Total</th>
                                                                   <th></th>
-                                                                  <th>27</th>
-                                                                  <th>1120 </th>
-                                                                  <th> </th>
-                                                                  <th> </th>
+                                                                  <th>{totalStudents} </th>
+                                                                     <th> </th>
                                                                </tr>
-                                                            </tfoot>
+                                                               </tfoot>
                                                          </table>
                                                       </div>
                                                    </div>

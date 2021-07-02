@@ -19,8 +19,11 @@ export default function StudentAttempt(){
 	const [formData, setFormData] = useState('');
 	const [loading, setLoading] = useState(false);
 	const [questLoading, setQuestLoading] = useState(false);
+	const [opt, setOpt] = useState('');
 
 	const set = (e, option,id) => {		
+		console.log(e.target.value)
+		setOpt(option)
 		if(counts-1 == questions?.length-1){
 			setFormData({...formData,  ['answer'] : e.target.value, ['option']: option, ['question_id']:id, ['completion_status'] : "completed" });
 		}else{
@@ -75,6 +78,7 @@ export default function StudentAttempt(){
 
 	useEffect(()=>{
 		setQuestLoading(false)
+		setOpt('')
 	},[question])
 
 	useEffect(()=>{
@@ -175,7 +179,7 @@ export default function StudentAttempt(){
                                     </div>
                                     <div className="col-md-8">
                   <div className="job-info job-widget">
-                     <h3 className="job-title">Research Associate - Assessment Mathematics - SME Mathematics</h3>
+                     <h3 className="job-title">{questLoading ? "loading. .." : question?.chapter_name +" - "+ question?.unit_name }</h3>
                   </div>
                   <div className="job-content job-widget mcq-start">
                      <div className="container">
@@ -191,21 +195,21 @@ export default function StudentAttempt(){
                                  {questLoading ? <span>loading next question. ..</span> : <div className="question bg-Not-select p-2 border-bottom">
                                     <div className="d-flex flex-row question-title">
                                        <span className="text-danger q_nsekected">Q.</span>
-                                       <h5 className="ml-3"><div dangerouslySetInnerHTML={{ __html: question?.question }}/></h5>
+                                       <h5 className="ml-3"><div style={{fontSize :"20px"}} dangerouslySetInnerHTML={{ __html: question?.question }}/></h5>
                                     </div>
                                     <div className="ans ml-2">
-                                       <label className="radio"> <input type="radio" name="option" value={question?.option_a} onChange={(e)=>{set(e,"option_a",question?._id)}}/> <span><div dangerouslySetInnerHTML={{ __html: question?.option_a }}/></span> </label>
+                                       <label className={"radio " + (opt == 'option_a' ? 'active' :'')}> <input type="radio" name="option" value={question?.option_a} onChange={(e)=>{set(e,"option_a",question?._id)}}/><span class="checkmark"></span> <span><div dangerouslySetInnerHTML={{ __html: question?.option_a }}/></span> </label>
                                     </div>
                                     <div className="ans ml-2">
-                                       <label className="radio"> <input type="radio" name="option" value={question?.option_b} onChange={(e)=>{set(e,"option_b",question?._id)}}/> <span><div dangerouslySetInnerHTML={{ __html: question?.option_b }}/></span>
+                                       <label className={"radio " + (opt == 'option_b' ? 'active' :'')}> <input type="radio" name="option" value={question?.option_b} onChange={(e)=>{set(e,"option_b",question?._id)}}/><span class="checkmark"></span> <span><div dangerouslySetInnerHTML={{ __html: question?.option_b }}/></span>
                                        </label>
                                     </div>
                                     <div className="ans ml-2">
-                                       <label className="radio"> <input type="radio" name="option" value={question?.option_c} onChange={(e)=>{set(e,"option_c",question?._id)}}/> <span><div dangerouslySetInnerHTML={{ __html: question?.option_c }}/></span>
+                                       <label className={"radio " + (opt == 'option_c' ? 'active' :'')}> <input type="radio" name="option" value={question?.option_c} onChange={(e)=>{set(e,"option_c",question?._id)}}/><span class="checkmark"></span> <span><div dangerouslySetInnerHTML={{ __html: question?.option_c }}/></span>
                                        </label>
                                     </div>
                                     <div className="ans ml-2">
-                                       <label className="radio"> <input type="radio" name="option" value={question?.option_d} onChange={(e)=>{set(e,"option_d",question?._id)}}/> <span><div dangerouslySetInnerHTML={{ __html: question?.option_d }}/></span>
+                                       <label className={"radio " + (opt == 'option_d' ? 'active' :'')}> <input type="radio" name="option" value={question?.option_d} onChange={(e)=>{set(e,"option_d",question?._id)}}/><span class="checkmark"></span> <span><div dangerouslySetInnerHTML={{ __html: question?.option_d }}/></span>
                                        </label>
                                     </div>
                                  </div>}
@@ -253,7 +257,7 @@ export default function StudentAttempt(){
                      <div className="Quiz_reviewLegend">
                         <ol>
 							<li> <span className="Quiz_reviewColor" style={{backgroundColor: "#00ab54"}}></span> <span className="Quiz_reviewText">Answered</span></li>
-							<li> <span className="Quiz_reviewColor" style={{backgroundColor: "#f62d51"}}></span> <span className="Quiz_reviewText">Not Attempt</span></li>
+							<li> <span className="Quiz_reviewColor" style={{backgroundColor: "white",border:"1px solid black"}}></span> <span className="Quiz_reviewText">Not Attempt</span></li>
                         </ol>
                         <div style={{clear: "both"}}></div>
                      </div>

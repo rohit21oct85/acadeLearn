@@ -74,11 +74,11 @@ export const teacherRoutes = [
         component: TeacherDashboard
     },
     {
-        path:'/:user_type?/teacher-class-report',
+        path:'/:user_type?/teacher-class-report/:class_id?/:class_name?',
         component: TeacherClassReport
     },
     {
-        path:'/:user_type?/teacher-class-section-report',
+        path:'/:user_type?/teacher-class-section-report/:class_id?/:class_name?/:section?',
         component: TeacherClassSectionReport
     },
     {
@@ -101,11 +101,11 @@ export const principalRoutes = [
         component: ClassWiseSectionReport
     },
     {
-        path:'/:user_type?/principal-teacher-wise-report/:school_id?',
+        path:'/:user_type?/principal-teacher-wise-report/:school_id?/:teacher_id?',
         component: TeacherWiseReport
     },
     {
-        path:'/:user_type?/principal-teacher-wise-section-report/:school_id?',
+        path:'/:user_type?/principal-teacher-wise-section-report/:school_id?/:teacher_id?/:class_id?/:test_id?',
         component: TeacherWiseSectionReport
     },
 ]

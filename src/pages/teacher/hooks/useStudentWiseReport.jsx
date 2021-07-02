@@ -5,7 +5,7 @@ import {AuthContext} from '../../../context/AuthContext';
 import  {apiUrl} from '../../../config/config' 
 import {useParams} from 'react-router-dom'
 
-export default function useUnitTestList() {
+export default function useStudentWiseReport() {
     const {state } = useContext(AuthContext);
     const params = useParams();
     const key =  `student-report-${params.test_id}`

@@ -7,7 +7,7 @@ import {useState} from 'react'
 import useClassWiseList from '../../pages/principal/hooks/useClassWiseList'
 import useTeacherWiseList from '../../pages/principal/hooks/useTeacherWiseList'
 import useSubjectList from '../../pages/principal/hooks/useSubjectList'
-
+import {MakeSlug} from '../../utils/utils'
 
 export default function PrincipalDashboard(){
     const params = useParams();
@@ -29,7 +29,13 @@ export default function PrincipalDashboard(){
         }
     }
 
+    const viewDetails = (data) => {
+        localStorage.setItem('teacher_details',data?.name)
+        history.push(`/principal/principal-teacher-wise-report/${params.school_id}/${data._id}`)
+    }
+
     let totalStudents = 0;
+    let totalCapacity = 0;
     const {data:classWise, classWiseLoading} = useClassWiseList();
     const {data:teacherWise, teacherWiseLoading} = useTeacherWiseList();
     const {data:subjects, subjectListLoading} = useSubjectList();
@@ -98,22 +104,22 @@ export default function PrincipalDashboard(){
                                                                 <tr>
                                                                     <th>S.No</th>
                                                                     <th>ClassName	</th>
-                                                                    <th>No. of Sections	</th>
                                                                     <th>No. of Students</th>
-                                                                    {/* <th>Last Updated</th> */}
+                                                                    <th>Capacity</th>
                                                                     <th>Details</th>
                                                                 </tr>
                                                                 </thead>
                                                                 <tbody>
                                                                 {classWise && classWise.map((item,key)=>{
                                                                     totalStudents = totalStudents + item.student_count;
+                                                                    totalCapacity = totalCapacity + item.capacity;
                                                                     return(
                                                                         <tr key={key}>
                                                                             <td>{key+1}</td>
                                                                             <td>{item.class_name}</td>
-                                                                            <td>3 (static data)	</td>
                                                                             <td>{item.student_count}</td>
-                                                                            {/* <td>02/05/2021</td> */}
+                                                                            <td>{item.capacity}</td>
+                                                                            {/* <td><a href="#">View</a></td> */}
                                                                             <td><Link to={`/principal/principal-class-wise-report/${params.school_id}`}>View</Link></td>
                                                                         </tr>
                                                                     )
@@ -124,9 +130,9 @@ export default function PrincipalDashboard(){
                                                                 <tr>
                                                                     <th>Total</th>
                                                                     <th></th>
-                                                                    <th>27(static data)</th>
                                                                     <th>{totalStudents} </th>
-                                                                        <th> </th>
+                                                                        <th>{totalCapacity} </th>
+                                                                        <th></th>
                                                                 </tr>
                                                                 </tfoot>
                                                             </table>
@@ -176,7 +182,8 @@ export default function PrincipalDashboard(){
                                                             </div>
                                                             <p className="user-name m-t-10 mb-0 text-teachet1">{item.name} </p>({item.EmpID})
                                                             <h5 className="user-name m-t-10 mb-0 text-subject"><a href="#">{item.subject_name} </a></h5>
-                                                            <div className="View_Detail text-muted"><Link to={`/principal/principal-teacher-wise-report/${params.school_id}`}>View Details </Link></div>
+                                                            <div className="View_Detail text-muted">
+                                                                <a href="#" onClick={()=>{viewDetails(item)}}>View Details </a></div>
                                                         </div>
                                                     </div>
                                                 )

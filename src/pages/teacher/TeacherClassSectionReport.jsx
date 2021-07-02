@@ -1,9 +1,14 @@
-import {useHistory, useParams, useLocation} from 'react-router-dom'
+import {useHistory, useParams, useLocation, Link} from 'react-router-dom'
 import Head from '../../components/common/Head'
 import Footer from '../../components/common/Footer'
 import Foot from '../../components/common/Foot'
 import HeaderNav from '../../components/common/HeaderNav'
+import useClassSectionReportList from './hooks/useClassSectionReportList'
+
 export default function TeacherClassSectionReport(){
+   const params = useParams();
+
+   const {data:datas, datasLoading} = useClassSectionReportList();
     return(
         <>
         <Head/>
@@ -13,7 +18,7 @@ export default function TeacherClassSectionReport(){
          <div className="content-wrapper">
             <div className="content-header row">
                <div className="content-header-left col-md-6 col-12 mb-2 breadcrumb-new">
-                  <h3 className="content-header-title mb-0 d-inline-block">ClassName 6th A</h3>
+                  <h3 className="content-header-title mb-0 d-inline-block">Class {params?.class_name}th {params?.section}</h3>
                   <div className="row breadcrumbs-top d-inline-block">
                      <div className="breadcrumb-wrapper col-12">
                         <ol className="breadcrumb">
@@ -21,7 +26,7 @@ export default function TeacherClassSectionReport(){
                            </li>
                            <li className="breadcrumb-item"><a href="#">Teacher</a>
                            </li>
-                           <li className="breadcrumb-item">ClassName 6th A
+                           <li className="breadcrumb-item">Class {params?.class_name}th {params?.section}
                            </li>
                         </ol>
                      </div>
@@ -35,7 +40,7 @@ export default function TeacherClassSectionReport(){
                      <div className="card">
                      <div className="col-xl-12 col-lg-12 left-arrow1">
                <ul> 
-               <li><a href="className-report.php"><img src="../images/left-arrow.png" className="img-fluid" alt="back-arrow"/> Back</a></li>
+               <li><Link to={`/teacher/teacher-class-report/${params.class_id}/${params.class_name}`}><img src="/images/left-arrow.png" className="img-fluid" alt="back-arrow"/> Back</Link></li>
                </ul>
                </div>
                         <div className="card-content">
@@ -53,186 +58,21 @@ export default function TeacherClassSectionReport(){
                                           </tr>
                                        </thead>
                                        <tbody>
-                                          <tr>
-                                             <td className="text-truncate">
-                                                <span className="avatar avatar-xs">
-                                                <img className="box-shadow-2" src="../images/portrait/small/avatar-s-4.png" alt="avatar"/> 
-                                                </span> <span>Rachna Thitte</span>
-                                             </td>
-                                             <td>Science   </td>
-                                             <td> 65%   </td>
-                                             <td>35% </td>
-                                          </tr>
-                                          <tr>
-                                             <td className="text-truncate">
-                                                <span className="avatar avatar-xs">
-                                                <img className="box-shadow-2" src="../images/portrait/small/avatar-s-5.png" alt="avatar"/> 
-                                                </span> <span>Pankaj Mittal</span>
-                                             </td>
-                                             <td>Science   </td>
-                                             <td> 20%    </td>
-                                             <td>45%   </td>
-                                          </tr>
-                                          <tr>
-                                             <td className="text-truncate">
-                                                <span className="avatar avatar-xs">
-                                                <img className="box-shadow-2" src="../images/portrait/small/avatar-s-9.png" alt="avatar"/> 
-                                                </span> <span>Amar Kaushik</span>
-                                             </td>
-                                             <td>Science   </td>
-                                             <td> 30%      </td>
-                                             <td>70%   </td>
-                                          </tr>
-                                          <tr>
-                                             <td className="text-truncate">
-                                                <span className="avatar avatar-xs">
-                                                <img className="box-shadow-2" src="../images/portrait/small/avatar-s-4.png" alt="avatar"/> 
-                                                </span> <span>Rachna Thitte</span>
-                                             </td>
-                                             <td>Science   </td>
-                                             <td> 65%   </td>
-                                             <td>35% </td>
-                                          </tr>
-                                          <tr>
-                                             <td className="text-truncate">
-                                                <span className="avatar avatar-xs">
-                                                <img className="box-shadow-2" src="../images/portrait/small/avatar-s-5.png" alt="avatar"/> 
-                                                </span> <span>Pankaj Mittal</span>
-                                             </td>
-                                             <td>Science   </td>
-                                             <td> 20%    </td>
-                                             <td>45%   </td>
-                                          </tr>
-                                          <tr>
-                                             <td className="text-truncate">
-                                                <span className="avatar avatar-xs">
-                                                <img className="box-shadow-2" src="../images/portrait/small/avatar-s-9.png" alt="avatar"/> 
-                                                </span> <span>Amar Kaushik</span>
-                                             </td>
-                                             <td>Science   </td>
-                                             <td> 30%      </td>
-                                             <td>70%   </td>
-                                          </tr>
-                                          <tr>
-                                             <td className="text-truncate">
-                                                <span className="avatar avatar-xs">
-                                                <img className="box-shadow-2" src="../images/portrait/small/avatar-s-4.png" alt="avatar"/> 
-                                                </span> <span>Rachna Thitte</span>
-                                             </td>
-                                             <td>Science   </td>
-                                             <td> 65%   </td>
-                                             <td>35% </td>
-                                          </tr>
-                                          <tr>
-                                             <td className="text-truncate">
-                                                <span className="avatar avatar-xs">
-                                                <img className="box-shadow-2" src="../images/portrait/small/avatar-s-5.png" alt="avatar"/> 
-                                                </span> <span>Pankaj Mittal</span>
-                                             </td>
-                                             <td>Science   </td>
-                                             <td> 20%    </td>
-                                             <td>45%   </td>
-                                          </tr>
-                                          <tr>
-                                             <td className="text-truncate">
-                                                <span className="avatar avatar-xs">
-                                                <img className="box-shadow-2" src="../images/portrait/small/avatar-s-9.png" alt="avatar"/> 
-                                                </span> <span>Amar Kaushik</span>
-                                             </td>
-                                             <td>Science   </td>
-                                             <td> 30%      </td>
-                                             <td>70%   </td>
-                                          </tr>
-                                          <tr>
-                                             <td className="text-truncate">
-                                                <span className="avatar avatar-xs">
-                                                <img className="box-shadow-2" src="../images/portrait/small/avatar-s-4.png" alt="avatar"/> 
-                                                </span> <span>Rachna Thitte</span>
-                                             </td>
-                                             <td>Science   </td>
-                                             <td> 65%   </td>
-                                             <td>35% </td>
-                                          </tr>
-                                          <tr>
-                                             <td className="text-truncate">
-                                                <span className="avatar avatar-xs">
-                                                <img className="box-shadow-2" src="../images/portrait/small/avatar-s-5.png" alt="avatar"/> 
-                                                </span> <span>Pankaj Mittal</span>
-                                             </td>
-                                             <td>Science   </td>
-                                             <td> 20%    </td>
-                                             <td>45%   </td>
-                                          </tr>
-                                          <tr>
-                                             <td className="text-truncate">
-                                                <span className="avatar avatar-xs">
-                                                <img className="box-shadow-2" src="../images/portrait/small/avatar-s-9.png" alt="avatar"/> 
-                                                </span> <span>Amar Kaushik</span>
-                                             </td>
-                                             <td>Science   </td>
-                                             <td> 30%      </td>
-                                             <td>70%   </td>
-                                          </tr>
-                                          <tr>
-                                             <td className="text-truncate">
-                                                <span className="avatar avatar-xs">
-                                                <img className="box-shadow-2" src="../images/portrait/small/avatar-s-4.png" alt="avatar"/> 
-                                                </span> <span>Rachna Thitte</span>
-                                             </td>
-                                             <td>Science   </td>
-                                             <td> 65%   </td>
-                                             <td>35% </td>
-                                          </tr>
-                                          <tr>
-                                             <td className="text-truncate">
-                                                <span className="avatar avatar-xs">
-                                                <img className="box-shadow-2" src="../images/portrait/small/avatar-s-5.png" alt="avatar"/> 
-                                                </span> <span>Pankaj Mittal</span>
-                                             </td>
-                                             <td>Science   </td>
-                                             <td> 20%    </td>
-                                             <td>45%   </td>
-                                          </tr>
-                                          <tr>
-                                             <td className="text-truncate">
-                                                <span className="avatar avatar-xs">
-                                                <img className="box-shadow-2" src="../images/portrait/small/avatar-s-9.png" alt="avatar"/> 
-                                                </span> <span>Amar Kaushik</span>
-                                             </td>
-                                             <td>Science   </td>
-                                             <td> 30%      </td>
-                                             <td>70%   </td>
-                                          </tr>
-                                          <tr>
-                                             <td className="text-truncate">
-                                                <span className="avatar avatar-xs">
-                                                <img className="box-shadow-2" src="../images/portrait/small/avatar-s-4.png" alt="avatar"/> 
-                                                </span> <span>Rachna Thitte</span>
-                                             </td>
-                                             <td>Science   </td>
-                                             <td> 65%   </td>
-                                             <td>35% </td>
-                                          </tr>
-                                          <tr>
-                                             <td className="text-truncate">
-                                                <span className="avatar avatar-xs">
-                                                <img className="box-shadow-2" src="../images/portrait/small/avatar-s-5.png" alt="avatar"/> 
-                                                </span> <span>Pankaj Mittal</span>
-                                             </td>
-                                             <td>Science   </td>
-                                             <td> 20%    </td>
-                                             <td>45%   </td>
-                                          </tr>
-                                          <tr>
-                                             <td className="text-truncate">
-                                                <span className="avatar avatar-xs">
-                                                <img className="box-shadow-2" src="../images/portrait/small/avatar-s-9.png" alt="avatar"/> 
-                                                </span> <span>Amar Kaushik</span>
-                                             </td>
-                                             <td>Science   </td>
-                                             <td> 30%      </td>
-                                             <td>70%   </td>
-                                          </tr>
+                                          {datas && datas.map((item,key)=>{
+                                             return(
+                                                <tr>
+                                                   <td className="text-truncate">
+                                                      {/* <span className="avatar avatar-xs">
+                                                      <img className="box-shadow-2" src="./images/portrait/small/avatar-s-9.png" alt="avatar"/> 
+                                                      </span>  */}
+                                                      <span>{item.name}</span>
+                                                   </td>
+                                                   <td>Science   </td>
+                                                   <td> 30%      </td>
+                                                   <td>70%   </td>
+                                                </tr>
+                                             )
+                                          })}
                                           </tbody>
                                     </table>
                                  </div>

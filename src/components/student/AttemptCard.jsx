@@ -3,8 +3,9 @@ import { Link } from 'react-router-dom'
 export default function AttemptCard({test, key, fun}){
 
     let d = new Date(test?.start_date)
-   
-
+    let endsIN = new Date(test?.start_date)
+    endsIN.setMinutes( endsIN.getMinutes() + test.test_window );
+    
     const attempt = (data) => {
         var current_time = new Date();
         var allowed_time = new Date(data.start_date);
@@ -32,7 +33,7 @@ export default function AttemptCard({test, key, fun}){
                         <div className="float-right">
                             <a href="#" className="">{test?.start_date?.substring(10,0)}</a><br/>
                             Starts at:<a href="#" className=""> { d.getHours()+" : "+ d.getMinutes()+" : "+d.getSeconds()} </a>hrs<br/>
-                            Test Window:<a href="#" className=""> {test?.test_window} </a>min
+                            Test Window:<a href="#" className=""> {endsIN.getHours()+" : "+ endsIN.getMinutes()+" : "+endsIN.getSeconds()} </a>min
                         </div>
                         
                     </div>

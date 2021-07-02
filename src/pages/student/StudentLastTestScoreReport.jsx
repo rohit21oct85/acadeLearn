@@ -14,6 +14,7 @@ export default function StudentLastTestScoreReport(){
         {key: 'option_c', value: 'C'},
         {key: 'option_d', value: 'D'},
     ]
+    const options1 = { 'option_a':'A','option_b':'B','option_c':'C','option_d':'D' }
 
     const {data:lastScore, lastScoreLoading} = useLastTestScore();
     return(
@@ -79,8 +80,8 @@ export default function StudentLastTestScoreReport(){
                                                     <li>C: <span dangerouslySetInnerHTML={{__html: item?.option_c}}></span></li>
                                                     <li>D: <span dangerouslySetInnerHTML={{__html: item?.option_d}}></span></li> */}
                                                     </ul>
-                                                    <p>User Answer: <span dangerouslySetInnerHTML={{__html: item?.answer}}></span></p>
-                                                    <p className="border-0">Correct Answer: <span dangerouslySetInnerHTML={{__html: item?.correct_answer}}></span> <i className="fa fa-check"></i></p>
+                                                    <p>User Answer: { options1[`${item?.option}`]+ " : " }<span dangerouslySetInnerHTML={{__html: item?.answer}}></span></p>
+                                                    <p className="border-0">Correct Answer: { options1[`${item?.correct_option}`] + " : " }<span dangerouslySetInnerHTML={{__html: item?.correct_answer}}></span> <i className="fa fa-check"></i></p>
                                                 </div>
                                             </div>
                                         </div>

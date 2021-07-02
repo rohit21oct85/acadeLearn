@@ -3,11 +3,29 @@ import Footer from '../components/common/Footer'
 import Foot from '../components/common/Foot'
 import { Link } from 'react-router-dom'
 import {useHistory, useParams, useLocation} from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { authAxios, apiUrl } from '../config/config'
 
 export default function SelectLogin(){
     const history = useHistory();
     const params  = useParams();
     const location = useLocation();
+    
+    const [image, setImage] = useState();
+
+    useEffect(()=>{
+        const parsedData = window.location.host.split(".");
+
+        if(parsedData.length >= 3){
+            const subDomain = parsedData[0];
+            getSchoolLogo(subDomain)
+        }
+        async function getSchoolLogo(sub_domain){
+            const data = await authAxios.get(`${apiUrl}v1/web/get-school-logo/${sub_domain}`)
+            // console.log(data?.data?.data?.school_logo)
+            setImage(data?.data?.data?.school_logo)
+        }
+        }, [])
     return(
         <>
         <Head/>
@@ -32,6 +50,7 @@ export default function SelectLogin(){
                             <div className="card-body pb-0">
                                 <div className="row mt-0">
                                     <div className="col-md-12 text-center select_you_are">
+                                    <span className="logo_school"><img src={`https://drive.google.com/uc?export=view&id=${image}`} alt=""/></span>
                                     <h2>Welcome to the online assessment portal of AcadeLearn!
                                     <span>Here, you can Log In as </span></h2>
                                     {/* <p>Login As</p> */}

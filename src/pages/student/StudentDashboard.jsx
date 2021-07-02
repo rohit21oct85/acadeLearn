@@ -56,6 +56,7 @@ export default function StudentDashboard(){
     const {data:lastScore, lastScoreLoading} = useLastTestScore();
     const {data:cumulativeScore, cumulativeScoreLoading} = useCumulativeScore();
     
+
     return(
         <>
         <Head/>
@@ -165,7 +166,7 @@ export default function StudentDashboard(){
                                             </div>
                                             </div>
                                             {/* <div className="row"> */}
-                                            {cumulativeScore?.length>0 && <CumilativeTestScore score={cumulativeScore}/>}
+                                                {cumulativeScore?.length>0 && <CumilativeTestScore score={cumulativeScore}/>}
                                             {/* </div> */}
                                         </div>
                                     </div>
