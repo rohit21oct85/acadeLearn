@@ -52,9 +52,9 @@ export default function TeacherClassSectionReport(){
                                        <thead>
                                           <tr>
                                              <th>Student Name </th>
-                                             <th>Subject </th>
-                                             <th>Last Test Performance</th>
-                                             <th>Cumulative Test Performance</th>
+                                             <th>Average </th>
+                                             <th>Cumulative Performance</th>
+                                             {/* <th>Cumulative Test Performance</th> */}
                                           </tr>
                                        </thead>
                                        <tbody>
@@ -67,9 +67,9 @@ export default function TeacherClassSectionReport(){
                                                       </span>  */}
                                                       <span>{item.name}</span>
                                                    </td>
-                                                   <td>Science   </td>
-                                                   <td> 30%      </td>
-                                                   <td>70%   </td>
+                                                   <td> {item?.average ?  item.average: "no results"}       </td>
+                                                   <td> {item?.percentage ? item.percentage +" %": "no results"}       </td>
+                                                   {/* <td>70%   </td> */}
                                                 </tr>
                                              )
                                           })}

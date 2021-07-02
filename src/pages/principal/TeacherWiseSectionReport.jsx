@@ -55,7 +55,7 @@ export default function TeacherWiseSectionReport(){
                                                         <tr>
 
                                                         <th scope="col">Name</th>
-                                                        <th scope="col">Tine Taken</th>
+                                                        <th scope="col">Time Taken</th>
                                                         <th scope="col">Score</th>
                                                         <th scope="col">Percentage</th>
                                                         </tr>

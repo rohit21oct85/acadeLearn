@@ -225,7 +225,7 @@ export default function TeacherDashboard(){
                                                                <th>Student Name </th>
                                                                <th>Time Taken</th>
                                                                <th>Marks</th>
-                                                               <th>Cumulative Test Performance</th>
+                                                               <th>Percentage</th>
                                                                <th>Action</th>
                                                          </tr>
                                                       </thead>
@@ -363,7 +363,7 @@ export default function TeacherDashboard(){
                                                                   <th>S.No</th>
                                                                   <th>ClassName	</th>
                                                                   <th>No. of Students</th>
-                                                                  <th>Section</th>
+                                                                  {/* <th>Section</th> */}
                                                                   <th>Details</th>
                                                                </tr>
                                                             </thead>
@@ -375,9 +375,9 @@ export default function TeacherDashboard(){
                                                                            <td>{key+1}</td>
                                                                            <td>{item.class_name}</td>
                                                                            <td>{item.student_count}</td>
-                                                                           <td>{item.section + ' ,'}</td>
+                                                                           {/* <td>{item.section + ' ,'}</td> */}
                                                                            {/* <td>02/05/2021</td> */}
-                                                                           <td><Link to={`/teacher/teacher-class-report/${item._id}/${item.class_name}`}>View</Link></td>
+                                                                           <td><Link to={`/teacher/teacher-class-report/${item.class_id}/${item.class_name}`}>View</Link></td>
                                                                      </tr>
                                                                   )
                                                                })}

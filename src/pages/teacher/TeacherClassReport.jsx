@@ -54,7 +54,7 @@ export default function TeacherClassReport(){
                                             <tr>
                                                 <th>Section   </th>
                                                 <th>No of Students   </th>
-                                                <th>Last Test Attendance    </th>
+                                                <th>No of Student Attempts    </th>
                                                 <th>Cumulative Test Attendance</th>
                                             </tr>
                                         </thead>
