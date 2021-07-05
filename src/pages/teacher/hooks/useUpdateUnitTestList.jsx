@@ -1,15 +1,11 @@
-import React, { useContext, useState } from 'react'
-import {useLocation, useParams, useHistory} from 'react-router-dom'
+import { useContext } from 'react'
+import { useParams } from 'react-router-dom'
 import {useMutation, useQueryClient} from 'react-query'
-import axios from 'axios'
 import {apiUrl, authAxios} from '../../../config/config'
 import {AuthContext} from '../../../context/AuthContext';
 
 export default function useUpdateUnitTestList(formData) {
       const params = useParams();
-      const location = useLocation();
-      const path = location.pathname;
-      const history = useHistory();
       const queryClient = useQueryClient()
       const class_id = params.class_id
       const {state} = useContext(AuthContext);

@@ -18,7 +18,7 @@ export default function ClassWiseReport(){
          <div className="content-wrapper">
             <div className="content-header row">
                <div className="content-header-left col-md-6 col-12 mb-2 breadcrumb-new">
-                  <h3 className="content-header-title mb-0 d-inline-block">ClassName {params.class_name}th </h3>
+                  <h3 className="content-header-title mb-0 d-inline-block">Class {params.class_name}th </h3>
                   <div className="row breadcrumbs-top d-inline-block">
                      <div className="breadcrumb-wrapper col-12">
                         <ol className="breadcrumb">
@@ -59,9 +59,8 @@ export default function ClassWiseReport(){
                                              <th>Cumulative Test Attendance</th>
                                           </tr>
                                        </thead>
-                                       <tbody>{console.log(sections)}
+                                       <tbody>
                                           {sections && sections?.section?.map((item,key) => {
-                                             console.log(item)
                                                 return(
                                                     <tr key={key}>
                                                         <td><Link to={`/principal/principal-class-wise-section-report/${params.school_id}/${params.class_id}/${params.class_name}/${item}`} className="sbject_sw">{item} </Link></td>

@@ -4,8 +4,7 @@ import Foot from '../components/common/Foot'
 import { Link } from 'react-router-dom'
 import {useHistory, useParams, useLocation} from 'react-router-dom'
 import { baseUrl, apiUrl, server_type } from "../config/config";
-import reactDom from 'react-dom'
-import react, {useEffect, useState} from 'react'
+import {useEffect, useState} from 'react'
 import axios from 'axios';
 
 export default function SearchSchool(){
@@ -53,9 +52,9 @@ export default function SearchSchool(){
                 <div className="col-md-6">
                     <a href="index.php"><img src="/images/logo/logo.png" className="img-fluid"/> AcadeLearn</a>
                 </div>
-                <div className="col-md-6 text-right top_login_btn">
+                {/* <div className="col-md-6 text-right top_login_btn">
                     <a href="select-login.php"><i className="fa fa-user"></i> Log In</a>
-                </div>
+                </div> */}
                 </div>
             </div>
             </section>

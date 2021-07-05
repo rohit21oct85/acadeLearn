@@ -19,7 +19,7 @@ export default function ClassWiseSectionReport(){
             <div className="content-wrapper">
                 <div className="content-header row">
                 <div className="content-header-left col-md-6 col-12 mb-2 breadcrumb-new">
-                    <h3 className="content-header-title mb-0 d-inline-block">ClassName {params.class_name}th {params.section}</h3>
+                    <h3 className="content-header-title mb-0 d-inline-block">Class {params.class_name}th {params.section}</h3>
                     <div className="row breadcrumbs-top d-inline-block">
                         <div className="breadcrumb-wrapper col-12">
                             <ol className="breadcrumb">
@@ -27,7 +27,7 @@ export default function ClassWiseSectionReport(){
                             </li>
                             <li className="breadcrumb-item"><a href="#">Teacher</a>
                             </li>
-                            <li className="breadcrumb-item">ClassName {params.class_name}th {params.section}
+                            <li className="breadcrumb-item">Class {params.class_name}th {params.section}
                             </li>
                             </ol>
                         </div>

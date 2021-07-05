@@ -1,14 +1,13 @@
-import { useHistory, useParams, useLocation, Link } from 'react-router-dom'
-import React, { useState, useEffect, useRef, useContext } from 'react';
+import { useHistory, Link } from 'react-router-dom'
+import React, { useState, useContext } from 'react';
 import { AuthContext } from '../../context/AuthContext';
 
 export default function HeaderNav(){
     const [searchState, setSearchState] = useState('');
     const [showDrop, setShowDrop] = useState('');
     const [showLang, setShowLang] = useState('');
-    const {dispatch, state } = useContext(AuthContext);
+    const {dispatch} = useContext(AuthContext);
     const history = useHistory();
-    const params = useParams();
 
 
     const openSearch = () => {
@@ -36,15 +35,6 @@ export default function HeaderNav(){
 
     const logout = () => {
         dispatch({ type: 'LOGOUT' })
-        // if(state?.user_type === 'student'){
-        //     history.push('/student/login')
-        // }
-        // else if(state?.user_type === 'teacher'){
-        //     history.push('/teacher/login')
-        // }
-        // else if(state?.user_type === 'principal'){
-        //     history.push('/principal/login')
-        // }
         history.push('/');
     }
 

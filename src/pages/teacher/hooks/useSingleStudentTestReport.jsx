@@ -3,7 +3,7 @@ import{useParams} from 'react-router-dom'
 import {useQuery} from 'react-query';
 import axios from 'axios';
 import {AuthContext} from '../../../context/AuthContext.jsx';
-import  {apiUrl, authAxios} from '../../../config/config' 
+import {apiUrl} from '../../../config/config' 
 
 export default function useSingleStudentTestReport() {
     const {state } = useContext(AuthContext);

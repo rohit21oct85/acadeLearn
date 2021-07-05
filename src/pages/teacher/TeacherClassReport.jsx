@@ -1,4 +1,4 @@
-import {useHistory, useParams, useLocation, Link} from 'react-router-dom'
+import {useParams, Link} from 'react-router-dom'
 import Head from '../../components/common/Head'
 import Footer from '../../components/common/Footer'
 import Foot from '../../components/common/Foot'

@@ -1,7 +1,7 @@
-import React, {ReactFragment, useEffect, useState} from 'react';
+import React, { useEffect, useState} from 'react';
 import DatePicker from "react-datepicker";
 
-export default function AssignmentCard({test, key, fun}){
+export default function AssignmentCard({test, key, fun, loading}){
     const [startDate, setStartDate] = useState(new Date());
     const [testWindow, setTestWindow] = useState();
     
@@ -54,7 +54,7 @@ export default function AssignmentCard({test, key, fun}){
                             <div className="col-md-2 text-right">
                                 {/* <a href="#" className="btn btn-outline-info mr-1" data-toggle="modal" data-target="#syllabus_modal"><i className="fa fa-eye"></i> SYLLABUS</a> */}
                                 <a href="#" className="btn btn-info" onClick={()=>{fun(startDate, testWindow)}}> 
-                                    {test.assigned == false ? "Assign" :"Assigned"}
+                                    {loading ? "Assigning" :"Assign"}
                                 </a>
                             </div>
                         </div>

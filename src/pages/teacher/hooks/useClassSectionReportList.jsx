@@ -3,7 +3,7 @@ import {useContext}  from 'react'
 import {useQuery} from 'react-query';
 import axios from 'axios';
 import {AuthContext} from '../../../context/AuthContext';
-import  {apiUrl, authAxios} from '../../../config/config' 
+import  {apiUrl} from '../../../config/config' 
 import {useParams} from 'react-router-dom'
 
 export default function useClassSectionReportList() {

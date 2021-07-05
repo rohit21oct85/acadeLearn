@@ -7,7 +7,6 @@ import {useState} from 'react'
 import useClassWiseList from '../../pages/principal/hooks/useClassWiseList'
 import useTeacherWiseList from '../../pages/principal/hooks/useTeacherWiseList'
 import useSubjectList from '../../pages/principal/hooks/useSubjectList'
-import {MakeSlug} from '../../utils/utils'
 
 export default function PrincipalDashboard(){
     const params = useParams();

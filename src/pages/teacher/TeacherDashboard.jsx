@@ -4,13 +4,12 @@ import Footer from '../../components/common/Footer'
 import Foot from '../../components/common/Foot'
 import HeaderNav from '../../components/common/HeaderNav'
 import { Link } from 'react-router-dom'
-import {useState, useEffect, useContext} from 'react'
+import {useState, useContext} from 'react'
 import AssignmentCard  from "../../components/teacher/AssignmentCard";
 import useClassList from '../../pages/teacher/hooks/useClassList'
 // import useTeacherSubject from '../../pages/teacher/hooks/useTeacherSubject'
 import useUnitTestList from '../../pages/teacher/hooks/useUnitTestList'
 import useStudentWiseReport from '../../pages/teacher/hooks/useStudentWiseReport'
-import { apiUrl, authAxios } from '../../config/config'
 import {AuthContext} from '../../context/AuthContext'
 import useUpdateUnitTestList from '../../pages/teacher/hooks/useUpdateUnitTestList'
 import useAssignedTestReport from '../../pages/teacher/hooks/useAssignedTestReport'
@@ -21,6 +20,7 @@ import useClassWiseList from './hooks/useClassWiseList'
 
 export default function TeacherDashboard(){
     const [section, setSection] = useState('tab1');
+    const [loading, setLoading] = useState(false);
 
 	const { state } = useContext(AuthContext);
 
@@ -51,30 +51,26 @@ export default function TeacherDashboard(){
    }
    let totalStudents = 0;
 	let formData = '';
-	const updateMutation = useUpdateUnitTestList(formData);
-    const updateAssignment = async (id, testduration, startDate, testWindow) => {
 
-      // const s = startDate.toISOString()
-      // var s = new Date(startDate).toLocaleString(undefined, {timeZone: 'Asia/Kolkata'});
+	const updateMutation = useUpdateUnitTestList(formData);
+
+   const updateAssignment = async (id, testduration, startDate, testWindow) => {
+      setLoading(true)
       if(!params.class_id){
          alert('Please select a class first')
+         setLoading(false)
       }else{
          await updateMutation.mutate({id:id,testduration:testduration,startDate:startDate,testWindow:testWindow,teacher_id:localStorage.getItem('user_id'),school_id:localStorage.getItem('school_id')},{
             onError: (error) => {
                if(error.response.status == 405){
                   alert('Test cant be assigned at this time\n Some test with the same timing already assigned.\n Change test timing and assign again')
+                  setLoading(false)
                }
             }
-         });
-
+         });  
+         setLoading(false)       
       }
-		// var today = new Date();
-		// if(today.toISOString().substring(0, 10) == date.substr(0,10)){
-			
-		// }else{
-			// alert(`Tests can only be assigned on the same date of the test, Test Date: ${date.substr(0,10)}`);
-		// }
-    }
+   }
 
     return(
         <>
@@ -170,7 +166,7 @@ export default function TeacherDashboard(){
                                        <div className="row">
                                           {unitTests && unitTests.map(test =>{
                                              return(<>
-                                                <AssignmentCard test={test} fun={(startDate,testWindow)=>updateAssignment(test.assign_table_id, test.test_duration, startDate, testWindow)}/>
+                                                <AssignmentCard test={test} fun={(startDate,testWindow)=>updateAssignment(test.assign_table_id, test.test_duration, startDate, testWindow)} loading={loading}/>
                                              </>)
                                           })}
                                        </div>

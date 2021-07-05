@@ -3,13 +3,10 @@ import {useContext}  from 'react'
 import {useQuery} from 'react-query';
 import axios from 'axios';
 import {AuthContext} from '../../../context/AuthContext';
-import  {apiUrl, authAxios} from '../../../config/config' 
-import {useParams} from 'react-router-dom'
+import  {apiUrl} from '../../../config/config' 
 
 export default function useClassList() {
     const {state } = useContext(AuthContext);
-    const params = useParams();
-    // const key = params.school_id ? `classes` : `classes`
     const school_id = localStorage.getItem('school_id');
     const teacher_id = localStorage.getItem('user_id');
     return useQuery(`classes-teacher-${teacher_id}`, async () => {

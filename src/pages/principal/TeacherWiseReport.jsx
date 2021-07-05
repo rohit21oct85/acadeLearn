@@ -4,7 +4,6 @@ import Footer from '../../components/common/Footer'
 import Foot from '../../components/common/Foot'
 import HeaderNav from '../../components/common/HeaderNav'
 import useTeacherAssignedTests from '../../pages/principal/hooks/useTeacherAssignedTests'
-import {GetName} from '../../utils/utils'
 
 export default function TeacherWiseReport(){
     const params = useParams();

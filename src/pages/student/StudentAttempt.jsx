@@ -3,8 +3,7 @@ import HeaderNav from '../../components/common/HeaderNav'
 import Footer from '../../components/common/Footer'
 import Foot from '../../components/common/Foot'
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
-import {useHistory, useParams, useLocation} from 'react-router-dom'
+import {useHistory, useParams } from 'react-router-dom'
 import useRandomQuestion from '../../pages/student/hooks/useRandomQuestion'
 import useQuestionList from '../../pages/student/hooks/useQuestionList'
 import useUpdateAttemptTest from '../../pages/student/hooks/useUpdateAttemptTest'
@@ -22,7 +21,6 @@ export default function StudentAttempt(){
 	const [opt, setOpt] = useState('');
 
 	const set = (e, option,id) => {		
-		console.log(e.target.value)
 		setOpt(option)
 		if(counts-1 == questions?.length-1){
 			setFormData({...formData,  ['answer'] : e.target.value, ['option']: option, ['question_id']:id, ['completion_status'] : "completed" });
@@ -55,6 +53,11 @@ export default function StudentAttempt(){
 				tDuration = difference;
 				localStorage.setItem('test_test_duration', difference)
 			}
+			// const da = parseFloat(tDuration)?.toFixed(2)
+			// console.log(da)
+			// const measuredTime = new Date(da);
+			// measuredTime.setSeconds(da);
+			// let MHSTime = measuredTime.toISOString().substr(11, 8);
 			setDuration(parseFloat(tDuration)?.toFixed(2));
 		}
 	},[])
@@ -130,10 +133,8 @@ export default function StudentAttempt(){
 			
 			localStorage.setItem('COUNTER', sec);
 			const measuredTime = new Date(null);
-			// console.log(measuredTime,sec)
 			measuredTime.setSeconds(sec);
 			let MHSTime = measuredTime.toISOString().substr(11, 8);
-			// console.log(MHSTime)
 			const test_duration = localStorage.getItem('test_test_duration');
 			if(sec > test_duration*60){ //*60 converts to seconds
 				// setFormData({...formData, ['completion_status'] : "timeover" });

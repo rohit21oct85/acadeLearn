@@ -3,7 +3,7 @@ import Footer from '../../components/common/Footer'
 import Foot from '../../components/common/Foot'
 import HeaderNav from '../../components/common/HeaderNav'
 import React, { useState } from 'react';
-import {useHistory, useParams, useLocation} from 'react-router-dom'
+import {useHistory, useParams} from 'react-router-dom'
 
 export default function StudentAgreement(){
 	const [ checked, setChecked ] = useState('false');

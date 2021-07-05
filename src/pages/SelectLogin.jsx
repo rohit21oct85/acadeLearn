@@ -22,7 +22,6 @@ export default function SelectLogin(){
         }
         async function getSchoolLogo(sub_domain){
             const data = await authAxios.get(`${apiUrl}v1/web/get-school-logo/${sub_domain}`)
-            // console.log(data?.data?.data?.school_logo)
             setImage(data?.data?.data?.school_logo)
         }
         }, [])

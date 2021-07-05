@@ -33,7 +33,7 @@ export default function AttemptCard({test, key, fun}){
                         <div className="float-right">
                             <a href="#" className="">{test?.start_date?.substring(10,0)}</a><br/>
                             Starts at:<a href="#" className=""> { d.getHours()+" : "+ d.getMinutes()+" : "+d.getSeconds()} </a>hrs<br/>
-                            Test Window:<a href="#" className=""> {endsIN.getHours()+" : "+ endsIN.getMinutes()+" : "+endsIN.getSeconds()} </a>min
+                            Ends at:<a href="#" className=""> {endsIN.getHours()+" : "+ endsIN.getMinutes()+" : "+endsIN.getSeconds()} </a>min
                         </div>
                         
                     </div>

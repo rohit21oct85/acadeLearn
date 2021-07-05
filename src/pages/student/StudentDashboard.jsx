@@ -1,4 +1,4 @@
-import {useHistory, useParams, useLocation} from 'react-router-dom'
+import {useHistory, useParams} from 'react-router-dom'
 import React, { useState } from 'react';
 import Head from '../../components/common/Head'
 import Footer from '../../components/common/Footer'
@@ -143,10 +143,14 @@ export default function StudentDashboard(){
                                                 </div>
                                                 <div className="row">
                                                     {tests && tests.map((test, key)=>{
-                                                        console.log(test)
-                                                        return (
-                                                            <AttemptCard test={test} key={key} fun={()=>{ handleAttempt(test.unit_table_id, test.assign_table_id, test.start_date, test.test_window, test.test_duration,test.test_name) }}/>
-                                                        )
+                                                        let timeAlTest = new Date(test?.start_date)
+                                                        timeAlTest.setMinutes( timeAlTest.getMinutes() + test?.test_window );
+                                                        let currentTime = new Date()
+                                                        if(timeAlTest > currentTime){
+                                                            return (
+                                                                <AttemptCard test={test} key={key} fun={()=>{ handleAttempt(test.unit_table_id, test.assign_table_id, test.start_date, test.test_window, test.test_duration,test.test_name) }}/>
+                                                            )
+                                                        }
                                                     })}
                                                 </div>
                                             </div>

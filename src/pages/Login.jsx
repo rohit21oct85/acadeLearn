@@ -2,7 +2,7 @@ import Head from '../components/common/Head'
 import Footer from '../components/common/Footer'
 import Foot from '../components/common/Foot'
 import { Link } from 'react-router-dom'
-import { useHistory, useParams, useLocation } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { apiUrl } from "../config/config";
