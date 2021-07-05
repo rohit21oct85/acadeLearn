@@ -62,7 +62,7 @@ export default function TeacherWiseReport(){
                                                         <th scope="col">Start Time</th>
                                                         <th scope="col">End Time</th>
                                                         <th scope="col">Duration</th>
-                                                        <th scope="col">Details</th>
+                                                        {/* <th scope="col">Details</th> */}
                                                         {/* <th scope="col">Details</th> */}
                                                         </tr>
                                                     </thead>
@@ -73,7 +73,7 @@ export default function TeacherWiseReport(){
                                                             test_window.setMinutes( test_window.getMinutes() + item?.test_window );
                                                             return(
                                                                 <tr key={key}>
-                                                                    <th scope="row">1</th>
+                                                                    <th scope="row">{key+1}</th>
                                                                     <td className="text-truncate sorting_1">
                                                                         {/* <span className="avatar avatar-xs">
                                                                         <img className="box-shadow-2" src="/images/portrait/small/avatar-s-9.png" alt="avatar"/> 
@@ -92,7 +92,7 @@ export default function TeacherWiseReport(){
                                                                     <td>{ start_time?.toLocaleString() }</td>
                                                                     <td>{ test_window?.toLocaleString() }</td>
                                                                     <td>{ item.test_duration } min</td>
-                                                                    <td><Link to={`/principal/principal-teacher-wise-section-report/${params.school_id}/${item.teacher_id}/${item.class_id}/${item.test_id}`}>View</Link></td>
+                                                                    {/* <td><Link to={`/principal/principal-teacher-wise-section-report/${params.school_id}/${item.teacher_id}/${item.class_id}/${item.test_id}`}>View</Link></td> */}
                                                                 </tr>
                                                             )
                                                         })}

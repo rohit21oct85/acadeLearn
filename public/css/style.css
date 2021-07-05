@@ -278,7 +278,7 @@ span#basic-addon2 {
 	.best_luck_text ul li.full_syllabuss{font-weight:600;}
 	
 	
-	.home_banner{background:url(../images/bg_hpage.png) no-repeat center top / cover; padding-top:100px; padding-bottom:260px;}
+	.home_banner{background:url(/images/bg_hpage.png) no-repeat center top / cover; padding-top:100px; padding-bottom:260px;}
 	.custom_container{max-width:1270px;}
 	.banner_text_top {
     position: relative;
@@ -329,7 +329,7 @@ span#basic-addon2 {
     position: relative;}
 		}
 	
-	.bg_img1{background:url(../images/bg_img1.jpg) no-repeat center top / cover !important; padding-bottom:180px !important; }
+	.bg_img1{background:url(/images/bg_img1.jpg) no-repeat center top / cover !important; padding-bottom:180px !important; }
 	.bg_img2{padding-bottom:50px !important;}
 	.select_you_are ul li{display:inline-block; margin-top:10px; color:#fff;  padding:0 15px; text-transform:uppercase; }
 	.select_you_are ul li a{font-size:16px; transition:.6s; font-weight:600; color:#fff; display:inline-block; width:100%;}
@@ -554,7 +554,7 @@ span.test-end {
 .profile-card-with-cover .card-profile-image:before { 
 content:"";  z-index:-1;
 	position:absolute; left:0px; 
-	top:0px;   background:url(../images/bg_img1.jpg) no-repeat center top / cover;
+	top:0px;   background:url(/images/bg_img1.jpg) no-repeat center top / cover;
     text-align: center; width:100%; height:100px;
 }
 .position-sticky {

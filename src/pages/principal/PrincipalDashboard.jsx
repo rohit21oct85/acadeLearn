@@ -70,7 +70,7 @@ export default function PrincipalDashboard(){
                             <div className="card-header">
                                 <h4 className="card-title rpt1" style={{display: section == "tab1" ? "block" : 'none'}}>Class-wise Reports</h4>
                                 <h4 className="card-title rpt2" style={{display: section == "tab2" ? "block" : 'none'}}>Teacher-wise Reports</h4>
-                                <h4 className="card-title rpt3" style={{display: section == "tab3" ? "block" : 'none'}}>Subject-wise Reports</h4>
+                                {/* <h4 className="card-title rpt3" style={{display: section == "tab3" ? "block" : 'none'}}>Subject-wise Reports</h4> */}
                             </div>
                             <div className="card-content">
                                 <div className="card-body pt-0">
@@ -84,9 +84,9 @@ export default function PrincipalDashboard(){
                                         <li className="nav-item">
                                         <a className={section == "tab2" ? "nav-link active" : 'nav-link'} id="base-tab42" data-toggle="tab" aria-controls="tab42" href="#tab42" aria-expanded="false" onClick={()=>{changeSection('tab2')}}>Teacher-wise Reports </a>
                                         </li>
-                                        <li className="nav-item">
+                                        {/* <li className="nav-item">
                                         <a className={section == "tab3" ? "nav-link active" : 'nav-link'} id="base-tab43" data-toggle="tab" aria-controls="tab43" href="#tab43" aria-expanded="false" onClick={()=>{changeSection('tab3')}}>Subject-wise Reports </a>
-                                        </li>
+                                        </li> */}
                                     </ul>
                                     <div className="tab-content px-1 pt-1">
                                         <div role="tabpanel" className={section == "tab1" ? "tab-pane container-fluid active" : 'tab-pane container-fluid'} id="tab41" aria-expanded="true" aria-labelledby="base-tab41">
@@ -120,7 +120,7 @@ export default function PrincipalDashboard(){
                                                                             <td>{item.student_count}</td>
                                                                             <td>{item.capacity}</td>
                                                                             {/* <td><a href="#">View</a></td> */}
-                                                                            <td><Link to={`/principal/principal-class-wise-report/${params.school_id}`}>View</Link></td>
+                                                                            <td><Link to={`/principal/principal-class-wise-report/${params.school_id}/${item._id}/${item.class_name}`}>View</Link></td>
                                                                         </tr>
                                                                     )
                                                                 })}
@@ -149,7 +149,7 @@ export default function PrincipalDashboard(){
                                                 <h4 className="card-title"><strong>Teacher-wise Reports</strong> </h4>
                                             </div>
                                             <div className="col-md-6 col-sm-12 col-12 col-lg-6 col-xl-6">
-                                                <div className="select_tcr_wis_rpt">
+                                                <div className="select_tcr_wis_rpt float-right">
                                                     <fieldset>
                                                     <div className="input-group">
                                                         <div className="input-group-prepend">
@@ -165,10 +165,10 @@ export default function PrincipalDashboard(){
                                                                 </select>
                                                             </span>
                                                         </div>
-                                                        <input type="text" className="form-control border-right-0" placeholder="Enter Teacher Name" aria-describedby="basic-addon2"/>
+                                                        {/* <input type="text" className="form-control border-right-0" placeholder="Enter Teacher Name" aria-describedby="basic-addon2"/>
                                                         <div className="input-group-append">
                                                             <span className="input-group-text" id="basic-addon2"><i className="fa fa-search"></i></span>
-                                                        </div>
+                                                        </div> */}
                                                     </div>
                                                     </fieldset>
                                                 </div>

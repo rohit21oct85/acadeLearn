@@ -93,11 +93,11 @@ export const principalRoutes = [
         component: PrincipalDashboard
     },
     {
-        path:'/:user_type?/principal-class-wise-report/:school_id?',
+        path:'/:user_type?/principal-class-wise-report/:school_id?/:class_id?/:class_name?',
         component: ClassWiseReport
     },
     {
-        path:'/:user_type?/principal-class-wise-section-report/:school_id?',
+        path:'/:user_type?/principal-class-wise-section-report/:school_id?/:class_id?/:class_name?/:section?',
         component: ClassWiseSectionReport
     },
     {

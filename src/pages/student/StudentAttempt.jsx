@@ -55,7 +55,7 @@ export default function StudentAttempt(){
 				tDuration = difference;
 				localStorage.setItem('test_test_duration', difference)
 			}
-			setDuration(parseFloat(tDuration)?.toFixed(3));
+			setDuration(parseFloat(tDuration)?.toFixed(2));
 		}
 	},[])
 
@@ -127,7 +127,13 @@ export default function StudentAttempt(){
 		async function tick() {
 			var counter = document.getElementById("timer");
 			sec++;
+			
 			localStorage.setItem('COUNTER', sec);
+			const measuredTime = new Date(null);
+			// console.log(measuredTime,sec)
+			measuredTime.setSeconds(sec);
+			let MHSTime = measuredTime.toISOString().substr(11, 8);
+			// console.log(MHSTime)
 			const test_duration = localStorage.getItem('test_test_duration');
 			if(sec > test_duration*60){ //*60 converts to seconds
 				// setFormData({...formData, ['completion_status'] : "timeover" });
@@ -146,7 +152,8 @@ export default function StudentAttempt(){
 				
 			}
 			if(counter){
-				counter.innerHTML = "0:" + (sec < 10 ? "0" : "") + String(sec);
+				// counter.innerHTML = "0:" + (MHSTime < 10 ? "0" : "") + String(MHSTime);
+				counter.innerHTML = String(MHSTime);
 					setTimeout(tick, 1000);
 			}
 		}
@@ -172,10 +179,10 @@ export default function StudentAttempt(){
                                  <div className="row">
                                     <div className="col-xl-12 col-lg-12">
                                        <div className="timer-s" >
-                                       <span className="test-end">Total time taken:</span><span className="" id="timer">1:00</span> secs
+                                       <span className="test-end">Total time taken:</span><span className="" id="timer"></span>
                                     	</div>
                                        <div className="timer-s" style={{"float":"left"}}>
-                                       <span className="test-end">Time Left:</span><span className="">{duration} min</span>
+                                       <span className="test-end">Total Time:</span><span className="">{duration} min</span>
                                     	</div>
                                     </div>
                                     <div className="col-md-8">
@@ -199,18 +206,18 @@ export default function StudentAttempt(){
                                        <h5 className="ml-3"><div style={{fontSize :"20px"}} dangerouslySetInnerHTML={{ __html: question?.question }}/></h5>
                                     </div>
                                     <div className="ans ml-2">
-                                       <label className={"radio " + (opt == 'option_a' ? 'active' :'')}> <input type="radio" name="option" value={question?.option_a} onChange={(e)=>{set(e,"option_a",question?._id)}}/><span class="checkmark"></span> <span><div dangerouslySetInnerHTML={{ __html: question?.option_a }}/></span> </label>
+                                       <label className={"radio " + (opt == 'option_a' ? 'active' :'')}> <input type="radio" name="option" value={question?.option_a} onChange={(e)=>{set(e,"option_a",question?._id)}}/><span className="checkmark"></span> <span><div dangerouslySetInnerHTML={{ __html: question?.option_a }}/></span> </label>
                                     </div>
                                     <div className="ans ml-2">
-                                       <label className={"radio " + (opt == 'option_b' ? 'active' :'')}> <input type="radio" name="option" value={question?.option_b} onChange={(e)=>{set(e,"option_b",question?._id)}}/><span class="checkmark"></span> <span><div dangerouslySetInnerHTML={{ __html: question?.option_b }}/></span>
+                                       <label className={"radio " + (opt == 'option_b' ? 'active' :'')}> <input type="radio" name="option" value={question?.option_b} onChange={(e)=>{set(e,"option_b",question?._id)}}/><span className="checkmark"></span> <span><div dangerouslySetInnerHTML={{ __html: question?.option_b }}/></span>
                                        </label>
                                     </div>
                                     <div className="ans ml-2">
-                                       <label className={"radio " + (opt == 'option_c' ? 'active' :'')}> <input type="radio" name="option" value={question?.option_c} onChange={(e)=>{set(e,"option_c",question?._id)}}/><span class="checkmark"></span> <span><div dangerouslySetInnerHTML={{ __html: question?.option_c }}/></span>
+                                       <label className={"radio " + (opt == 'option_c' ? 'active' :'')}> <input type="radio" name="option" value={question?.option_c} onChange={(e)=>{set(e,"option_c",question?._id)}}/><span className="checkmark"></span> <span><div dangerouslySetInnerHTML={{ __html: question?.option_c }}/></span>
                                        </label>
                                     </div>
                                     <div className="ans ml-2">
-                                       <label className={"radio " + (opt == 'option_d' ? 'active' :'')}> <input type="radio" name="option" value={question?.option_d} onChange={(e)=>{set(e,"option_d",question?._id)}}/><span class="checkmark"></span> <span><div dangerouslySetInnerHTML={{ __html: question?.option_d }}/></span>
+                                       <label className={"radio " + (opt == 'option_d' ? 'active' :'')}> <input type="radio" name="option" value={question?.option_d} onChange={(e)=>{set(e,"option_d",question?._id)}}/><span className="checkmark"></span> <span><div dangerouslySetInnerHTML={{ __html: question?.option_d }}/></span>
                                        </label>
                                     </div>
                                  </div>

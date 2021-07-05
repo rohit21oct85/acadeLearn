@@ -47,7 +47,7 @@ export default function TeacherClassSectionReport(){
                            <div className="card-body">
                               <div className="col-md-12">
                                  <div className="table-responsive mt-2 second_lbl_show">
-                                    <h4 className="pb-2"><strong>ClassName Wise Reports</strong></h4>
+                                    <h4 className="pb-2"><strong>Student Wise Report</strong></h4>
                                     <table className="table table-striped table-bordered zero-configuration">
                                        <thead>
                                           <tr>
@@ -67,7 +67,7 @@ export default function TeacherClassSectionReport(){
                                                       </span>  */}
                                                       <span>{item.name}</span>
                                                    </td>
-                                                   <td> {item?.average ?  item.average: "no results"}       </td>
+                                                   <td> {item?.average}       </td>
                                                    <td> {item?.percentage ? item.percentage +" %": "no results"}       </td>
                                                    {/* <td>70%   </td> */}
                                                 </tr>

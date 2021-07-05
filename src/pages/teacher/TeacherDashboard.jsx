@@ -16,7 +16,7 @@ import useUpdateUnitTestList from '../../pages/teacher/hooks/useUpdateUnitTestLi
 import useAssignedTestReport from '../../pages/teacher/hooks/useAssignedTestReport'
 import useSingleStudentTestReport from '../../pages/teacher/hooks/useSingleStudentTestReport'
 import CumilativeStudent from '../../components/teacher/CumulativeStudent'
-import useClassWiseList from '../../pages/principal/hooks/useClassWiseList'
+import useClassWiseList from './hooks/useClassWiseList'
 
 
 export default function TeacherDashboard(){
@@ -59,7 +59,7 @@ export default function TeacherDashboard(){
       if(!params.class_id){
          alert('Please select a class first')
       }else{
-         await updateMutation.mutate({id:id,testduration:testduration,startDate:startDate,testWindow:testWindow,teacher_id:localStorage.getItem('user_id')},{
+         await updateMutation.mutate({id:id,testduration:testduration,startDate:startDate,testWindow:testWindow,teacher_id:localStorage.getItem('user_id'),school_id:localStorage.getItem('school_id')},{
             onError: (error) => {
                if(error.response.status == 405){
                   alert('Test cant be assigned at this time\n Some test with the same timing already assigned.\n Change test timing and assign again')

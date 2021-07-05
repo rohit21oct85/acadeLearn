@@ -3,9 +3,12 @@ import Head from '../../components/common/Head'
 import Footer from '../../components/common/Footer'
 import Foot from '../../components/common/Foot'
 import HeaderNav from '../../components/common/HeaderNav'
+import useClassReportList from '../teacher/hooks/useClassReportList'
 
 export default function ClassWiseReport(){
    const params = useParams();
+
+   const {data:sections, sectionsLoading} = useClassReportList();
     return(
         <>
         <Head/>
@@ -15,7 +18,7 @@ export default function ClassWiseReport(){
          <div className="content-wrapper">
             <div className="content-header row">
                <div className="content-header-left col-md-6 col-12 mb-2 breadcrumb-new">
-                  <h3 className="content-header-title mb-0 d-inline-block">ClassName 6th </h3>
+                  <h3 className="content-header-title mb-0 d-inline-block">ClassName {params.class_name}th </h3>
                   <div className="row breadcrumbs-top d-inline-block">
                      <div className="breadcrumb-wrapper col-12">
                         <ol className="breadcrumb">
@@ -23,7 +26,7 @@ export default function ClassWiseReport(){
                            </li>
                            <li className="breadcrumb-item"><a href="#">Teacher</a>
                            </li>
-                           <li className="breadcrumb-item">ClassName 6th 
+                           <li className="breadcrumb-item">Class {params.class_name}th 
                            </li>
                         </ol>
                      </div>
@@ -37,14 +40,14 @@ export default function ClassWiseReport(){
                      <div className="card"> 
                        <div className="col-xl-12 col-lg-12 left-arrow1">
                <ul> 
-               <li><a href="principal.php"><img src="/images/left-arrow.png" className="img-fluid" alt="back-arrow"/> Back</a></li>
+               <li><Link to={`/principal/principal-dashboard/${params.school_id}`}><img src="/images/left-arrow.png" className="img-fluid" alt="back-arrow"/> Back</Link></li>
                </ul>
                </div>
                         <div className="card-content">
                            <div className="card-body">
                               <div className="col-md-12">
                                  <div className="table-responsive first_lbl_show">
-                                    <h4><strong>ClassName Wise Reports</strong></h4>
+                                    <h4><strong>Section Wise Reports</strong></h4>
                                     <table className="table table-striped table-bordered lavel_select_sction">
                                        {/* <!--zero-configuration--> */}
                                        <thead>
@@ -56,26 +59,19 @@ export default function ClassWiseReport(){
                                              <th>Cumulative Test Attendance</th>
                                           </tr>
                                        </thead>
-                                       <tbody>
-                                          <tr>
-                                             <td><Link to={`/principal/principal-class-wise-section-report/${params.school_id}`} className="sbject_sw">A </Link></td>
-                                             <td>50  </td>
-                                             <td>34/50 </td>
-                                             <td>35% </td>
-                                          </tr>
-                                          <tr>
-                                             <td><Link to={`/principal/principal-class-wise-section-report/${params.school_id}`} className="sbject_sw">B </Link></td>
-                                             <td>60  </td>
-                                             <td>25/60 </td>
-                                             <td>45%</td>
-                                          </tr>
-                                          <tr>
-                                             <td><Link to={`/principal/principal-class-wise-section-report/${params.school_id}`} className="sbject_sw">C </Link></td>
-                                             <td>40 </td>
-                                             <td>36/40</td>
-                                             <td>70%</td>
-                                          </tr>
-                                          </tbody>
+                                       <tbody>{console.log(sections)}
+                                          {sections && sections?.section?.map((item,key) => {
+                                             console.log(item)
+                                                return(
+                                                    <tr key={key}>
+                                                        <td><Link to={`/principal/principal-class-wise-section-report/${params.school_id}/${params.class_id}/${params.class_name}/${item}`} className="sbject_sw">{item} </Link></td>
+                                                        <td>{sections[`${item+"-count"}`]} </td>
+                                                        <td>{sections[`${item+"-attempted"}`]}/{sections[`${item+"-count"}`]}</td>
+                                                        <td>{sections[`${item+"-percentage"}`] == null ? 0 :sections[`${item+"-percentage"}`]?.toFixed(2)} %</td>
+                                                    </tr>
+                                                )
+                                          })}
+                                       </tbody>
                                     </table>
                                  </div>
                               </div>

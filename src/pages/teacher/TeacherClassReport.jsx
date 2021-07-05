@@ -47,7 +47,7 @@ export default function TeacherClassReport(){
                             <div className="card-body">
                                 <div className="col-md-12">
                                     <div className="table-responsive first_lbl_show">
-                                        <h4><strong>ClassName Wise Reports</strong></h4>
+                                        <h4><strong>Subject Wise Report</strong></h4>
                                         <table className="table table-striped table-bordered lavel_select_sction">
                                         {/* <!--zero-configuration--> */}
                                         <thead>

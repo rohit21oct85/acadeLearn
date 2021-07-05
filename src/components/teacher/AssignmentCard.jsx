@@ -12,6 +12,7 @@ export default function AssignmentCard({test, key, fun}){
     useEffect(()=>{
         setStartDate(new Date(test?.start_date))
     },[test])
+    
     return(<>
             <div className="col-md-6 text1_w_dfine">
                 <div className="card pull-up attempt_text att_border">
@@ -21,12 +22,12 @@ export default function AssignmentCard({test, key, fun}){
                         </div>
                         <div className="float-left date_one1">
                             <a href="#" className="">{test?.start_date?.substring(10,0)}</a>
-                            <div class="mb-0 pt-2 live_text">
+                            <div className="mb-0 pt-2 live_text">
                                 <ul>
                                     <li>
                                         {/* <a href="#">live</a> */}
-                                        </li><li><i class="fa fa-clock">
-                                            </i> 30 MIN Science</li></ul></div>
+                                        </li><li><i className="fa fa-clock">
+                                            </i> {test?.test_duration} MIN</li></ul></div>
                         </div>
                     </div>
                     <div className="card-content live_text">
@@ -42,7 +43,7 @@ export default function AssignmentCard({test, key, fun}){
                             <ul>
                                 <li className="pl-0"><DatePicker selected={startDate} onChange={(date) => setStartDate(date)} isClearable showTimeSelect dateFormat="MM/d/yyyy h:mm aa"/></li>
                                 <li><input type="text" name="test-window" defaultValue={test?.test_window} id="test-window" placeholder="test-window enter in min" onChange={enterTestWindow}/>
-                               <label class="small">Test window should be greater than test duration</label>
+                               <label className="small">Test window should be greater than test duration</label>
                                 </li>
                             </ul>
                             
