@@ -41,6 +41,8 @@ export default function StudentResult(){
                                     <div className="table-responsive">
                                     <table className="table table-striped table-bordered ">
                                         <tbody>
+                                        {result == undefined ? "Loading ..." :
+                                        <>
                                         <tr>
                                             <th colSpan="2" className="head-result">Result</th>
                                         </tr>
@@ -52,14 +54,6 @@ export default function StudentResult(){
                                                 <th>Attempted Questions </th>
                                                 <td>{result?.attemptedQuestions}</td>
                                             </tr>
-                                            {/* <tr>
-                                                <th>Correct Answers </th>
-                                                <td>{result?.correctAnswers}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Wrong Answers </th>
-                                                <td> {result?.wrongAnswers}</td>
-                                            </tr> */}
                                             <tr>
                                                 <th>Score </th>
                                                 <td> {result?.correctAnswers}/{result?.totalQuestions}</td>
@@ -68,6 +62,8 @@ export default function StudentResult(){
                                                 <th className="percent">Percentage </th>
                                                 <th className="percent"> {((result?.correctAnswers/result?.totalQuestions)*100).toFixed(2)} %</th>
                                             </tr>
+                                            </>
+                                            }
                                         </tbody>
                                     </table>
                                     </div>

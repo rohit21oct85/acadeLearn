@@ -1,4 +1,4 @@
-import {useHistory, useParams, useLocation} from 'react-router-dom'
+import {useHistory, useParams} from 'react-router-dom'
 import Head from '../../components/common/Head'
 import Footer from '../../components/common/Footer'
 import Foot from '../../components/common/Foot'
@@ -27,6 +27,7 @@ export default function TeacherDashboard(){
     const changeSection = (value) => {
         setSection(value)
     }
+    
     const params = useParams();
     const history = useHistory();
 

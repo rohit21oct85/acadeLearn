@@ -20,7 +20,8 @@ export default function StudentAttempt(){
 	const [questLoading, setQuestLoading] = useState(false);
 	const [opt, setOpt] = useState('');
 
-	const set = (e, option,id) => {		
+	const set = (e, option, id) => {
+		console.log(e.target.value, option, id)
 		setOpt(option)
 		if(counts-1 == questions?.length-1){
 			setFormData({...formData,  ['answer'] : e.target.value, ['option']: option, ['question_id']:id, ['completion_status'] : "completed" });
@@ -53,11 +54,6 @@ export default function StudentAttempt(){
 				tDuration = difference;
 				localStorage.setItem('test_test_duration', difference)
 			}
-			// const da = parseFloat(tDuration)?.toFixed(2)
-			// console.log(da)
-			// const measuredTime = new Date(da);
-			// measuredTime.setSeconds(da);
-			// let MHSTime = measuredTime.toISOString().substr(11, 8);
 			setDuration(parseFloat(tDuration)?.toFixed(2));
 		}
 	},[])
@@ -161,6 +157,8 @@ export default function StudentAttempt(){
 		tick();
 	}
 	
+	let optionsDocx = [{key: 0,value: " A", option: "option_a",},{key: 1,value: " B", option: "option_b",},{key: 3,value: " C", option: "option_c",},{key: 4,value: " D", option: "option_d",}];
+    
     return(
         <>
             <Head/>
@@ -183,7 +181,7 @@ export default function StudentAttempt(){
                                        <span className="test-end">Total time taken:</span><span className="" id="timer"></span>
                                     	</div>
                                        <div className="timer-s" style={{"float":"left"}}>
-                                       <span className="test-end">Total Time:</span><span className="">{duration} min</span>
+                                       <span className="test-end">Total Allowed:</span><span className="">{duration} min</span>
                                     	</div>
                                     </div>
                                     <div className="col-md-8">
@@ -203,29 +201,41 @@ export default function StudentAttempt(){
                                  </div>
                                  <div className="question bg-Not-select p-2 border-bottom">
                                     <div className="flex-row question-title">
-                                       <span className="text-danger q_nsekected">Q.</span>
+                                       <span className="text-danger q_nsekected">Q.</span>{console.log(question)}
                                        <h5 className="ml-3"><div style={{fontSize :"20px"}} dangerouslySetInnerHTML={{ __html: question?.question }}/></h5>
                                     </div>
-                                    <div className="ans ml-2">
-                                       <label className={"radio " + (opt == 'option_a' ? 'active' :'')}> <input type="radio" name="option" value={question?.option_a} onChange={(e)=>{set(e,"option_a",question?._id)}}/><span className="checkmark"></span> <span><div dangerouslySetInnerHTML={{ __html: question?.option_a }}/></span> </label>
-                                    </div>
-                                    <div className="ans ml-2">
-                                       <label className={"radio " + (opt == 'option_b' ? 'active' :'')}> <input type="radio" name="option" value={question?.option_b} onChange={(e)=>{set(e,"option_b",question?._id)}}/><span className="checkmark"></span> <span><div dangerouslySetInnerHTML={{ __html: question?.option_b }}/></span>
-                                       </label>
-                                    </div>
-                                    <div className="ans ml-2">
-                                       <label className={"radio " + (opt == 'option_c' ? 'active' :'')}> <input type="radio" name="option" value={question?.option_c} onChange={(e)=>{set(e,"option_c",question?._id)}}/><span className="checkmark"></span> <span><div dangerouslySetInnerHTML={{ __html: question?.option_c }}/></span>
-                                       </label>
-                                    </div>
-                                    <div className="ans ml-2">
-                                       <label className={"radio " + (opt == 'option_d' ? 'active' :'')}> <input type="radio" name="option" value={question?.option_d} onChange={(e)=>{set(e,"option_d",question?._id)}}/><span className="checkmark"></span> <span><div dangerouslySetInnerHTML={{ __html: question?.option_d }}/></span>
-                                       </label>
-                                    </div>
+									{question?.extension && question?.extension == "docx" ? 
+										<span>
+											{question.options.map((item,key)=>{
+												return(
+													<div className="ans ml-2">
+														<label className={"radio " + (opt == optionsDocx[key]['option'] ? 'active' :'')}> <input type="radio" name="option" value={item} onChange={(e)=>{set(e, optionsDocx[key]['option'], question?._id)}}/><span className="checkmark"></span> <span><div dangerouslySetInnerHTML={{ __html: item }}/></span> </label>
+													</div>
+												)
+											})}
+										</span> : 
+										<span>
+											<div className="ans ml-2">
+										<label className={"radio " + (opt == 'option_a' ? 'active' :'')}> <input type="radio" name="option" value={question?.option_a} onChange={(e)=>{set(e,"option_a",question?._id)}}/><span className="checkmark"></span> <span><div dangerouslySetInnerHTML={{ __html: question?.option_a }}/></span> </label>
+										</div>
+										<div className="ans ml-2">
+										<label className={"radio " + (opt == 'option_b' ? 'active' :'')}> <input type="radio" name="option" value={question?.option_b} onChange={(e)=>{set(e,"option_b",question?._id)}}/><span className="checkmark"></span> <span><div dangerouslySetInnerHTML={{ __html: question?.option_b }}/></span>
+										</label>
+										</div>
+										<div className="ans ml-2">
+										<label className={"radio " + (opt == 'option_c' ? 'active' :'')}> <input type="radio" name="option" value={question?.option_c} onChange={(e)=>{set(e,"option_c",question?._id)}}/><span className="checkmark"></span> <span><div dangerouslySetInnerHTML={{ __html: question?.option_c }}/></span>
+										</label>
+										</div>
+										<div className="ans ml-2">
+										<label className={"radio " + (opt == 'option_d' ? 'active' :'')}> <input type="radio" name="option" value={question?.option_d} onChange={(e)=>{set(e,"option_d",question?._id)}}/><span className="checkmark"></span> <span><div dangerouslySetInnerHTML={{ __html: question?.option_d }}/></span>
+										</label>
+										</div>
+									</span>}
                                  </div>
                                  <div className="p-2 bg-Not-select">
                                  <div className="row"> 
                                  <div className="col-md-12 text-right">
-                                 <button className={"btn nextqus_btn "} disabled={loading} type="button" onClick={()=>{saveAnswerAndNext(question?._id)}}>{!loading ? counts-1 == questions?.length-1 ? "Submit" : "Next" : "please wait. .."}<i className="fa fa-angle-right ml-2"></i></button></div></div>
+                                 <button className={"btn nextqus_btn "} disabled={loading && questLoading} type="button" onClick={()=>{saveAnswerAndNext(question?._id)}}>{!loading ? counts-1 == questions?.length-1 ? "Submit" : "Next" : "please wait. .."}<i className="fa fa-angle-right ml-2"></i></button></div></div>
                               </div>
                               </div>
                            </div>

@@ -1,4 +1,5 @@
 import { useParams, Link} from 'react-router-dom'
+import { useEffect} from 'react'
 import Head from '../../components/common/Head'
 import Footer from '../../components/common/Footer'
 import Foot from '../../components/common/Foot'
@@ -14,9 +15,19 @@ export default function StudentLastTestScoreReport(){
         {key: 'option_c', value: 'C'},
         {key: 'option_d', value: 'D'},
     ]
+    
     const options1 = { 'option_a':'A','option_b':'B','option_c':'C','option_d':'D' }
 
     const {data:lastScore, lastScoreLoading} = useLastTestScore();
+    
+    useEffect(() => {
+        const script = document.createElement("script");
+        script.id = 'editor';
+        script.src = "https://www.wiris.net/demo/plugins/app/WIRISplugins.js?viewer=image";
+        script.async = true;
+        document.body.appendChild(script);
+    },[lastScore])
+
     return(
         <>
         <Head/>
@@ -49,6 +60,7 @@ export default function StudentLastTestScoreReport(){
                             <div className="card-body pt-0">
                             {/* <p>Here, select a subject to find out your average performance.</p> */}
                             <div className="row">
+                                {lastScore == undefined ? "Loading. .." :
                                 <div className="col-md-12">
                                 {lastScore && lastScore.questions.map((item,key)=>{
                                     return (
@@ -88,6 +100,7 @@ export default function StudentLastTestScoreReport(){
                                     )
                                 })}
                                 </div>
+                                }
                                 <div className="col-md-12 text-center"> <Link to={`/student/student-dashboard/${params.class_id}/${params.class_name}`} className="btn btn-info"> Go To Dashboard</Link></div>
                             </div>
                             </div>

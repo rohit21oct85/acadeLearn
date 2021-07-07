@@ -18,7 +18,7 @@ export default function SearchSchool(){
 
     useEffect(() => {
         const delayDebounceFn = setTimeout(() => {
-            if(search && search.length > 3 && search != ''){
+            if(search && search.length > 2 && search != ''){
                 setDisplay('block');
                 openSearch(search);
             }else if(search === ""){
@@ -50,7 +50,7 @@ export default function SearchSchool(){
             <div className="container-fluid">
                 <div className="row">
                 <div className="col-md-6">
-                    <a href="index.php"><img src="/images/logo/logo.png" className="img-fluid"/> AcadeLearn</a>
+                    <Link to="/"><img src="/images/logo/logo.png" className="img-fluid"/> AcadeLearn</Link>
                 </div>
                 {/* <div className="col-md-6 text-right top_login_btn">
                     <a href="select-login.php"><i className="fa fa-user"></i> Log In</a>

@@ -4,14 +4,17 @@ import Foot from '../components/common/Foot'
 import { Link } from 'react-router-dom'
 import {useHistory, useParams, useLocation} from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import { authAxios, apiUrl } from '../config/config'
+import { authAxios, apiUrl, baseUrl } from '../config/config'
 
 export default function SelectLogin(){
     const history = useHistory();
     const params  = useParams();
     const location = useLocation();
-    
     const [image, setImage] = useState();
+
+    const handleClick = () => {
+        history.push(`${baseUrl}/search-school`)
+    }
 
     useEffect(()=>{
         const parsedData = window.location.host.split(".");
@@ -25,6 +28,7 @@ export default function SelectLogin(){
             setImage(data?.data?.data?.school_logo)
         }
         }, [])
+    
     return(
         <>
         <Head/>
@@ -32,7 +36,7 @@ export default function SelectLogin(){
             <div className="container-fluid">
                 <div className="row">
                 <div className="col-md-12">
-                    <Link to="/"><img src="/images/logo/logo.png" className="img-fluid"/> AcadeLearn</Link>
+                    <Link to="" onClick={handleClick}><img src="/images/logo/logo.png" className="img-fluid"/> AcadeLearn</Link>
                 </div>
                 </div>
             </div>
