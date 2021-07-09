@@ -17,6 +17,9 @@ import useSingleStudentTestReport from '../../pages/teacher/hooks/useSingleStude
 import CumilativeStudent from '../../components/teacher/CumulativeStudent'
 import useClassWiseList from './hooks/useClassWiseList'
 
+import jsPDF from 'jspdf'
+import 'jspdf-autotable'
+
 
 export default function TeacherDashboard(){
     const [section, setSection] = useState('tab1');
@@ -56,7 +59,6 @@ export default function TeacherDashboard(){
 	const updateMutation = useUpdateUnitTestList(formData);
 
    const updateAssignment = async (id, testduration, startDate, testWindow) => {
-      setLoading(true)
       if(!params.class_id){
          alert('Please select a class first')
          setLoading(false)
@@ -67,10 +69,19 @@ export default function TeacherDashboard(){
                   alert('Test cant be assigned at this time\n Some test with the same timing already assigned.\n Change test timing and assign again')
                   setLoading(false)
                }
+            },
+            onSuccess:(data)=>{
+               setLoading(false)
             }
-         });  
-         setLoading(false)       
+         });            
       }
+   }
+   const makePdf = () => {
+      const doc = new jsPDF()
+      doc.autoTable({ html: '#tableConvert'})
+      // doc.autoTable({ html: '#tableConvert'},{columns: ColumnDef[{header: 'ID', dataKey: 'id'}] })
+      doc.text("Student Wise Report", 80, 10);
+      doc.save('table.pdf')
    }
 
     return(
@@ -140,7 +151,7 @@ export default function TeacherDashboard(){
                                                                         <option value="999">--Select Class-- </option>
                                                                         {classes && classes.map((item,key)=>{
                                                                            return(
-                                                                              <option value={item._id} data-class_name={item.class_name} key={key} >{item.class_name + ' th'} </option>
+                                                                              <option value={item.class_id} data-class_name={item.class_name} key={key} >{item.class_name + ' th'} </option>
                                                                            )
                                                                         })}
                                                                      </select>
@@ -167,7 +178,7 @@ export default function TeacherDashboard(){
                                        <div className="row">
                                           {unitTests && unitTests.map(test =>{
                                              return(<>
-                                                <AssignmentCard test={test} fun={(startDate,testWindow)=>updateAssignment(test.assign_table_id, test.test_duration, startDate, testWindow)} loading={loading}/>
+                                                <AssignmentCard test={test} fun={(startDate, testWindow)=> {setLoading(true); updateAssignment(test.assign_table_id, test.test_duration, startDate, testWindow)}} loading={loading}/>
                                              </>)
                                           })}
                                        </div>
@@ -189,7 +200,7 @@ export default function TeacherDashboard(){
                                                                         <option value="999">--Select ClassName-- </option>
                                                                         {classes && classes.map((item,key)=>{
                                                                            return(
-                                                                              <option value={item._id} data-class_name={item.class_name} key={key}>{item.class_name + ' th'} </option>
+                                                                              <option value={item.class_id} data-class_name={item.class_name} key={key}>{item.class_name + ' th'} </option>
                                                                            )
                                                                         })}
                                                                      </select>
@@ -205,6 +216,9 @@ export default function TeacherDashboard(){
                                                                         })}
                                                                      </select>
                                                                   </div>
+                                                                  {/* <div className="form-group col-md-2 mb-2">
+                                                                     <button className="btn btn-primary" onClick={makePdf}>Pdf -- (under development)</button>
+                                                                  </div> */}
                                                                   
                                                                   {/* <div className="form-group col-md-3 mb-2">
                                                                      <button type="button" className="btn btn-warning btn-min-width sbmt_view_form btn_click1 mr-1 mb-1 mt-0">Search</button>
@@ -216,7 +230,7 @@ export default function TeacherDashboard(){
                                                    </div>
                                                 </div>
                                                 <div className="table-responsive mt-2 thr_lbl_show">
-                                                   <table className="table table-striped table-bordered zero-configuration">
+                                                   <table id="tableConvert" className="table table-striped table-bordered zero-configuration">
                                                       <thead>
                                                          <tr>
                                                                <th>Student Name </th>
@@ -269,7 +283,7 @@ export default function TeacherDashboard(){
                                                                         <option value="999">--Select ClassName-- </option>
                                                                         {classes && classes.map((item,key)=>{
                                                                            return(
-                                                                              <option value={item._id} data-class_name={item.class_name} key={key}>{item.class_name + ' th'} </option>
+                                                                              <option value={item.class_id} data-class_name={item.class_name} key={key}>{item.class_name + ' th'} </option>
                                                                            )
                                                                         })}
                                                                      </select>

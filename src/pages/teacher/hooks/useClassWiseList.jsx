@@ -5,7 +5,7 @@ import axios from 'axios';
 import {AuthContext} from '../../../context/AuthContext';
 import  {apiUrl} from '../../../config/config' 
 
-export default function useClassList() {
+export default function useClassWiseList() {
     const {state } = useContext(AuthContext);
     const school_id = localStorage.getItem('school_id');
     const teacher_id = localStorage.getItem('user_id');

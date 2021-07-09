@@ -6,7 +6,7 @@ import {AuthContext} from '../../../context/AuthContext';
 import  {apiUrl, authAxios} from '../../../config/config' 
 import {useParams} from 'react-router-dom'
 
-export default function useClassList() {
+export default function useTeacherAssignedTests() {
     const {state } = useContext(AuthContext);
     const params = useParams();
     // const key = params.school_id ? `classes` : `classes`
