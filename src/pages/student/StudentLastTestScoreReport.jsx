@@ -16,7 +16,7 @@ export default function StudentLastTestScoreReport(){
         {key: 'option_d', value: 'D'},
     ]
     
-    const options1 = { 'option_a':'A','option_b':'B','option_c':'C','option_d':'D' }
+    const options1 = { 'option_a':' A','option_b':' B','option_c':' C','option_d':' D' }
 
     const {data:lastScore, lastScoreLoading} = useLastTestScore();
     

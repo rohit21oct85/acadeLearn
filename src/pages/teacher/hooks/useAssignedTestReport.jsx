@@ -13,7 +13,7 @@ export default function useAssignedTestReport() {
     const school_id = localStorage.getItem('school_id')
     return useQuery(key, async () => {
         if(state.access_token ){
-            if(params.class_id){
+            if(params.class_id && params.window == "tab2"){
                 const result = await axios.get(`${apiUrl}v1/web/get-assigned-tests-teacher/${school_id}/${params.class_id}/${subject_id}`,{
                     headers: {
                         'Content-Type': 'Application/json',

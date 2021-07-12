@@ -7,6 +7,7 @@ import {useHistory, useParams } from 'react-router-dom'
 import useRandomQuestion from '../../pages/student/hooks/useRandomQuestion'
 import useQuestionList from '../../pages/student/hooks/useQuestionList'
 import useUpdateAttemptTest from '../../pages/student/hooks/useUpdateAttemptTest'
+import { Prompt } from 'react-router'
 
 export default function StudentAttempt(){
     const history = useHistory();
@@ -21,12 +22,11 @@ export default function StudentAttempt(){
 	const [opt, setOpt] = useState('');
 
 	const set = (e, option, id) => {
-		console.log(e.target.value, option, id)
 		setOpt(option)
 		if(counts-1 == questions?.length-1){
 			setFormData({...formData,  ['answer'] : e.target.value, ['option']: option, ['question_id']:id, ['completion_status'] : "completed" });
 		}else{
-			setFormData({...formData, ['answer'] : e.target.value, ['option']: option, ['question_id']:id});
+			setFormData({...formData, ['answer'] : e.target.value, ['option']: option, ['question_id']:id,});
 		}
 	}
 
@@ -47,7 +47,8 @@ export default function StudentAttempt(){
 		let allowedTime = new Date(localStorage.getItem('test_test_time'));
 		allowedTime.setMinutes( allowedTime.getMinutes() + parseInt(tWindow));
 		if(current_time > allowedTime){
-			alert("Test is over")
+			setFormData({...formData, ['completion_status'] : "timeover"});
+				endTest();
 		}else{
 			const difference = (Math.abs(allowedTime  - new Date(attemptTime))/1000)/60
 			if(difference < tDuration){
@@ -133,20 +134,8 @@ export default function StudentAttempt(){
 			let MHSTime = measuredTime.toISOString().substr(11, 8);
 			const test_duration = localStorage.getItem('test_test_duration');
 			if(sec > test_duration*60){ //*60 converts to seconds
-				// setFormData({...formData, ['completion_status'] : "timeover" });
-				await attempt.mutate(formData,{
-					onSuccess: (data, variables, context) => {
-						if(data?.data){
-							setAttemptId(data?.data?.attemptId)
-							var ele = document.getElementsByName("option");
-							setFormData({})
-							for(var i=0;i<ele.length;i++)
-								ele[i].checked = false;
-						}
-						history.push(`/student/student-result/${params.class_id}/${params.class_name}/${params.test_id}/${data?.data?.attemptId}`);
-					},
-				});
-				
+				setFormData({...formData, ['completion_status'] : "timeover"});
+					endTest()
 			}
 			if(counter){
 				// counter.innerHTML = "0:" + (MHSTime < 10 ? "0" : "") + String(MHSTime);
@@ -156,10 +145,42 @@ export default function StudentAttempt(){
 		}
 		tick();
 	}
-	
+
 	let optionsDocx = [{key: 0,value: " A", option: "option_a",},{key: 1,value: " B", option: "option_b",},{key: 3,value: " C", option: "option_c",},{key: 4,value: " D", option: "option_d",}];
-    
-    return(
+    async function endTest(){
+		await attempt.mutate(formData,{
+			onSuccess: (data, variables, context) => {
+				if(data?.data){
+					setAttemptId(data?.data?.attemptId)
+					var ele = document.getElementsByName("option");
+					setFormData({})
+					for(var i=0;i<ele.length;i++)
+						ele[i].checked = false;
+				}
+				history.push(`/student/student-result/${params.class_id}/${params.class_name}/${params.test_id}/${data?.data?.attemptId}`);
+			},
+		});
+	}
+
+	const onBlur = () => {
+		alert("Tab Switching is not Allowed!\n if u do it once again ur test will be cancelled")
+		let tabSwitchCount = JSON.parse(localStorage.getItem('tabSwitchCount'))!= null ? JSON.parse(localStorage.getItem('tabSwitchCount')) : 0 
+		tabSwitchCount = tabSwitchCount +1 ;
+		localStorage.setItem('tabSwitchCount',tabSwitchCount);
+		if(tabSwitchCount >= 2){
+			endTest()
+		}
+	};
+
+	useEffect(() => {
+		window.addEventListener('blur', onBlur);
+		// Specify how to clean up after this effect:
+		return () => {
+		  window.removeEventListener('blur', onBlur);
+		};
+	});
+
+	return(
         <>
             <Head/>
             <HeaderNav/>
@@ -201,7 +222,7 @@ export default function StudentAttempt(){
                                  </div>
                                  <div className="question bg-Not-select p-2 border-bottom">
                                     <div className="flex-row question-title">
-                                       <span className="text-danger q_nsekected">Q.</span>{console.log(question)}
+                                       <span className="text-danger q_nsekected">Q.</span>
                                        <h5 className="ml-3"><div style={{fontSize :"20px"}} dangerouslySetInnerHTML={{ __html: question?.question }}/></h5>
                                     </div>
 									{question?.extension && question?.extension == "docx" ? 

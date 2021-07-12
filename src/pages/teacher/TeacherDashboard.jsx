@@ -4,7 +4,7 @@ import Footer from '../../components/common/Footer'
 import Foot from '../../components/common/Foot'
 import HeaderNav from '../../components/common/HeaderNav'
 import { Link } from 'react-router-dom'
-import {useState, useContext} from 'react'
+import {useState, useContext, useEffect} from 'react'
 import AssignmentCard  from "../../components/teacher/AssignmentCard";
 import useClassList from '../../pages/teacher/hooks/useClassList'
 // import useTeacherSubject from '../../pages/teacher/hooks/useTeacherSubject'
@@ -16,19 +16,23 @@ import useAssignedTestReport from '../../pages/teacher/hooks/useAssignedTestRepo
 import useSingleStudentTestReport from '../../pages/teacher/hooks/useSingleStudentTestReport'
 import CumilativeStudent from '../../components/teacher/CumulativeStudent'
 import useClassWiseList from './hooks/useClassWiseList'
+import useClassAndSubjectWiseUnitList from './hooks/useClassAndSubjectWiseUnitList'
+import useClassSubjectAndUnitWiseChapterList from './hooks/useClassSubjectAndUnitWiseChapterList'
 
 import jsPDF from 'jspdf'
 import 'jspdf-autotable'
 
 
 export default function TeacherDashboard(){
-    const [section, setSection] = useState('tab1');
+    const [section, setSection] = useState();
     const [loading, setLoading] = useState(false);
+    const [answers, setAnswers] = useState();
 
 	const { state } = useContext(AuthContext);
 
     const changeSection = (value) => {
         setSection(value)
+        history.push(`/teacher/teacher-dashboard/${value}`)
     }
     
     const params = useParams();
@@ -41,16 +45,24 @@ export default function TeacherDashboard(){
     const {data:assignedTests, assignedTestsLoading} = useAssignedTestReport();
     const {data:singleStudentTests, singleStudentTestsLoading} = useSingleStudentTestReport();
     const {data:classWise, classWiseLoading} = useClassWiseList();
+    const {data:classAndSubjectWiseUnit, classAndSubjectWiseUnitLoading} = useClassAndSubjectWiseUnitList();
+    const {data:classSubjectAndUnitWiseChapter, classSubjectAndUnitWiseChapterLoading} = useClassSubjectAndUnitWiseChapterList();
 
    const handleChange = (e) => {
       if(e.target.value != 999){
-         history.push(`/teacher/teacher-dashboard/${e.target.value}`)
+         history.push(`/teacher/teacher-dashboard/${params.window}/${e.target.value}`)
       }
    }
-   
+   console.log(params)
    const handleChangeTest = (e) => {
       if(e.target.value != 999){
-         history.push(`/teacher/teacher-dashboard/${params.class_id}/${e.target.value}`)
+         history.push(`/teacher/teacher-dashboard/${params.window}/${params.class_id}/${e.target.value}`)
+      }
+   }
+
+   const handleChangeUnit = (e) => {
+      if(e.target.value != 999){
+         history.push(`/teacher/teacher-dashboard/${params.window}/${params.class_id}/${e.target.value}`)
       }
    }
    let totalStudents = 0;
@@ -84,6 +96,14 @@ export default function TeacherDashboard(){
       doc.save('table.pdf')
    }
 
+   useEffect(()=>{
+      setSection(params.window)
+   },[section])
+
+   const setNumber = (e) => {
+       setAnswers(e.target.value)
+   }
+
     return(
         <>
         <Head/>
@@ -111,6 +131,7 @@ export default function TeacherDashboard(){
                   <div className="col-xl-12 col-lg-12">
                      <div className="card">
                            <div className="card-header">
+                              <h4 className="card-title rpt1" style={{display: section == "tab0" ? "block" : 'none'}}>Create Tests </h4>
                               <h4 className="card-title rpt1" style={{display: section == "tab1" ? "block" : 'none'}}>Assign Tests </h4>
                               <h4 className="card-title rpt2" style={{display: section == "tab2" ? "block" : 'none'}}>Student-wise Reports</h4>
                               <h4 className="card-title rpt3" style={{display: section == "tab3" ? "block" : 'none'}}>Subject-wise Reports</h4>
@@ -118,11 +139,15 @@ export default function TeacherDashboard(){
                            </div>
                            <div className="card-content">
                               <div className="card-body pt-0">
+                                 <p className="rpt1" style={{display: section == "tab0" ? "block" : 'none'}}>Create a Test.</p>
                                  <p className="rpt1" style={{display: section == "tab1" ? "block" : 'none'}}>Select a class to assign a test to your students.</p>
                                  <p className="rpt2" style={{display: section == "tab2" ? "block" : 'none'}}>Select the class and test for which you wish to analyze the performance of the students.</p>
                                  <p className="rpt3" style={{display: section == "tab3" ? "block" : 'none'}}>Select a className and subject to view a detailed report of the subject-wise performance of your className.</p>
                                  <p className="rpt4" style={{display: section == "tab4" ? "block" : 'none'}}>It will show the overall performance of all the classes. By clicking on 'View', you can examine the detailed performace report of each class.</p>
                                  <ul className="nav nav-tabs nav-linetriangle no-hover-bg">
+                                    <li className="nav-item">
+                                       <a className={section == "tab0" ? "nav-link active" : 'nav-link'} id="base-tab1" data-toggle="tab" aria-controls="tab0" href="#tab0" aria-expanded="true" onClick={()=>{changeSection('tab0')}}> Create Test  </a>
+                                    </li>
                                     <li className="nav-item">
                                        <a className={section == "tab1" ? "nav-link active" : 'nav-link'} id="base-tab1" data-toggle="tab" aria-controls="tab1" href="#tab1" aria-expanded="true" onClick={()=>{changeSection('tab1')}}> Assign Test  </a>
                                     </li>
@@ -156,20 +181,6 @@ export default function TeacherDashboard(){
                                                                         })}
                                                                      </select>
                                                                   </div>
-                                                                  {/* <div className="form-group col-md-4 mb-0">
-                                                                     <select className="form-control">
-                                                                        <option value="">--Select Subject-- </option>
-                                                                        <option value="">Science </option>
-                                                                        <option value="">Mathematics </option>
-                                                                        <option value="">Social Science </option>
-                                                                        <option value="">Physics</option>
-                                                                        <option value="">Chemistry</option>
-                                                                        <option value="">Biology </option>
-                                                                     </select>
-                                                                  </div> */}
-                                                                  {/* <div className="form-group col-md-3 mb-0">
-                                                                     <button type="button" className="btn btn-warning btn-min-width sbmt_view_form btn_click2 mr-1 mb-1 mt-0">Search</button>
-                                                                  </div> */}
                                                                </div>
                                                             </div>
                                                          </form>
@@ -181,6 +192,100 @@ export default function TeacherDashboard(){
                                                 <AssignmentCard test={test} fun={(startDate, testWindow)=> {setLoading(true); updateAssignment(test.assign_table_id, test.test_duration, startDate, testWindow)}} loading={loading}/>
                                              </>)
                                           })}
+                                       </div>
+                                    </div>
+                                    <div className={section == "tab0" ? "tab-pane container-fluid active" : 'tab-pane container-fluid'} id="tab0" aria-labelledby="base-tab0">
+                                       <div className="row mb-5 pt-1">
+                                          {/* <div className="col-md-6">
+                                             <h4 className="card-title"><strong> Create Test </strong></h4>
+                                          </div> */}
+                                          <div className="col-md-12">
+                                             <form className="form">
+                                                <div className="form-body">
+                                                   <div className="row">
+                                                      <div className="col-md-4">
+                                                         <h4 className="card-title"><strong>Create Test</strong></h4>
+                                                         <div className="form-group col-md-12 mb-1">
+                                                            <select className="form-control" onChange={handleChange} value={params.class_id ? params.class_id : 9999}>
+                                                               <option value="999">--Select Class-- </option>
+                                                               {classes && classes.map((item,key)=>{
+                                                                  return(
+                                                                     <option value={item.class_id} data-class_name={item.class_name} key={key} >{item.class_name + ' th'} </option>
+                                                                  )
+                                                               })}
+                                                            </select>
+                                                         </div> 
+                                                         <div className="form-group col-md-12 mb-1">
+                                                            {/* test_id here contains unit_id */}
+                                                            <select className="form-control" onChange={handleChangeUnit} value={params.test_id ? params.test_id : 9999}>
+                                                               <option value="999">--Select Unit-- </option>
+                                                               {classAndSubjectWiseUnit && classAndSubjectWiseUnit.map((it,key)=>{
+                                                                  return(
+                                                                        <option value={it._id}  key={key} >{it.unit_name} </option>
+                                                                     )
+                                                               })}
+                                                            </select>
+                                                         </div>
+                                                      
+                                                         <div className="form-group col-md-12 mb-1">
+                                                            <select className="form-control">
+                                                               <option value="">--Select Chapter-- </option>
+                                                               {classSubjectAndUnitWiseChapter && classSubjectAndUnitWiseChapter.map((it,key)=>{
+                                                                  return(
+                                                                        <option value={it._id}  key={key} >{it.chapter_name} </option>
+                                                                     )
+                                                               })}
+                                                            </select>
+                                                         </div>
+                                                      
+                                                         <div className="form-group col-md-12 mb-1"> 
+                                                            <input type="text" className="form-control" placeholder="Number of Question" onChange={setNumber}/> 
+                                                         </div>
+                                                      
+                                                         <div className="form-group choose_file col-md-12 mb-1">
+                                                            <div className="input-group mb-3">
+                                                               <div className="input-group-prepend">
+                                                                  <span className="input-group-text p-0" id="basic-addon1">
+                                                                     <select className="form-control">
+                                                                        <option value="">.jpeg</option>
+                                                                        <option value="">.pdf</option>
+                                                                        <option value="">.docx </option>
+                                                                     </select>
+                                                                  </span>
+                                                               </div>
+                                                               <input type="file" className="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1"/>
+                                                            </div>
+                                                         </div>
+                                                      </div>
+
+                                                      <div className="col-md-4">
+                                                         <h4 className="card-title"><strong>Choose Anwers</strong></h4>
+                                                         <div className="form-group col-md-12 mb-1">
+                                                            <ul className="create_title1">
+                                                               <li><input type="checkbox" name="ans" value="A"/> <label for="vehicle1"> A</label></li>
+                                                               <li><input type="checkbox" name="ans" value="B"/> <label for="vehicle1"> B</label></li>
+                                                               <li><input type="checkbox" name="ans" value="C"/> <label for="vehicle1"> C</label></li>
+                                                               <li><input type="checkbox" name="ans" value="D"/> <label for="vehicle1"> D</label></li>
+                                                            </ul>
+                                                         </div>
+                                                         <div className="form-group col-md-12 mb-1">
+                                                            <ul className="create_title1">
+                                                               <li><input type="checkbox" name="ans" value="A"/> <label for="vehicle1"> A</label></li>
+                                                               <li><input type="checkbox" name="ans" value="B"/> <label for="vehicle1"> B</label></li>
+                                                               <li><input type="checkbox" name="ans" value="C"/> <label for="vehicle1"> C</label></li>
+                                                               <li><input type="checkbox" name="ans" value="D"/> <label for="vehicle1"> D</label></li>
+                                                            </ul>
+                                                         </div>
+                                                      </div>
+                                                      <div className="col-md-4">
+                                                         <h4 className="card-title"><strong>Uploaded Questions</strong></h4>
+                                                         <img src=""/>
+                                                         <img src=""/>
+                                                      </div>
+                                                   </div> 
+                                                </div>
+                                             </form>
+                                          </div>
                                        </div>
                                     </div>
                                     <div className={section == "tab2" ? "tab-pane container-fluid active" : 'tab-pane container-fluid'} id="tab2" aria-labelledby="base-tab2">
@@ -216,13 +321,6 @@ export default function TeacherDashboard(){
                                                                         })}
                                                                      </select>
                                                                   </div>
-                                                                  {/* <div className="form-group col-md-2 mb-2">
-                                                                     <button className="btn btn-primary" onClick={makePdf}>Pdf -- (under development)</button>
-                                                                  </div> */}
-                                                                  
-                                                                  {/* <div className="form-group col-md-3 mb-2">
-                                                                     <button type="button" className="btn btn-warning btn-min-width sbmt_view_form btn_click1 mr-1 mb-1 mt-0">Search</button>
-                                                                  </div> */}
                                                                </div>
                                                             </div>
                                                          </form>
@@ -245,9 +343,6 @@ export default function TeacherDashboard(){
                                                                return(
                                                                <tr key={key}>
                                                                   <td className="text-truncate">
-                                                                     {/* <span className="avatar avatar-xs">
-                                                                     <img className="box-shadow-2" src="/images/portrait/small/avatar-s-4.png" alt="avatar"/>
-                                                                     </span>  */}
                                                                      <span>{item.student_name}</span>
                                                                   </td>
                                                                   <td>{item && item.time_taken && new Date(item?.time_taken * 1000)?.toISOString()?.substr(11, 8)} </td>
@@ -261,7 +356,6 @@ export default function TeacherDashboard(){
                                                    </table>
                                                 </div>
                                                 {singleStudentTests && <CumilativeStudent score={singleStudentTests} heading={singleStudentTests[0]?.student_name}/>}
-
                                              </div>
                                           </div>
                                        </div>

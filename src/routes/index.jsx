@@ -68,7 +68,7 @@ export const studentRoutes = [
 
 export const teacherRoutes = [
     {
-        path:'/:user_type?/teacher-dashboard/:class_id?/:test_id?/:student_id?',
+        path:'/:user_type?/teacher-dashboard/:window?/:class_id?/:test_id?/:student_id?',
         component: TeacherDashboard
     },
     {

@@ -862,3 +862,116 @@ label.radio p {
     font-size: 15px;
     padding: 10px 20px;
 }
+
+
+
+.choose_file input.form-control{padding:5px !important;}
+.choose_file ::-webkit-file-upload-button {
+background: #FF6E00;
+color: #FFFFFF; border-radius:2px;
+padding:5px 20px; border:none;
+}
+.choose_file .input-group-text{border:none;}
+.choose_file .select.form-control{box-shadow: none;
+  border: none;
+}
+
+
+
+
+ul.create_title1 li {
+    display: inline-block;
+    padding: 0 15px;
+}
+ul.create_title1 li:first-child {
+    padding-left: 0;
+}
+
+
+
+
+.bh_answer1 {
+    margin-bottom:0px;
+    padding:10px 0;
+    border-bottom:1px solid #dedede;
+}
+.ovr_flw_hedn{
+   overflow:hidden;
+    padding-left:0px;
+}
+.Qnd_anw{
+   position:relative;
+}
+.ovr_flw_hedn .question.bg-Not-select{
+   padding:10px 20px;
+    border:1px solid #ececec;
+    max-height: 500px;
+    overflow: hidden;
+    overflow-y: scroll;
+    padding-bottom:60px;
+}
+.ovr_flw_hedn .question.bg-Not-select::-webkit-scrollbar {
+    width: 5px;
+}
+.ovr_flw_hedn .question.bg-Not-select::-webkit-scrollbar-track {
+    background: #EFEFEF;
+}
+.ovr_flw_hedn .question.bg-Not-select::-webkit-scrollbar-thumb {
+    background: #f28251;
+}
+.ovr_flw_hedn .question.bg-Not-select::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+.ovr_flw_hedn .bh_answer1 h5{
+   position:relative;
+    font-size: 16px;
+    padding-left:45px;
+}
+.ovr_flw_hedn .bh_answer1 h5 span{
+   position:absolute;
+    top:3px;
+    left:0px;
+    color: #f62d51 !important;
+    font-size: 18px;
+}
+h1.upload-area__title {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+.bh_answer1 ul{
+   vertical-align:top;
+    display:inline-block;
+    width:100%;
+}
+.bh_answer1 ul li{
+   font-size:14px;
+    font-weight:500;
+    display:inline-block;
+    width:50%;
+    float:left;
+    padding:0px 10px;
+}
+.bh_answer1 ul li span{
+   font-weight:600;
+}
+.bdr_to1{
+   position:absolute;
+    z-index:9;
+    bottom:0px;
+    left: 0;
+    width: 100%;
+    background: #fff;
+    box-shadow: 0 -3px 9px rgb(0 0 0 / 10%);
+    border-left:1px solid #ececec !important;
+    border-bottom:1px solid #ececec !important;
+    border-right:1px solid #ececec !important;
+}
+.online_answ_bg{
+   padding-right:0px;
+}
+.online_answ{
+   max-height:500px;
+    height:100%;
+    overflow:hidden;
+}

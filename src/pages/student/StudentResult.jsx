@@ -16,6 +16,7 @@ export default function StudentResult(){
         localStorage.removeItem('test_test_window');
         localStorage.removeItem('test_test_time');
         localStorage.removeItem('test_test_attempt_time');
+        localStorage.removeItem('tabSwitchCount');
     },[])
     
     return(

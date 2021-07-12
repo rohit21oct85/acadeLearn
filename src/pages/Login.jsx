@@ -89,7 +89,7 @@ export default function Login(){
                                 history.push(`/student/student-dashboard/${class_id}/${class_name}`)
                             }
                             else if(user_type === 'teacher'){
-                                history.push(`/teacher/teacher-dashboard/`)
+                                history.push(`/teacher/teacher-dashboard/tab0`)
                             }
                             else if(user_type === 'principal'){
                                 history.push(`/principal/principal-dashboard/${school_id}`)
@@ -114,7 +114,7 @@ export default function Login(){
             if(state?.user_type == "student"){
                 history.push(`/student/student-dashboard/${state.class_id}/${state.class_name}`)
             }else if(state?.user_type == "teacher"){
-                history.push(`/teacher/teacher-dashboard`)
+                history.push(`/teacher/teacher-dashboard/tab0`)
             }else if(state?.user_type == "principal"){
                 history.push(`/principal/principal-dashboard/${state.school_id}`)
             }
