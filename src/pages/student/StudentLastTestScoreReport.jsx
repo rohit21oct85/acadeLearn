@@ -28,6 +28,7 @@ export default function StudentLastTestScoreReport(){
         document.body.appendChild(script);
     },[lastScore])
 
+    
     return(
         <>
         <Head/>

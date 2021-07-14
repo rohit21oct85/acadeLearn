@@ -12,6 +12,7 @@ import useTestList from '../../pages/student/hooks/useTestList'
 import useCreateAttemptTest from '../student/hooks/useCreateAttemptTest'
 import useLastTestScore from '../student/hooks/useLastTestScore'
 import useCumulativeScore from '../student/hooks/useCumulativeScore'
+import useMockTest from '../student/hooks/useMockTest'
 
 export default function StudentDashboard(){
     const [section, setSection] = useState('tab1');
@@ -56,6 +57,7 @@ export default function StudentDashboard(){
     const {data:tests, testLoading} = useTestList();
     const {data:lastScore, lastScoreLoading} = useLastTestScore();
     const {data:cumulativeScore, cumulativeScoreLoading} = useCumulativeScore();
+    const {data:mockTest, mockTestLoading} = useMockTest();
     
 
     return(
@@ -132,7 +134,7 @@ export default function StudentDashboard(){
                                         <li className="nav-item">
                                             <a className={section == "tab3" ? "nav-link active" : 'nav-link'}  data-toggle="tab" aria-controls="tab43" href="#tab43" aria-expanded="false" onClick={()=>{changeSection('tab3')}}>Cumulative Test Score  </a>
                                         </li>
-                                    </ul>
+                                    </ul>{console.log(mockTest)}
                                     <div className="tab-content px-1 pt-1">
                                         <div role="tabpanel" className={section == "tab1" ? "tab-pane active" : 'tab-pane'} aria-expanded="true" aria-labelledby="base-tab41">
                                             <div className="tab-pane active" id="comp-order-tab" aria-expanded="true" role="tablist" aria-labelledby="complete-order">
@@ -152,6 +154,7 @@ export default function StudentDashboard(){
                                                             )
                                                         }
                                                     })}
+                                                    {/* {mockTest && <AttemptCard test={test} key={key} fun={()=>{ handleAttempt(test.unit_table_id, test.assign_table_id, test.start_date, test.test_window, test.test_duration,test.test_name) }}/>} */}
                                                 </div>
                                             </div>
                                         </div>

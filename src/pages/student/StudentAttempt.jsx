@@ -7,7 +7,6 @@ import {useHistory, useParams } from 'react-router-dom'
 import useRandomQuestion from '../../pages/student/hooks/useRandomQuestion'
 import useQuestionList from '../../pages/student/hooks/useQuestionList'
 import useUpdateAttemptTest from '../../pages/student/hooks/useUpdateAttemptTest'
-import { Prompt } from 'react-router'
 
 export default function StudentAttempt(){
     const history = useHistory();
@@ -20,7 +19,7 @@ export default function StudentAttempt(){
 	const [loading, setLoading] = useState(false);
 	const [questLoading, setQuestLoading] = useState(false);
 	const [opt, setOpt] = useState('');
-
+	
 	const set = (e, option, id) => {
 		setOpt(option)
 		if(counts-1 == questions?.length-1){
@@ -74,7 +73,6 @@ export default function StudentAttempt(){
 	const {data: question, questionLoading} = useRandomQuestion();
 	const {data: questions, questionsLoading} = useQuestionList();
 	const attempt = useUpdateAttemptTest(formData);
-	// const updateMutation = useUpdateAttemptTest(formData);
 
 	useEffect(()=>{
 		setQuestLoading(false)
@@ -168,7 +166,7 @@ export default function StudentAttempt(){
 		tabSwitchCount = tabSwitchCount +1 ;
 		localStorage.setItem('tabSwitchCount',tabSwitchCount);
 		if(tabSwitchCount >= 2){
-			endTest()
+			// endTest()
 		}
 	};
 
@@ -178,6 +176,19 @@ export default function StudentAttempt(){
 		return () => {
 		  window.removeEventListener('blur', onBlur);
 		};
+	});
+
+	useEffect(() => {
+		function toggleFullScreen() {
+			if (!document.fullscreenElement) {
+				document.documentElement.requestFullscreen();
+			} else {
+				if (document.exitFullscreen) {
+					// document.exitFullscreen();
+				}
+			}
+		}
+		toggleFullScreen()
 	});
 
 	return(
@@ -297,16 +308,9 @@ export default function StudentAttempt(){
                      <div className="Quiz_reviewLegend">
                         <ol>
 							<li> <span className="Quiz_reviewColor" style={{backgroundColor: "#00ab54"}}></span> <span className="Quiz_reviewText">Answered</span></li>
-							{/* <li> <span className="Quiz_reviewColor" style={{backgroundColor: "white",border:"1px solid black"}}></span> <span className="Quiz_reviewText">Not Attempt</span></li> */}
                         </ol>
                         <div style={{clear: "both"}}></div>
                      </div>
-                    {/* <!-- <div className="info-list text-center">
-                        <a className="app-ends" href="#">Application ends in 2d 7h 6m</a>
-                     </div>--> */}
-                     {/* <div className="info-list text-center">
-                        <a href="MCQ-question-submit.php"> <button className="btn btn-primary border-success align-items-center btn-success submit-sd" type="button">Submit</button></a>
-                     </div> */}
                   </div>
                </div>
                                  </div>

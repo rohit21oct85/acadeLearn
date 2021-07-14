@@ -19,6 +19,19 @@ export default function StudentResult(){
         localStorage.removeItem('tabSwitchCount');
     },[])
     
+    useEffect(() => {
+		function toggleFullScreen() {
+			if (!document.fullscreenElement) {
+				// document.documentElement.requestFullscreen();
+			} else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+			}
+		}
+		toggleFullScreen()
+	});
+    
     return(
         <>
         <Head/>
