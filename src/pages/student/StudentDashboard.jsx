@@ -27,16 +27,24 @@ export default function StudentDashboard(){
     // let assign_test_id = ''; 
     const createMutation = useCreateAttemptTest(form);
 
-    const handleAttempt = async(id, assign_test_id, start_time, test_window, test_duration,test_name) => {
+    const handleAttempt = async(id, assign_test_id, start_time, test_window, test_duration,test_name,test_type) => {
         localStorage.setItem('test_test_name',test_name)
         localStorage.setItem('test_test_time',start_time)
         localStorage.setItem('test_test_window',test_window)
         localStorage.setItem('test_test_duration',test_duration)
         localStorage.setItem('test_test_attempt_time',new Date())
-        await createMutation.mutate({id:id, assign_test_id:assign_test_id});
-        // await createMutation.mutate({id:id, assign_test_id:assign_test_id, subject_id:subject_id});
-        // history.push(`/student/student-agreement/${params.class_id}/${params.class_name}/${subject_id}/${id}`)
-        history.push(`/student/student-agreement/${params.class_id}/${params.class_name}/${id}`)
+        await createMutation.mutate({id:id, assign_test_id:assign_test_id,test_type:test_type});
+        history.push(`/student/student-agreement/${params.class_id}/${params.class_name}/${id}/${test_type}`)
+    }
+
+    const handleMockAttempt = async(id,mock_id, start_time, test_window, test_duration,test_name,test_type) => {
+        localStorage.setItem('test_test_name',test_name)
+        localStorage.setItem('test_test_time',start_time)
+        localStorage.setItem('test_test_window',test_window)
+        localStorage.setItem('test_test_duration',test_duration)
+        localStorage.setItem('test_test_attempt_time',new Date())
+        await createMutation.mutate({id:id, mock_id:mock_id,test_type:test_type});
+        history.push(`/student/student-agreement/${params.class_id}/${params.class_name}/${id}/${test_type}`)
     }
 
     const handleChangeSubject = (e) => {
@@ -134,7 +142,7 @@ export default function StudentDashboard(){
                                         <li className="nav-item">
                                             <a className={section == "tab3" ? "nav-link active" : 'nav-link'}  data-toggle="tab" aria-controls="tab43" href="#tab43" aria-expanded="false" onClick={()=>{changeSection('tab3')}}>Cumulative Test Score  </a>
                                         </li>
-                                    </ul>{console.log(mockTest)}
+                                    </ul>
                                     <div className="tab-content px-1 pt-1">
                                         <div role="tabpanel" className={section == "tab1" ? "tab-pane active" : 'tab-pane'} aria-expanded="true" aria-labelledby="base-tab41">
                                             <div className="tab-pane active" id="comp-order-tab" aria-expanded="true" role="tablist" aria-labelledby="complete-order">
@@ -150,11 +158,11 @@ export default function StudentDashboard(){
                                                         let currentTime = new Date()
                                                         if(timeAlTest > currentTime){
                                                             return (
-                                                                <AttemptCard test={test} key={key} fun={()=>{ handleAttempt(test.unit_table_id, test.assign_table_id, test.start_date, test.test_window, test.test_duration,test.test_name) }}/>
+                                                                <AttemptCard test={test} key={key} fun={()=>{ handleAttempt(test.unit_table_id, test.assign_table_id, test.start_date, test.test_window, test.test_duration,test.test_name,test.test_type) }}/>
                                                             )
                                                         }
                                                     })}
-                                                    {/* {mockTest && <AttemptCard test={test} key={key} fun={()=>{ handleAttempt(test.unit_table_id, test.assign_table_id, test.start_date, test.test_window, test.test_duration,test.test_name) }}/>} */}
+                                                    {mockTest && <AttemptCard test={mockTest} fun={()=>{ handleMockAttempt(mockTest.test_id, mockTest._id, mockTest.start_date, mockTest.test_window, mockTest.test_duration,mockTest.test_name,mockTest.test_type) }}/>}
                                                 </div>
                                             </div>
                                         </div>

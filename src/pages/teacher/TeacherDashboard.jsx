@@ -200,14 +200,16 @@ export default function TeacherDashboard(){
 	}
 	
 	const selectAnswer = (e,id) => {
-		setCorrectAnswers([...correctAnswers, {[e.target.name]: e.target.value}])
-		setFormData1({...formData1, ['correctAnswers']:correctAnswers})
+
+		setCorrectAnswers([...correctAnswers,{[e.target.name]: e.target.value}])
+		// setCorrectAnswers(correctAnswers => [...correctAnswers,{[e.target.name]: e.target.value}])
+		// setFormData1({...formData1, ['correctAnswers']:correctAnswers})
 	}
 
 	const createTest = async (e) => {
 		e.preventDefault();
-		setFormData1({...formData1, ['correctAnswers']:correctAnswers})
-		formDataUpload.append(['correctAnswers'],correctAnswers)
+		// setFormData1({...formData1, ['correctAnswers']:correctAnswers})
+		formDataUpload.append(['correctAnswers'], JSON.stringify(correctAnswers))
 		formDataUpload.append(['extension'],formData1.extension)
 		formDataUpload.append(['totalQuestions'],formData1.totalQuestions)
 		formDataUpload.append(['start_date'],formData1.start_date)
@@ -222,7 +224,7 @@ export default function TeacherDashboard(){
 		await createTestMutation.mutate(formDataUpload,{
 			onSuccess: (data, variables, context) => {
 				if(data?.data){
-					alert('')
+					alert('Test Created Successfully')
 				}
 				setLoadingCreate(false)
 			},
@@ -233,7 +235,7 @@ export default function TeacherDashboard(){
 		<>
 		<Head/>
 		<HeaderNav/>
-		<div className="app-content content mt-5">
+		<div className="app-content content mt-5">{console.log(correctAnswers)}
 				<div className="content-overlay"></div>
 				<div className="content-wrapper">
 				<div className="content-header row">
@@ -389,7 +391,7 @@ export default function TeacherDashboard(){
 															</div>
 
 															<div className="form-group col-md-12 mb-1">
-																<DatePicker selected={startDate} onChange={(date) => setStartDate(date)} isClearable showTimeSelect dateFormat="MM/d/yyyy h:mm aa"/>
+																<DatePicker selected={startDate} onChange={(date) => setStartDate(date)} isClearable showTimeSelect dateFormat="MM/d/yyyy h:mm aa" className="date_bg1"/>
 															</div>
 															<div className="form-group col-md-12 mb-1">
 																<button className="btn btn-primary">{loadingCreate ? "loading" : "Save Test"}</button>
@@ -417,11 +419,11 @@ export default function TeacherDashboard(){
 																{anyFile.map((item, key)=>{
 																	return (docType == "png" || docType == "jpg" || docType == "pdf") ? 
 																		<span key={key}>
-																			<iframe src={base64FilesArr[key]} height="250" width="700"/>
+																			<iframe src={base64FilesArr[key]} height="250" width="100%"/>
 																		</span>
 																		: (docType == "docx") ? 
 																		<span key={key}>
-																			<iframe src={`data:text/html;charset=utf-8,%3Chtml%3E%3Cbody%3E${base64FilesArr[key]}%3C/body%3E%3C/html%3E`} height="250" width="700"></iframe>
+																			<iframe src={`data:text/html;charset=utf-8,%3Chtml%3E%3Cbody%3E${base64FilesArr[key]}%3C/body%3E%3C/html%3E`} height="250" width="100%"></iframe>
 																		</span>
 																		:
 																		<></>

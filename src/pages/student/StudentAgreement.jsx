@@ -88,7 +88,7 @@ export default function StudentAgreement(){
 						<label htmlFor="accepted"> “I am ({localStorage.getItem('name')}), and I have read and hereby accepted all the instructions mentioned above. I, therefore, want to open the test portal, and my test starts now.</label>
 						<button className={`${disabled} start_now_btn btn btn-warning btn-min-width sbmt_view_form btn_click2 mr-1 mb-1 mt-2`} onClick={()=>{
 							if(disabled == ""){
-								history.push(`/student/student-attempt/${params.class_id}/${params.class_name}/${params.test_id}?query=true`)
+								history.push(`/student/student-attempt/${params.class_id}/${params.class_name}/${params.test_id}/${params.test_type}/?query=true`)
 							}else{
 								alert('Kindly agree to the terms and conditions');
 							}

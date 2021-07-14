@@ -45,11 +45,11 @@ export const studentRoutes = [
         component: StudentDashboard
     },
     {
-        path:'/:user_type?/student-agreement/:class_id?/:class_name?/:test_id?',
+        path:'/:user_type?/student-agreement/:class_id?/:class_name?/:test_id?/:test_type?',
         component: StudentAgreement
     },
     {
-        path:'/:user_type?/student-attempt/:class_id?/:class_name?/:test_id?',
+        path:'/:user_type?/student-attempt/:class_id?/:class_name?/:test_id?/:test_type?',
         component: StudentAttempt
     },
     {

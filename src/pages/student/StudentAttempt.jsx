@@ -64,7 +64,7 @@ export default function StudentAttempt(){
 		let foo = query.get('query');
 		if(foo){
 			localStorage.removeItem('COUNTER');
-			history.push(`/student/student-attempt/${params.class_id}/${params.class_name}/${params.test_id}`);
+			history.push(`/student/student-attempt/${params.class_id}/${params.class_name}/${params.test_id}/${params.test_type}`);
 		}
 		timer()
 	},[attemptId])
@@ -94,7 +94,7 @@ export default function StudentAttempt(){
 		let query = new URLSearchParams(search);
 		let foo = query.get('query');
 		if(foo){
-			history.push(`/student/student-attempt/${params.class_id}/${params.class_name}/${params.test_id}`);
+			history.push(`/student/student-attempt/${params.class_id}/${params.class_name}/${params.test_id}/${params.test_type}`);
 		}
 		
 		if(formData.answer == undefined){
@@ -102,9 +102,11 @@ export default function StudentAttempt(){
 			setLoading(false)
 			return;
 		}
+
 		await attempt.mutate(formData,{
 			onSuccess: (data, variables, context) => {
 				if(data?.data){
+					console.log(data)
 					setAttemptId(data?.data?.attemptId)
 					var ele = document.getElementsByName("option");
 					setFormData({})
@@ -248,20 +250,20 @@ export default function StudentAttempt(){
 										</span> : 
 										<span>
 											<div className="ans ml-2">
-										<label className={"radio " + (opt == 'option_a' ? 'active' :'')}> <input type="radio" name="option" value={question?.option_a} onChange={(e)=>{set(e,"option_a",question?._id)}}/><span className="checkmark"></span> <span><div dangerouslySetInnerHTML={{ __html: question?.option_a }}/></span> </label>
-										</div>
-										<div className="ans ml-2">
-										<label className={"radio " + (opt == 'option_b' ? 'active' :'')}> <input type="radio" name="option" value={question?.option_b} onChange={(e)=>{set(e,"option_b",question?._id)}}/><span className="checkmark"></span> <span><div dangerouslySetInnerHTML={{ __html: question?.option_b }}/></span>
-										</label>
-										</div>
-										<div className="ans ml-2">
-										<label className={"radio " + (opt == 'option_c' ? 'active' :'')}> <input type="radio" name="option" value={question?.option_c} onChange={(e)=>{set(e,"option_c",question?._id)}}/><span className="checkmark"></span> <span><div dangerouslySetInnerHTML={{ __html: question?.option_c }}/></span>
-										</label>
-										</div>
-										<div className="ans ml-2">
-										<label className={"radio " + (opt == 'option_d' ? 'active' :'')}> <input type="radio" name="option" value={question?.option_d} onChange={(e)=>{set(e,"option_d",question?._id)}}/><span className="checkmark"></span> <span><div dangerouslySetInnerHTML={{ __html: question?.option_d }}/></span>
-										</label>
-										</div>
+												<label className={"radio " + (opt == 'option_a' ? 'active' :'')}> <input type="radio" name="option" value={question?.option_a} onChange={(e)=>{set(e,"option_a",question?._id)}}/><span className="checkmark"></span> <span><div dangerouslySetInnerHTML={{ __html: question?.option_a }}/></span> </label>
+											</div>
+											<div className="ans ml-2">
+												<label className={"radio " + (opt == 'option_b' ? 'active' :'')}> <input type="radio" name="option" value={question?.option_b} onChange={(e)=>{set(e,"option_b",question?._id)}}/><span className="checkmark"></span> <span><div dangerouslySetInnerHTML={{ __html: question?.option_b }}/></span>
+												</label>
+											</div>
+											{params.test_type != "mock-test" ?  <><div className="ans ml-2">
+												<label className={"radio " + (opt == 'option_c' ? 'active' :'')}> <input type="radio" name="option" value={question?.option_c} onChange={(e)=>{set(e,"option_c",question?._id)}}/><span className="checkmark"></span> <span><div dangerouslySetInnerHTML={{ __html: question?.option_c }}/></span>
+												</label>
+											</div>
+											<div className="ans ml-2">
+												<label className={"radio " + (opt == 'option_d' ? 'active' :'')}> <input type="radio" name="option" value={question?.option_d} onChange={(e)=>{set(e,"option_d",question?._id)}}/><span className="checkmark"></span> <span><div dangerouslySetInnerHTML={{ __html: question?.option_d }}/></span>
+												</label>
+											</div></> : ""}
 									</span>}
                                  </div>
                                  <div className="p-2 bg-Not-select">
@@ -281,7 +283,6 @@ export default function StudentAttempt(){
                      <a className="btn job-btn">All Attempt Question</a>
                      <div className="col-md-12 Attendence_dv  msq-o">
                         <ul>
-							
 							{questions && questions.map((item, key)=>{
 								if(item.answer){
 									count++
