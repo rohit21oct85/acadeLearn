@@ -167,9 +167,14 @@ export default function StudentDashboard(){
                                                     })}
                                                     {mockTest && <AttemptCard test={mockTest} fun={()=>{ handleMockAttempt(mockTest.test_id, mockTest._id, mockTest.start_date, mockTest.test_window, mockTest.test_duration,mockTest.test_name,mockTest.test_type) }}/>}
                                                     {uploadTest && uploadTest.map((up, key)=>{
-                                                        return (
-                                                            <AttemptCard test={up} key={key} fun={()=>{ handleAttempt(null,up._id, up.start_date, up.test_window, up.test_duration,up.test_name,up.test_type) }}/>
-                                                        )
+                                                        let timeAlTest = new Date(up?.start_date)
+                                                        timeAlTest.setMinutes( timeAlTest.getMinutes() + up?.test_window );
+                                                        let currentTime = new Date()
+                                                        if(timeAlTest > currentTime){
+                                                            return (
+                                                                <AttemptCard test={up} key={key} fun={()=>{ handleAttempt(null,up._id, up.start_date, up.test_window, up.test_duration,up.test_name,up.test_type) }}/>
+                                                            )
+                                                        }
                                                     })}
                                                 </div>
                                             </div>

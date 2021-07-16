@@ -139,7 +139,6 @@ export default function StudentAttempt(){
 		await attempt.mutate(formData,{
 			onSuccess: (data, variables, context) => {
 				if(data?.data){
-					console.log(data)
 					setAttemptId(data?.data?.attemptId)
 					var ele = document.getElementsByName("option");
 					setFormData({})
@@ -196,12 +195,12 @@ export default function StudentAttempt(){
 	}
 
 	const onBlur = () => {
-		alert("Tab Switching is not Allowed!\n if u do it once again ur test will be cancelled")
+		addToast('Tab Switching is not Allowed!\n if u do it once again ur test will be cancelled', { appearance: 'error',autoDismiss: true, });
 		let tabSwitchCount = JSON.parse(localStorage.getItem('tabSwitchCount'))!= null ? JSON.parse(localStorage.getItem('tabSwitchCount')) : 0 
 		tabSwitchCount = tabSwitchCount +1 ;
 		localStorage.setItem('tabSwitchCount',tabSwitchCount);
 		if(tabSwitchCount >= 2){
-			endTest()
+			// endTest()
 		}
 	};
 
@@ -370,81 +369,44 @@ export default function StudentAttempt(){
 												<h3 className="job-title">{localStorage.getItem('test_test_name')}</h3>
 											</div>
 											<div className="col-md-6 online_answ_bg">
-												<div className="online_answ">
-													{/* {questionPaper.}  */}
-													<img src="assets/images/online-assessment.jpg" className="img-fluid" alt=""/>
+												<div className="online_answ">{console.log(questionPaper)}
+													{questionPaper?.extension == "png" || questionPaper?.extension == "jpg" 
+														? 
+														questionPaper.questions?.map(( item, key ) => {
+															return(
+																<>{console.log("sadas",item)}
+																	<img src={item} className="img-fluid" alt="question_paper"/>
+																</>
+															)
+														}) 
+														:
+														
+														questionPaper?.questions?.map(( item, key ) => {
+															return(
+																<>{console.log("sadfsfsdfsdas",item)}
+																	<iframe src={item} />
+																</>
+															)
+														})
+													}
 												</div>
 											</div>
 											<div className="col-md-6 ovr_flw_hedn">
 												<div className="Qnd_anw">
 													<div className="question bg-Not-select">
-													<div className="bh_answer1">
-														<div className=" question-title">
-															<h5 className=""><span>Q 1.</span>  Which of the following country has largest population?</h5>
+													{[...Array(questionPaper?.questionLength)].map((e, i) =>
+														<div className="bh_answer1">
+															<div className=" question-title">
+																<h5 className=""><span>Q {i+1}.</span></h5>
+															</div>
+															<ul>
+																<li><input type="radio" id={`check-a`} name={`ans${i+1}`}  value="a"/> <label htmlFor="check-a"> A</label></li>
+																<li><input type="radio" id={`check-b`} name={`ans${i+1}`}  value="b"/> <label htmlFor="check-b"> B</label></li>
+																<li><input type="radio" id={`check-c`} name={`ans${i+1}`}  value="c"/> <label htmlFor="check-c"> C</label></li>
+																<li><input type="radio" id={`check-d`} name={`ans${i+1}`}  value="d"/> <label htmlFor="check-d"> D</label></li>
+															</ul>
 														</div>
-														<ul>
-															<li><span>A.</span> Option1</li>
-															<li><span>B.</span> Option1</li>
-															<li><span>C.</span> Option1</li>
-															<li><span>D.</span> Option1</li>
-														</ul>
-													</div>
-													<div className="bh_answer1">
-														<div className=" question-title">
-															<h5 className=""><span>Q 2.</span>  Which of the following country has largest population?</h5>
-														</div>
-														<ul>
-															<li><span>A.</span> Option1</li>
-															<li><span>B.</span> Option1</li>
-															<li><span>C.</span> Option1</li>
-															<li><span>D.</span> Option1</li>
-														</ul>
-													</div>
-													<div className="bh_answer1">
-														<div className=" question-title">
-															<h5 className=""><span>Q 3.</span>  Which of the following country has largest population?</h5>
-														</div>
-														<ul>
-															<li><span>A.</span> Option1</li>
-															<li><span>B.</span> Option1</li>
-															<li><span>C.</span> Option1</li>
-															<li><span>D.</span> Option1</li>
-														</ul>
-													</div>
-													<div className="bh_answer1">
-														<div className=" question-title">
-															<h5 className=""><span>Q 4.</span>  Which of the following country has largest population?</h5>
-														</div>
-														<ul>
-															<li><span>A.</span> Option1</li>
-															<li><span>B.</span> Option1</li>
-															<li><span>C.</span> Option1</li>
-															<li><span>D.</span> Option1</li>
-														</ul>
-													</div>
-													<div className="bh_answer1">
-														<div className=" question-title">
-															<h5 className=""><span>Q 5.</span>  Which of the following country has largest population?</h5>
-														</div>
-														<ul>
-															<li><span>A.</span> Option1</li>
-															<li><span>B.</span> Option1</li>
-															<li><span>C.</span> Option1</li>
-															<li><span>D.</span> Option1</li>
-														</ul>
-													</div>
-													<div className="bh_answer1">
-														<div className=" question-title">
-															<h5 className=""><span>Q 6.</span>  Which of the following country has largest population?</h5>
-														</div>
-														<ul>
-															<li><span>A.</span> Option1</li>
-															<li><span>B.</span> Option1</li>
-															<li><span>C.</span> Option1</li>
-															<li><span>D.</span> Option1</li>
-														</ul>
-													</div>
-													<div className="p-1 bg-Not-select bdr_to1">
+													)}																										<div className="p-1 bg-Not-select bdr_to1">
 														<div className="col-md-12 text-right"> 
 															<button className="btn nextqus_btn" type="button">Next<i class="fa fa-angle-right ml-2"></i></button>
 														</div>
