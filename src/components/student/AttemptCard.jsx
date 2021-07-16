@@ -1,8 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom'
 import {formatAMPM} from '../../utils/utils'
+import { useToasts } from 'react-toast-notifications';
 
 export default function AttemptCard({test, key, fun}){
+    const { addToast } = useToasts();
 
     let d = new Date(test?.start_date)
     let endsIN = new Date(test?.start_date)
@@ -15,13 +17,13 @@ export default function AttemptCard({test, key, fun}){
         allowed_time.setMinutes( allowed_time.getMinutes() + data.test_window );
         if(current_time > start_time){
             if(current_time < allowed_time){
-                alert("Test is Live! you can't cancel the test now.")
+                addToast("Test is Live! you can't cancel the test now.", { appearance: 'success',autoDismiss: true });
                 fun();
             }else{
-                alert('Test has Expired');
+                addToast("Test has Expired.", { appearance: 'error',autoDismiss: true });
             }
         }else{
-            alert("Test hasn't started yet")
+            addToast("Test hasn't started yet.", { appearance: 'error',autoDismiss: true });
         }
         
     }

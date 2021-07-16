@@ -13,6 +13,7 @@ import useCreateAttemptTest from '../student/hooks/useCreateAttemptTest'
 import useLastTestScore from '../student/hooks/useLastTestScore'
 import useCumulativeScore from '../student/hooks/useCumulativeScore'
 import useMockTest from '../student/hooks/useMockTest'
+import useUploadTest from '../student/hooks/useUploadTest'
 
 export default function StudentDashboard(){
     const [section, setSection] = useState('tab1');
@@ -47,6 +48,7 @@ export default function StudentDashboard(){
         history.push(`/student/student-agreement/${params.class_id}/${params.class_name}/${id}/${test_type}`)
     }
 
+
     const handleChangeSubject = (e) => {
         if(e.target.value != 999 ){
             if(e.target.value==9999){
@@ -57,8 +59,8 @@ export default function StudentDashboard(){
         }
     }
 
-    const handleClick = (attempt_id,t) => {
-        history.push(`/student/student-result/${params.class_id}/${params.class_name}/${t}/${attempt_id}`)
+    const handleClick = (attempt_id,t,test_type) => {
+        history.push(`/student/student-result/${params.class_id}/${params.class_name}/${t}/${attempt_id}/${test_type}`)
     }
 
     const {data:subjects, subjectLoading} = useClassSubjectList();
@@ -66,6 +68,7 @@ export default function StudentDashboard(){
     const {data:lastScore, lastScoreLoading} = useLastTestScore();
     const {data:cumulativeScore, cumulativeScoreLoading} = useCumulativeScore();
     const {data:mockTest, mockTestLoading} = useMockTest();
+    const {data:uploadTest, uploadTestLoading} = useUploadTest();
     
 
     return(
@@ -163,6 +166,11 @@ export default function StudentDashboard(){
                                                         }
                                                     })}
                                                     {mockTest && <AttemptCard test={mockTest} fun={()=>{ handleMockAttempt(mockTest.test_id, mockTest._id, mockTest.start_date, mockTest.test_window, mockTest.test_duration,mockTest.test_name,mockTest.test_type) }}/>}
+                                                    {uploadTest && uploadTest.map((up, key)=>{
+                                                        return (
+                                                            <AttemptCard test={up} key={key} fun={()=>{ handleAttempt(null,up._id, up.start_date, up.test_window, up.test_duration,up.test_name,up.test_type) }}/>
+                                                        )
+                                                    })}
                                                 </div>
                                             </div>
                                         </div>

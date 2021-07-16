@@ -7,10 +7,14 @@ import {useHistory, useParams } from 'react-router-dom'
 import useRandomQuestion from '../../pages/student/hooks/useRandomQuestion'
 import useQuestionList from '../../pages/student/hooks/useQuestionList'
 import useUpdateAttemptTest from '../../pages/student/hooks/useUpdateAttemptTest'
+import useQuestionPaper from '../../pages/student/hooks/useQuestionPaper'
+import { useToasts } from 'react-toast-notifications';
 
 export default function StudentAttempt(){
     const history = useHistory();
     const params  = useParams();
+
+	const { addToast } = useToasts();
 
 	const [counts, setCounts] = useState(0);
 	const [attemptId, setAttemptId] = useState();
@@ -22,11 +26,26 @@ export default function StudentAttempt(){
 	
 	const set = (e, option, id) => {
 		setOpt(option)
-		if(counts-1 == questions?.length-1){
-			setFormData({...formData,  ['answer'] : e.target.value, ['option']: option, ['question_id']:id, ['completion_status'] : "completed" });
-		}else{
-			setFormData({...formData, ['answer'] : e.target.value, ['option']: option, ['question_id']:id,});
-		}
+		let answer = "";
+		// if(params.test_type == "mock-test"){
+		// 	if(e.target.value == "yes"){
+		// 		answer = "a";
+		// 	}else{
+		// 		answer = "b"
+		// 	}
+		// 	if(counts-1 == questions?.length-1){
+		// 		setFormData({...formData,  ['answer'] : answer, ['option']: option, ['question_id']:id, ['completion_status'] : "completed" });
+		// 	}else{
+		// 		setFormData({...formData, ['answer'] : answer, ['option']: option, ['question_id']:id,});
+		// 	}
+		// }else{
+			if(counts-1 == questions?.length-1){
+				setFormData({...formData,  ['answer'] : e.target.value, ['option']: option, ['question_id']:id, ['completion_status'] : "completed" });
+			}else{
+				setFormData({...formData, ['answer'] : e.target.value, ['option']: option, ['question_id']:id,});
+			}
+		// }
+		
 	}
 
 	useEffect(() => {
@@ -72,6 +91,7 @@ export default function StudentAttempt(){
 	var count = 0 ;
 	const {data: question, questionLoading} = useRandomQuestion();
 	const {data: questions, questionsLoading} = useQuestionList();
+	const {data: questionPaper, questionPaperLoading} = useQuestionPaper();
 	const attempt = useUpdateAttemptTest(formData);
 
 	useEffect(()=>{
@@ -87,6 +107,19 @@ export default function StudentAttempt(){
 		setCounts(count+1)
 	},[questions])
 
+	// useEffect(() => {
+	// 	function toggleFullScreen() {
+	// 		if (!document.fullscreenElement) {
+	// 			document.documentElement.requestFullscreen();
+	// 		} else {
+	// 			if (document.exitFullscreen) {
+	// 				// document.exitFullscreen();
+	// 			}
+	// 		}
+	// 	}
+	// 	toggleFullScreen()
+	// });
+
 	const saveAnswerAndNext = async () => {
 		setLoading(true)
 		setQuestLoading(true)
@@ -98,7 +131,7 @@ export default function StudentAttempt(){
 		}
 		
 		if(formData.answer == undefined){
-			alert('select an answer')
+			addToast('select an answer', { appearance: 'error',autoDismiss: true });
 			setLoading(false)
 			return;
 		}
@@ -115,7 +148,7 @@ export default function StudentAttempt(){
 				}
 				setLoading(false)
 				if(counts-1 == questions?.length-1){
-					history.push(`/student/student-result/${params.class_id}/${params.class_name}/${params.test_id}/${data?.data?.attemptId}`);
+					history.push(`/student/student-result/${params.class_id}/${params.class_name}/${params.test_id}/${data?.data?.attemptId}/${params.test_type}`);
 				}
 			},
 		});
@@ -157,7 +190,7 @@ export default function StudentAttempt(){
 					for(var i=0;i<ele.length;i++)
 						ele[i].checked = false;
 				}
-				history.push(`/student/student-result/${params.class_id}/${params.class_name}/${params.test_id}/${data?.data?.attemptId}`);
+				history.push(`/student/student-result/${params.class_id}/${params.class_name}/${params.test_id}/${data?.data?.attemptId}/${params.test_type}`);
 			},
 		});
 	}
@@ -168,7 +201,7 @@ export default function StudentAttempt(){
 		tabSwitchCount = tabSwitchCount +1 ;
 		localStorage.setItem('tabSwitchCount',tabSwitchCount);
 		if(tabSwitchCount >= 2){
-			// endTest()
+			endTest()
 		}
 	};
 
@@ -180,150 +213,256 @@ export default function StudentAttempt(){
 		};
 	});
 
-	useEffect(() => {
-		function toggleFullScreen() {
-			if (!document.fullscreenElement) {
-				document.documentElement.requestFullscreen();
-			} else {
-				if (document.exitFullscreen) {
-					// document.exitFullscreen();
-				}
-			}
-		}
-		toggleFullScreen()
-	});
-
 	return(
         <>
             <Head/>
             <HeaderNav/>
-            <div className="app-content content mt-5">
-         <div className="content-overlay"></div>
-         <div className="content-wrapper">
-            
-            <div className="content-body">
-               {/* <!-- Slaes & Purchase Order --> */}
-               <div className="row">
-                  <div className="col-xl-12 col-lg-12">
-                     <div className="card"> 
-                        <div className="card-content">
-                           <div className="card-body">
-                              <div className="container-fluid">
-                                 <div className="row">
-                                    <div className="col-xl-12 col-lg-12">
-                                       <div className="timer-s" >
-                                       <span className="test-end">Total time taken:</span><span className="" id="timer"></span>
-                                    	</div>
-                                       <div className="timer-s" style={{"float":"left"}}>
-                                       <span className="test-end">Total Allowed:</span><span className="">{duration} min</span>
-                                    	</div>
-                                    </div>
-                                    <div className="col-md-8">
-                  <div className="job-info job-widget">
-                     <h3 className="job-title">{localStorage.getItem('test_test_name')}</h3>
-                  </div>
-                  <div className="job-content job-widget mcq-start">
-                     <div className="container">
-                        <div className="d-flex justify-content-center row">
-                           <div className="col-md-12 col-lg-12">
-                              <div className="border">
-                                 <div className="question bg-Not-select p-2 border-bottom">
-                                    <div className="d-flex flex-row justify-content-between align-items-center mcq">
-                                       <h4 className="mb-0">MCQ Quiz</h4>
-                                       <span>{counts + ' of ' +questions?.length}</span>
-                                    </div>
-                                 </div>
-                                 <div className="question bg-Not-select p-2 border-bottom">
-                                    <div className="flex-row question-title">
-                                       <span className="text-danger q_nsekected">Q.</span>
-                                       <h5 className="ml-3"><div style={{fontSize :"20px"}} dangerouslySetInnerHTML={{ __html: question?.question }}/></h5>
-                                    </div>
-									{question?.extension && question?.extension == "docx" ? 
-										<span>
-											{question.options.map((item,key)=>{
-												return(
-													<div className="ans ml-2">
-														<label className={"radio " + (opt == optionsDocx[key]['option'] ? 'active' :'')}> <input type="radio" name="option" value={item} onChange={(e)=>{set(e, optionsDocx[key]['option'], question?._id)}}/><span className="checkmark"></span> <span><div dangerouslySetInnerHTML={{ __html: item }}/></span> </label>
+			{params.test_type != "upload-test" ? 
+			<>
+				<div className="app-content content mt-5">
+					<div className="content-overlay"></div>
+						<div className="content-wrapper">
+							<div className="content-body">
+								<div className="row">
+									<div className="col-xl-12 col-lg-12">
+										<div className="card"> 
+											<div className="card-content">
+												<div className="card-body">
+													<div className="container-fluid">
+														<div className="row">
+															<div className="col-xl-12 col-lg-12">
+																<div className="timer-s" >
+																	<span className="test-end">Total time taken:</span><span className="" id="timer"></span>
+																</div>
+																<div className="timer-s" style={{"float":"left"}}>
+																	<span className="test-end">Total Allowed:</span><span className="">{duration} min</span>
+																</div>
+															</div>
+															<div className="col-md-8">
+																<div className="job-info job-widget">
+																	<h3 className="job-title">{localStorage.getItem('test_test_name')}</h3>
+																</div>
+																<div className="job-content job-widget mcq-start">
+																	<div className="container">
+																		<div className="d-flex justify-content-center row">
+																			<div className="col-md-12 col-lg-12">
+																				<div className="border">
+																					<div className="question bg-Not-select p-2 border-bottom">
+																						<div className="d-flex flex-row justify-content-between align-items-center mcq">
+																						<h4 className="mb-0">MCQ Quiz</h4>
+																						<span>{counts + ' of ' +questions?.length}</span>
+																						</div>
+																					</div>
+																						<div className="question bg-Not-select p-2 border-bottom">
+																							<div className="flex-row question-title">
+																								<span className="text-danger q_nsekected">Q.</span>
+																								<h5 className="ml-3"><div style={{fontSize :"20px"}} dangerouslySetInnerHTML={{ __html: question?.question }}/></h5>
+																							</div>
+																							{question?.extension && question?.extension == "docx" ? 
+																								<span>
+																									{question.options.map((item,key)=>{
+																										return(
+																											<div className="ans ml-2">
+																												<label className={"radio " + (opt == optionsDocx[key]['option'] ? 'active' :'')}> <input type="radio" name="option" value={item} onChange={(e)=>{set(e, optionsDocx[key]['option'], question?._id)}}/><span className="checkmark"></span> <span><div dangerouslySetInnerHTML={{ __html: item }}/></span> </label>
+																											</div>
+																										)
+																									})}
+																								</span> : 
+																								<span>
+																									<div className="ans ml-2">
+																										<label className={"radio " + (opt == 'option_a' ? 'active' :'')}> <input type="radio" name="option" value={question?.option_a} onChange={(e)=>{set(e,"option_a",question?._id)}}/><span className="checkmark"></span> <span><div dangerouslySetInnerHTML={{ __html: question?.option_a }}/></span> </label>
+																									</div>
+																									<div className="ans ml-2">
+																										<label className={"radio " + (opt == 'option_b' ? 'active' :'')}> <input type="radio" name="option" value={question?.option_b} onChange={(e)=>{set(e,"option_b",question?._id)}}/><span className="checkmark"></span> <span><div dangerouslySetInnerHTML={{ __html: question?.option_b }}/></span>
+																										</label>
+																									</div>
+																									{params.test_type != "mock-test" ?  <><div className="ans ml-2">
+																										<label className={"radio " + (opt == 'option_c' ? 'active' :'')}> <input type="radio" name="option" value={question?.option_c} onChange={(e)=>{set(e,"option_c",question?._id)}}/><span className="checkmark"></span> <span><div dangerouslySetInnerHTML={{ __html: question?.option_c }}/></span>
+																										</label>
+																									</div>
+																									<div className="ans ml-2">
+																										<label className={"radio " + (opt == 'option_d' ? 'active' :'')}> <input type="radio" name="option" value={question?.option_d} onChange={(e)=>{set(e,"option_d",question?._id)}}/><span className="checkmark"></span> <span><div dangerouslySetInnerHTML={{ __html: question?.option_d }}/></span>
+																										</label>
+																									</div></> : ""}
+																								</span>}
+																						</div>
+																					<div className="p-2 bg-Not-select">
+																						<div className="row"> 
+																							<div className="col-md-12 text-right">
+																								<button className={"btn nextqus_btn "} disabled={loading && questLoading} type="button" onClick={()=>{saveAnswerAndNext(question?._id)}}>{!loading ? counts-1 == questions?.length-1 ? "Submit" : "Next" : "please wait. .."}<i className="fa fa-angle-right ml-2"></i></button></div></div>
+																							</div>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+												<div className="col-md-4 numer-list-atttemp">
+													<div className="job-det-info">
+															<a className="btn job-btn">All Attempt Question</a>
+															<div className="col-md-12 Attendence_dv  msq-o">
+																<ul>
+																	{questions && questions.map((item, key)=>{
+																		if(item.answer){
+																			count++
+																			return(
+																				<li className="ques-attemp" key={key}>
+																					<a href="#" data-toggle="tooltip" title="" data-original-title="Not Attempt">{count}</a>
+																				</li>
+																			)
+																		}
+																	})}
+																	{questions && questions.map((item, key)=>{
+																		if(!item.answer){
+																			count++
+																			return(
+																				<li className="" key={key}>
+																					<a href="#" data-toggle="tooltip" title="" data-original-title="Attempt">{count}</a>
+																				</li>
+																			)
+																		}
+																	})}
+																	
+																</ul>
+															</div>
+															<div className="Quiz_reviewLegend">
+																<ol>
+																	<li> <span className="Quiz_reviewColor" style={{backgroundColor: "#00ab54"}}></span> <span className="Quiz_reviewText">Answered</span></li>
+																</ol>
+																<div style={{clear: "both"}}></div>
+															</div>
+															</div>
+														</div>
 													</div>
-												)
-											})}
-										</span> : 
-										<span>
-											<div className="ans ml-2">
-												<label className={"radio " + (opt == 'option_a' ? 'active' :'')}> <input type="radio" name="option" value={question?.option_a} onChange={(e)=>{set(e,"option_a",question?._id)}}/><span className="checkmark"></span> <span><div dangerouslySetInnerHTML={{ __html: question?.option_a }}/></span> </label>
+												</div>
 											</div>
-											<div className="ans ml-2">
-												<label className={"radio " + (opt == 'option_b' ? 'active' :'')}> <input type="radio" name="option" value={question?.option_b} onChange={(e)=>{set(e,"option_b",question?._id)}}/><span className="checkmark"></span> <span><div dangerouslySetInnerHTML={{ __html: question?.option_b }}/></span>
-												</label>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</>
+	  	:
+	  	<>
+			<div className="app-content content mt-5">
+				<div className="content-overlay"></div>
+				<div className="content-wrapper">
+					<div className="content-body">
+						{/* <!-- Slaes & Purchase Order --> */}
+						<div className="row">
+							<div className="col-xl-12 col-lg-12">
+							<div className="card">
+								<div className="card-content">
+									<div className="card-body">
+										<div className="container-fluid">
+										<div className="row">
+										<div className="col-xl-12 col-lg-12">
+											<div className="timer-s" >
+												<span className="test-end">Total time taken:</span><span className="" id="timer"></span>
 											</div>
-											{params.test_type != "mock-test" ?  <><div className="ans ml-2">
-												<label className={"radio " + (opt == 'option_c' ? 'active' :'')}> <input type="radio" name="option" value={question?.option_c} onChange={(e)=>{set(e,"option_c",question?._id)}}/><span className="checkmark"></span> <span><div dangerouslySetInnerHTML={{ __html: question?.option_c }}/></span>
-												</label>
+											<div className="timer-s" style={{"float":"left"}}>
+												<span className="test-end">Total Allowed:</span><span className="">{duration} min</span>
 											</div>
-											<div className="ans ml-2">
-												<label className={"radio " + (opt == 'option_d' ? 'active' :'')}> <input type="radio" name="option" value={question?.option_d} onChange={(e)=>{set(e,"option_d",question?._id)}}/><span className="checkmark"></span> <span><div dangerouslySetInnerHTML={{ __html: question?.option_d }}/></span>
-												</label>
-											</div></> : ""}
-									</span>}
-                                 </div>
-                                 <div className="p-2 bg-Not-select">
-                                 <div className="row"> 
-                                 <div className="col-md-12 text-right">
-                                 <button className={"btn nextqus_btn "} disabled={loading && questLoading} type="button" onClick={()=>{saveAnswerAndNext(question?._id)}}>{!loading ? counts-1 == questions?.length-1 ? "Submit" : "Next" : "please wait. .."}<i className="fa fa-angle-right ml-2"></i></button></div></div>
-                              </div>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-               
-               <div className="col-md-4 numer-list-atttemp">
-                  <div className="job-det-info">
-                     <a className="btn job-btn">All Attempt Question</a>
-                     <div className="col-md-12 Attendence_dv  msq-o">
-                        <ul>
-							{questions && questions.map((item, key)=>{
-								if(item.answer){
-									count++
-									return(
-										<li className="ques-attemp" key={key}>
-											<a href="#" data-toggle="tooltip" title="" data-original-title="Not Attempt">{count}</a>
-										</li>
-									)
-								}
-							})}
-							{questions && questions.map((item, key)=>{
-								if(!item.answer){
-									count++
-									return(
-										<li className="" key={key}>
-											<a href="#" data-toggle="tooltip" title="" data-original-title="Attempt">{count}</a>
-										</li>
-									)
-								}
-							})}
-							
-                        </ul>
-                     </div>
-                     <div className="Quiz_reviewLegend">
-                        <ol>
-							<li> <span className="Quiz_reviewColor" style={{backgroundColor: "#00ab54"}}></span> <span className="Quiz_reviewText">Answered</span></li>
-                        </ol>
-                        <div style={{clear: "both"}}></div>
-                     </div>
-                  </div>
-               </div>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-            </div>
-         </div>
-      </div>
+										</div>
+											<div className="upload-area__header col-md-12">
+												<h3 className="job-title">{localStorage.getItem('test_test_name')}</h3>
+											</div>
+											<div className="col-md-6 online_answ_bg">
+												<div className="online_answ">
+													{/* {questionPaper.}  */}
+													<img src="assets/images/online-assessment.jpg" className="img-fluid" alt=""/>
+												</div>
+											</div>
+											<div className="col-md-6 ovr_flw_hedn">
+												<div className="Qnd_anw">
+													<div className="question bg-Not-select">
+													<div className="bh_answer1">
+														<div className=" question-title">
+															<h5 className=""><span>Q 1.</span>  Which of the following country has largest population?</h5>
+														</div>
+														<ul>
+															<li><span>A.</span> Option1</li>
+															<li><span>B.</span> Option1</li>
+															<li><span>C.</span> Option1</li>
+															<li><span>D.</span> Option1</li>
+														</ul>
+													</div>
+													<div className="bh_answer1">
+														<div className=" question-title">
+															<h5 className=""><span>Q 2.</span>  Which of the following country has largest population?</h5>
+														</div>
+														<ul>
+															<li><span>A.</span> Option1</li>
+															<li><span>B.</span> Option1</li>
+															<li><span>C.</span> Option1</li>
+															<li><span>D.</span> Option1</li>
+														</ul>
+													</div>
+													<div className="bh_answer1">
+														<div className=" question-title">
+															<h5 className=""><span>Q 3.</span>  Which of the following country has largest population?</h5>
+														</div>
+														<ul>
+															<li><span>A.</span> Option1</li>
+															<li><span>B.</span> Option1</li>
+															<li><span>C.</span> Option1</li>
+															<li><span>D.</span> Option1</li>
+														</ul>
+													</div>
+													<div className="bh_answer1">
+														<div className=" question-title">
+															<h5 className=""><span>Q 4.</span>  Which of the following country has largest population?</h5>
+														</div>
+														<ul>
+															<li><span>A.</span> Option1</li>
+															<li><span>B.</span> Option1</li>
+															<li><span>C.</span> Option1</li>
+															<li><span>D.</span> Option1</li>
+														</ul>
+													</div>
+													<div className="bh_answer1">
+														<div className=" question-title">
+															<h5 className=""><span>Q 5.</span>  Which of the following country has largest population?</h5>
+														</div>
+														<ul>
+															<li><span>A.</span> Option1</li>
+															<li><span>B.</span> Option1</li>
+															<li><span>C.</span> Option1</li>
+															<li><span>D.</span> Option1</li>
+														</ul>
+													</div>
+													<div className="bh_answer1">
+														<div className=" question-title">
+															<h5 className=""><span>Q 6.</span>  Which of the following country has largest population?</h5>
+														</div>
+														<ul>
+															<li><span>A.</span> Option1</li>
+															<li><span>B.</span> Option1</li>
+															<li><span>C.</span> Option1</li>
+															<li><span>D.</span> Option1</li>
+														</ul>
+													</div>
+													<div className="p-1 bg-Not-select bdr_to1">
+														<div className="col-md-12 text-right"> 
+															<button className="btn nextqus_btn" type="button">Next<i class="fa fa-angle-right ml-2"></i></button>
+														</div>
+													</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+	  	</> }
             <Footer/>
             <Foot/>
         </>

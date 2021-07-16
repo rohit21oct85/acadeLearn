@@ -19,12 +19,15 @@ import useClassWiseList from './hooks/useClassWiseList'
 import useClassAndSubjectWiseUnitList from './hooks/useClassAndSubjectWiseUnitList'
 import useClassSubjectAndUnitWiseChapterList from './hooks/useClassSubjectAndUnitWiseChapterList'
 import useCreateTest from './hooks/useCreateTest';
+import { useToasts } from 'react-toast-notifications';
 
 import DatePicker from "react-datepicker";
 import mammoth from 'mammoth';
 import jsPDF from 'jspdf'
 import 'jspdf-autotable'
 
+import './css/style.css'
+import './css/math.css'
 
 export default function TeacherDashboard(){
 	const [section, setSection] = useState();
@@ -42,6 +45,8 @@ export default function TeacherDashboard(){
 	const formDataUpload = new FormData();
 
 	const { state } = useContext(AuthContext);
+
+	const { addToast } = useToasts();
 
     const changeSection = (value) => {
         setSection(value)
@@ -61,6 +66,14 @@ export default function TeacherDashboard(){
     const {data:classAndSubjectWiseUnit, classAndSubjectWiseUnitLoading} = useClassAndSubjectWiseUnitList();
     const {data:classSubjectAndUnitWiseChapter, classSubjectAndUnitWiseChapterLoading} = useClassSubjectAndUnitWiseChapterList();
 	const createTestMutation = useCreateTest(formDataUpload);
+	
+	useEffect(() => {
+        const script = document.createElement("script");
+        script.id = 'editor';
+        script.src = "https://www.wiris.net/demo/plugins/app/WIRISplugins.js?viewer=image";
+        script.async = true; 
+        document.body.appendChild(script);
+    },[anyFile]);
 
 	const handleChange = (e) => {
 		if(e.target.value != 999){
@@ -84,6 +97,10 @@ export default function TeacherDashboard(){
 		}
 	}
 
+	const setName = (e) => {
+		setFormData1({...formData1,['test_name']:e.target.value})
+	}
+
 	const handleChapter = (e) => {
 		if(e.target.value != 999){//params.test_id contains unit_id
 			history.push(`/teacher/teacher-dashboard/${params.window}/${params.class_id}/${params.test_id}/${e.target.value}`)
@@ -98,7 +115,7 @@ export default function TeacherDashboard(){
 
 	const updateAssignment = async (id, testduration, startDate, testWindow) => {
 		if(!params.class_id){
-			alert('Please select a class first')
+			addToast("Please select a class first.", { appearance: 'error',autoDismiss: true });
 			setLoading(false)
 		}else{
 			await updateMutation.mutate({id:id,testduration:testduration,startDate:startDate,testWindow:testWindow,teacher_id:localStorage.getItem('user_id'),school_id:localStorage.getItem('school_id')},{
@@ -130,12 +147,12 @@ export default function TeacherDashboard(){
 	const setNumber = (e) => {
 		if(!isNaN(parseInt(e.target.value))){
 			if(parseInt(e.target.value) > 30){
-				alert('Questions cant be greater than 30')
+				addToast("Questions cant be greater than 30.", { appearance: 'error',autoDismiss: true });
 				document.getElementById('qNumber').value=""
 			}else{
 				setAnswers(parseInt(e.target.value))
-				setFormData1({...formData1,['totalQuestions']:e.target.value, ['extension']: 'png', ['start_date']:startDate})
-				// formDataUpload.append(['totalQuestions'],e.target.value)
+				setFormData1({...formData1,['total_question']:e.target.value, ['extension']: 'png', ['start_date']:startDate})
+				// formDataUpload.append(['total_question'],e.target.value)
 				// formDataUpload.append(['extension'],"png")
 				// formDataUpload.append(['start_date'],startDate)
 			}
@@ -146,7 +163,7 @@ export default function TeacherDashboard(){
 		const files = [...e.target.files];
 		files.forEach((item, key) => {
 			if(docType != item.name.split('.').pop()){
-				alert(`choose ${docType} files only and upload files again`)
+				addToast(`choose ${docType} files only and upload files again`, { appearance: 'error',autoDismiss: true });
 				setError('Wrong file type selected');
 			}
 			setFormData1({...formData1,['files'] : e.target.files[key]})
@@ -200,10 +217,17 @@ export default function TeacherDashboard(){
 	}
 	
 	const selectAnswer = (e,id) => {
-
 		setCorrectAnswers([...correctAnswers,{[e.target.name]: e.target.value}])
 		// setCorrectAnswers(correctAnswers => [...correctAnswers,{[e.target.name]: e.target.value}])
 		// setFormData1({...formData1, ['correctAnswers']:correctAnswers})
+	}
+
+	const setWindow = (e) => {
+		setFormData1({...formData1,['test_window']:e.target.value})
+	}
+	
+	const setDuration = (e) => {
+		setFormData1({...formData1,['test_duration']:e.target.value})
 	}
 
 	const createTest = async (e) => {
@@ -211,11 +235,15 @@ export default function TeacherDashboard(){
 		// setFormData1({...formData1, ['correctAnswers']:correctAnswers})
 		formDataUpload.append(['correctAnswers'], JSON.stringify(correctAnswers))
 		formDataUpload.append(['extension'],formData1.extension)
-		formDataUpload.append(['totalQuestions'],formData1.totalQuestions)
+		formDataUpload.append(['total_question'],formData1.total_question)
 		formDataUpload.append(['start_date'],formData1.start_date)
 		formDataUpload.append(['chapter_id'],formData1.chapter_id)
 		formDataUpload.append(['unit_id'],formData1.unit_id)
 		formDataUpload.append(['class_id'],formData1.class_id)
+		formDataUpload.append(['test_name'],formData1.test_name)
+		formDataUpload.append(['test_window'],formData1.test_window)
+		formDataUpload.append(['test_duration'],formData1.test_duration)
+		formDataUpload.append(['test_subjects'],JSON.stringify([{'subject_name':localStorage.getItem('subject_name'),subject_id:localStorage.getItem('subject_id')}]))
 		// formDataUpload.append(['file'],file)
 		for (let i = 0 ; i < anyFile.length ; i++) {
 			formDataUpload.append('files', anyFile[i]);
@@ -224,18 +252,25 @@ export default function TeacherDashboard(){
 		await createTestMutation.mutate(formDataUpload,{
 			onSuccess: (data, variables, context) => {
 				if(data?.data){
-					alert('Test Created Successfully')
+					addToast("Test Created Successfully.", { appearance: 'success',autoDismiss: true });
 				}
 				setLoadingCreate(false)
 			},
+			onError:(error)=>{
+				console.log(error.response.status)
+				if(error.response.status == 405){
+					alert('Test cant be assigned!\nSome test is assigned for the same time')
+				}
+			}
 		});
 	}
+
 
 	return(
 		<>
 		<Head/>
 		<HeaderNav/>
-		<div className="app-content content mt-5">{console.log(correctAnswers)}
+		<div className="app-content content mt-5">
 				<div className="content-overlay"></div>
 				<div className="content-wrapper">
 				<div className="content-header row">
@@ -327,11 +362,14 @@ export default function TeacherDashboard(){
 												<h4 className="card-title"><strong> Create Test </strong></h4>
 											</div> */}
 											<div className="col-md-12">
-												<form className="form" enctype='multipart/form-data' onSubmit={createTest}>
+												<form className="form" encType='multipart/form-data' onSubmit={createTest}>
 													<div className="form-body">
 													<div className="row">
 														<div className="col-md-3">
 															<h4 className="card-title"><strong>Create Test</strong></h4>
+															<div className="form-group col-md-12 mb-1">
+																<input type="text" className="form-control" placeholder="Test name" onChange={setName}/> 
+															</div>
 															<div className="form-group col-md-12 mb-1">
 																<select className="form-control" onChange={handleChange} value={params.class_id ? params.class_id : 9999}>
 																<option value="999">--Select Class-- </option>
@@ -370,7 +408,7 @@ export default function TeacherDashboard(){
 															</div>
 														
 															<div className="form-group choose_file col-md-12 mb-1">
-																<div className="input-group mb-3">
+																<div className="input-group mb-0">
 																	<div className="input-group-prepend">
 																		<span className="input-group-text p-0" id="basic-addon1">
 																			<select className="form-control" onChange={selectUploadFileType}>
@@ -382,19 +420,32 @@ export default function TeacherDashboard(){
 																		</span>
 																		
 																	</div>
-																	<small id="passwordHelp" className="text-danger">
-																		{error && error}
-																	</small>
-																<input type="file" name="files" className="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" multiple={allowMultiple}  onChange={chooseFiles}/>
-																
-																</div>   
-															</div>
+																	
+																	<input type="file" name="files" className="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" multiple={allowMultiple}  onChange={chooseFiles}/>
 
-															<div className="form-group col-md-12 mb-1">
-																<DatePicker selected={startDate} onChange={(date) => setStartDate(date)} isClearable showTimeSelect dateFormat="MM/d/yyyy h:mm aa" className="date_bg1"/>
+																</div>   
+																<small id="passwordHelp" className="text-danger">
+																		{error && error}
+																</small>
+															</div>
+															<div className="form-group col-md-12 mb-1"> 
+																<input type="number" className="form-control" placeholder="Test Duration" onChange={setDuration}/> 
+															</div>
+															<div className="form-group col-md-12 mb-1"> 
+																<select className="form-control" onChange={setWindow}>
+																	<option value="30">30 minutes</option>
+																	<option value="60">1 hour</option>
+																	<option value="90">1 hour 30 min</option>
+																	<option value="120">2 hour</option>
+																	<option value="150">2 hours 30 min</option>
+																</select>
+															</div>
+															<div className="form-group col-md-12 mb-1 date_bg1">
+																<DatePicker selected={startDate} onChange={(date) => setStartDate(date)} isClearable showTimeSelect dateFormat="MM/d/yyyy h:mm aa" />
 															</div>
 															<div className="form-group col-md-12 mb-1">
-																<button className="btn btn-primary">{loadingCreate ? "loading" : "Save Test"}</button>
+																<button className="btn btnsavetext1">{loadingCreate ? "loading" : "Save Test"}</button>
+																{/* <button className="btn btnsavetext2 ml-1">{"Cancel"}</button> */}
 															</div>
 														</div>
 
@@ -419,10 +470,11 @@ export default function TeacherDashboard(){
 																{anyFile.map((item, key)=>{
 																	return (docType == "png" || docType == "jpg" || docType == "pdf") ? 
 																		<span key={key}>
-																			<iframe src={base64FilesArr[key]} height="250" width="100%"/>
+																			<iframe src={base64FilesArr[key]} height="250" width="100%" className="fitscreen"/>
 																		</span>
 																		: (docType == "docx") ? 
 																		<span key={key}>
+																			<div style={{fontSize :"20px"}} dangerouslySetInnerHTML={{ __html: base64FilesArr[key] }}/>
 																			<iframe src={`data:text/html;charset=utf-8,%3Chtml%3E%3Cbody%3E${base64FilesArr[key]}%3C/body%3E%3C/html%3E`} height="250" width="100%"></iframe>
 																		</span>
 																		:

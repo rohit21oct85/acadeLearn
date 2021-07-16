@@ -19,7 +19,7 @@ export default function useRandomQuestion() {
         }
     }
     return useQuery(`single-question`, async () => {
-        if(state?.access_token){
+        if(state?.access_token && params.test_type != "upload-test"){
             const result = await authAxios.post(`${apiUrl}v1/web/get-question/${params.test_id}/${params.test_type}`,{school_id:school_id,student_id:student_id});
             return result.data; 
         }

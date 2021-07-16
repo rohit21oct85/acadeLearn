@@ -5,6 +5,7 @@ import MainApp from './MainApp';
 import SubDomainApp from './SubDomainApp';
 import reportWebVitals from './reportWebVitals';
 import AuthProvider from './context/AuthContext';
+import { ToastProvider } from 'react-toast-notifications';
 
 import { QueryClient, QueryClientProvider, } from 'react-query'
 const queryClient = new QueryClient({
@@ -23,9 +24,11 @@ if(parsedData.length >= 3){
 	ReactDOM.render(
 		<QueryClientProvider client={queryClient}>
 			<AuthProvider>
-				<React.StrictMode>
-					<SubDomainApp subDomain={subDomain} />
-				</React.StrictMode>
+				<ToastProvider>
+					<React.StrictMode>
+						<SubDomainApp subDomain={subDomain} />
+					</React.StrictMode>
+				</ToastProvider>
 			</AuthProvider>
 		</QueryClientProvider>, document.getElementById('root'));
 }else{

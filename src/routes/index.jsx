@@ -53,11 +53,11 @@ export const studentRoutes = [
         component: StudentAttempt
     },
     {
-        path:'/:user_type?/student-result/:class_id?/:class_name?/:test_id?/:attempt_id?',
+        path:'/:user_type?/student-result/:class_id?/:class_name?/:test_id?/:attempt_id?/:test_type?',
         component: StudentResult
     },
     {
-        path:'/:user_type?/student-last-report/:class_id?/:class_name?/:attempt_id?',
+        path:'/:user_type?/student-last-report/:class_id?/:class_name?/:attempt_id?/:test_type?',
         component: StudentLastTestScoreReport
     },
     {

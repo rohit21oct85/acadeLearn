@@ -4,11 +4,13 @@ import Foot from '../../components/common/Foot'
 import HeaderNav from '../../components/common/HeaderNav'
 import React, { useState } from 'react';
 import {useHistory, useParams} from 'react-router-dom'
+import { useToasts } from 'react-toast-notifications';
 
 export default function StudentAgreement(){
 	const [ checked, setChecked ] = useState('false');
 	const [ disabled, setDisabled ] = useState('disabled');
 	
+	const { addToast } = useToasts();
 	const history = useHistory();
 	const params = useParams();
 
@@ -21,6 +23,17 @@ export default function StudentAgreement(){
 			setChecked('true')
 		}
 	}
+
+		function toggleFullScreen() {
+			if (!document.fullscreenElement) {
+				document.documentElement.requestFullscreen();
+			} else {
+				if (document.exitFullscreen) {
+					// document.exitFullscreen();
+				}
+			}
+		}
+		
 
   	return(
 		<>
@@ -88,9 +101,10 @@ export default function StudentAgreement(){
 						<label htmlFor="accepted"> “I am ({localStorage.getItem('name')}), and I have read and hereby accepted all the instructions mentioned above. I, therefore, want to open the test portal, and my test starts now.</label>
 						<button className={`${disabled} start_now_btn btn btn-warning btn-min-width sbmt_view_form btn_click2 mr-1 mb-1 mt-2`} onClick={()=>{
 							if(disabled == ""){
+								toggleFullScreen()
 								history.push(`/student/student-attempt/${params.class_id}/${params.class_name}/${params.test_id}/${params.test_type}/?query=true`)
 							}else{
-								alert('Kindly agree to the terms and conditions');
+								addToast('Kindly agree to the terms and conditions', { appearance: 'error',autoDismiss: true });
 							}
 						}}>Start Now</button>
 						</div>

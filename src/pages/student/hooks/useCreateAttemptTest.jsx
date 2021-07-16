@@ -22,12 +22,14 @@ export default function useCreateModule(form) {
       const name = localStorage.getItem('name')
       const section = localStorage.getItem('section')
       return useMutation(form => {
-            console.log(form)
+            // console.log(form)
                   return axios.post(`${apiUrl}v1/web/attempt-test`, {id:form.id, user_id:user_id,class_id:class_id,school_id:school_id,name:name,assign_test_id:form.assign_test_id, section:section, test_type:form.test_type, mock_id:form.mock_id}, options)
             },{
-            onSuccess: () => {
-                queryClient.invalidateQueries('attempt-test')
-                // history.push(`/student/student-agreement/${id}`);
+            onSuccess: (data) => {
+                  console.log(data)
+                  localStorage.setItem('attemptIdUploadTest',data.data.data._id)
+                  queryClient.invalidateQueries('attempt-test')
+                  // history.push(`/student/student-agreement/${id}`);
             },
             onError: () => {
             },

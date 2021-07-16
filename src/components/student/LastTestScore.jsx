@@ -22,7 +22,7 @@ export default function LastTestScore({score, fun}){
                                 <p className="text-muted">{score.time_taken && new Date(score?.time_taken * 1000)?.toISOString()?.substr(11, 8)}</p>
                             </div>
                             <div className="order-details">
-                                <a href="#" className="btn btn-outline-info mr-1" onClick={()=>fun(score._id, score.test_id)}><i className="fa fa-eye"></i> View full result</a>
+                                <a href="#" className="btn btn-outline-info mr-1" onClick={()=>fun(score._id, score.test_id,score.test_type)}><i className="fa fa-eye"></i> View full result</a>
                             </div>
                         </div>
                         </div>

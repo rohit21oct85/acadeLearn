@@ -17,6 +17,10 @@ export default function StudentLastTestScoreReport(){
     ]
     
     const options1 = { 'option_a':' A','option_b':' B','option_c':' C','option_d':' D' }
+    const options_mock = [
+        {key: 'a', value: 'yes'},
+        {key: 'b', value: 'no'},
+    ]
 
     const {data:lastScore, lastScoreLoading} = useLastTestScore();
     
@@ -84,17 +88,40 @@ export default function StudentLastTestScoreReport(){
                                                 <div className="options_ans">
                                                     <h4>Options</h4>
                                                     <ul>
-                                                    {options && options.map((it,key)=>{
+                                                    {params.test_type != "mock-test" 
+                                                    ? 
+                                                    options && options.map((it,key)=>{
                                                         return(
                                                             <li key={key}><span className="crchater">{it.value}:</span> <span dangerouslySetInnerHTML={{__html: item[it?.key]}} className="crchater-text" ></span>{item.option == it?.key && item.correct_option != item.option ? <i className="fa fa-times"></i> : ""}{item.correct_option == item.option && item.option == it?.key ? <i className="fa fa-check"></i> : ""} </li>
+                                                        )
+                                                    })
+                                                    :
+                                                    options_mock && options_mock.map((it,key)=>{
+                                                        return(
+                                                            <li key={key}>
+                                                                <span className="crchater">{it.key +  " : " + it.value}</span> 
+                                                                <span dangerouslySetInnerHTML={{__html: item[it?.value]}} className="crchater-text" ></span>
+                                                            </li>
                                                         )
                                                     })}
                                                     {/* <li>B: <span dangerouslySetInnerHTML={{__html: item?.option_b}}></span></li>
                                                     <li>C: <span dangerouslySetInnerHTML={{__html: item?.option_c}}></span></li>
                                                     <li>D: <span dangerouslySetInnerHTML={{__html: item?.option_d}}></span></li> */}
                                                     </ul>
-                                                    <p>User Answer: { options1[`${item?.option}`]+ " : " }<span dangerouslySetInnerHTML={{__html: item?.answer}}></span></p>
-                                                    <p className="border-0">Correct Answer: { options1[`${item?.correct_option}`] + " : " }<span dangerouslySetInnerHTML={{__html: item?.correct_answer}}></span> <i className="fa fa-check"></i></p>
+                                                    
+                                                    {params.test_type != "mock-test" 
+                                                    ? 
+                                                    <>
+                                                        <p>User Answer: { options1[`${item?.option}`]+ " : " }<span dangerouslySetInnerHTML={{__html: item?.answer}}></span></p>
+                                                        <p className="border-0">Correct Answer: { options1[`${item?.correct_option}`] + " : " }<span dangerouslySetInnerHTML={{__html: item?.correct_answer}}></span> <i className="fa fa-check"></i></p>
+                                                    </>
+                                                    : 
+                                                    <>
+                                                        <p>User Answer: { item?.answer === 'yes' ? 'a : ' : 'b : '}<span dangerouslySetInnerHTML={{__html: item?.answer}}></span></p>
+                                                        <p className="border-0">Correct Answer: <span dangerouslySetInnerHTML={{__html: item?.correct_answer + " : "}}></span> <span dangerouslySetInnerHTML={{__html: item?.correct_answer === 'a' ? 'yes' : 'no'}}></span> <i className="fa fa-check"></i></p>
+                                                    </>
+                                                    }
+
                                                 </div>
                                             </div>
                                         </div>
