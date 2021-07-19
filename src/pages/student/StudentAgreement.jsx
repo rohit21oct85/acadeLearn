@@ -87,11 +87,14 @@ export default function StudentAgreement(){
 																<li>Please ensure that your device is adequately charged or connected to an active power connection throughout the test hours.<br/>
 																<strong>(Please note that the company will not be responsible for power cuts or other connectivity-related technical issues from the student’s side.)</strong></li>
 																<li>Before starting your test, please ensure that all the background programs/browsers/tabs are closed, except the test window.</li>
+																<li>If a student opens another tab or window he/she will not be able to resume the test.</li>
 																<li>Students MUST NOT STOP the test session temporarily and come back later to continue.
 																<br/><strong>(This is especially important in the online environment because the system will show a time-out error and not let you re-enter the exam site.)</strong></li>
 																<li>Students MUST NOT CLICK on the Back/Refresh/Close buttons of the browser while the test session is active. 
 																<strong>(If you do, you will not be able to re-enter the exam site.)</strong></li>
 																<li>Students SHOULD NOT FORGET TO CLICK on the ‘Submit’ button after completing the test.</li>
+																<li>Students will be able to view the scorecard after the test and score details only after the test window expires.</li>
+																<li>The test will continue in case the internet connection is interrupted but the students will be able to view the results only after the connection resumes.</li>
 															</ol>
 											</div>
 						<div className="test_assign_hlp pt-0">
