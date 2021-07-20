@@ -76,6 +76,7 @@ export default function PrincipalDashboard(){
                                     <p className="rpt1" style={{display: section == "tab1" ? "block" : 'none'}}>Here you can view the class-wise reports of the cummulative performance of all your students.</p>
                                     <p className="rpt2" style={{display: section == "tab2" ? "block" : 'none'}}>Here, you will receive a detailed report of the performance of teachers in your institute.<br/> Click on view to find out the tests assigned by them and analyse the results.</p>
                                     <p className="rpt3" style={{display: section == "tab3" ? "block" : 'none'}}>Here, you can view the cummulative performance of your students in different subjects.<br/> Select a particular className and subject to access the report.</p>
+                                    <div className="ul-listing style3">
                                     <ul className="nav nav-tabs nav-linetriangle no-hover-bg">
                                         <li className="nav-item">
                                         <a className={section == "tab1" ? "nav-link active" : 'nav-link'} id="base-tab41" data-toggle="tab" aria-controls="tab41" href="#tab41" aria-expanded="true" onClick={()=>{changeSection('tab1')}}> Class-wise Reports </a>
@@ -87,7 +88,8 @@ export default function PrincipalDashboard(){
                                         <a className={section == "tab3" ? "nav-link active" : 'nav-link'} id="base-tab43" data-toggle="tab" aria-controls="tab43" href="#tab43" aria-expanded="false" onClick={()=>{changeSection('tab3')}}>Subject-wise Reports </a>
                                         </li> */}
                                     </ul>
-                                    <div className="tab-content px-1 pt-1">
+                                    </div>
+                                    <div className="tab-content px-1 pt-1 princi-class">
                                         <div role="tabpanel" className={section == "tab1" ? "tab-pane container-fluid active" : 'tab-pane container-fluid'} id="tab41" aria-expanded="true" aria-labelledby="base-tab41">
                                         <div className="row">
                                             <div className="col-md-12">

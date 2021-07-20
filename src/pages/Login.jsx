@@ -42,16 +42,16 @@ export default function Login(){
                     }else if(response.status == 200){
                         let access_token = response?.data?.accessToken
                         let refresh_token = response?.data?.refreshToken
-                        let user_id = user_type == "student" ? response?.data?.student?._id : (user_type == "teacher") ? response?.data?.Teacher?._id : response?.data?.Principal?._id
-                        let name = user_type == "student" ? response?.data?.student?.name : (user_type == "teacher") ? response?.data?.Teacher?.name : response?.data?.Principal?.name
-                        let email = user_type == "student" ? response?.data?.student?.email : (user_type == "teacher") ? response?.data?.Teacher?.email : response?.data?.Principal?.email
-                        let created_at = user_type == "student" ? response?.data?.student?.created_at : (user_type == "T") ? response?.data?.Teacher?.created_at : response?.data?.Principal?.created_at
-                        let school_id = user_type == "student" ? response?.data?.student?.school_id : (user_type == "teacher") ? response?.data?.Teacher?.school_id : response?.data?.Principal?.school_id
-                        let class_name = user_type == "student" ? response?.data?.student?.class : response?.data?.Teacher?.class
-                        let class_id = user_type == "student" ? response?.data?.student?.class_id : response?.data?.Teacher?.class_id
-                        let section = user_type == "student" ? response?.data?.student?.section : response?.data?.Teacher?.section
-                        let subject_id = user_type == "teacher" && response?.data?.Teacher?.subject_id
-                        let subject_name = user_type == "teacher" && response?.data?.Teacher?.subject_name
+                        let user_id = user_type == "student" ? response?.data?.student?._id : (user_type == "teacher") ? response?.data?.teacher?._id : response?.data?.principal?._id
+                        let name = user_type == "student" ? response?.data?.student?.name : (user_type == "teacher") ? response?.data?.teacher?.name : response?.data?.principal?.name
+                        let email = user_type == "student" ? response?.data?.student?.email : (user_type == "teacher") ? response?.data?.teacher?.email : response?.data?.principal?.email
+                        let created_at = user_type == "student" ? response?.data?.student?.created_at : (user_type == "T") ? response?.data?.teacher?.created_at : response?.data?.principal?.created_at
+                        let school_id = user_type == "student" ? response?.data?.student?.school_id : (user_type == "teacher") ? response?.data?.teacher?.school_id : response?.data?.principal?.school_id
+                        let class_name = user_type == "student" ? response?.data?.student?.class : response?.data?.teacher?.class
+                        let class_id = user_type == "student" ? response?.data?.student?.class_id : response?.data?.teacher?.class_id
+                        let section = user_type == "student" ? response?.data?.student?.section : response?.data?.teacher?.section
+                        let subject_id = user_type == "teacher" && response?.data?.teacher?.subject_id
+                        let subject_name = user_type == "teacher" && response?.data?.teacher?.subject_name
                         let isLoggedIn = true;
                         let role = "";
                         localStorage.setItem('access_token', access_token)
@@ -100,6 +100,8 @@ export default function Login(){
                 if(error.response && error.response.status == 401){
                     // addToast(`${response?.data?.message}`, { appearance: 'error',autoDismiss: true });
                     setErrorMessage('Unauthorized!');
+                }else if(error.response && error.response.status == 403){
+                    setErrorMessage('Account not Active!');
                 }
             })
             

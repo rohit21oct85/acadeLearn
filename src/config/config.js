@@ -1,15 +1,21 @@
 import axios from 'axios';
 
 let apiUrl='';
+let imageUrl='';
 let baseUrl = '';
 let server_type = '';
 
 if(process.env.NODE_ENV === 'development'){
+    console.log("ASdasd")
     apiUrl = process.env.REACT_APP_LOCAL_API_URL ;
+    imageUrl = process.env.REACT_APP_LOCAL_API_URL_IMAGE;
     baseUrl = "example.com:3000";
     server_type = "http";
 }else{
+    console.log("asdasdasd")
     apiUrl = process.env.REACT_APP_LIVE_API_URL;
+    imageUrl = process.env.REACT_APP_LIVE_API_URL_IMAGE;
+    console.log(imageUrl)
     baseUrl = "acadelearn.com";
     server_type = "https";
 }
@@ -32,4 +38,4 @@ authAxios.interceptors.request.use(function(config) {
     return config;
 });
 
-export { baseUrl, apiUrl, server_type, authAxios, };
+export { baseUrl, apiUrl, imageUrl, server_type, authAxios, };

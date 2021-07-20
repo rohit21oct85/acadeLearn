@@ -72,7 +72,7 @@ export default function SearchSchool(){
                                         <p>Login & Access our Extensive Online Library of Bespoke Assessments</p>
                                         <div className="">
                                             <div className="bot-20">&nbsp;</div>
-                                            <form className="school_name_form">
+                                            <form className="school_name_form" autocomplete="off">
                                                 <div className="form-group floatlabel">
                                                     <input type="text" className="form-control" name="school-name" id="school-name" placeholder="Enter Your School Name" onChange={(e)=>{setSearch(e.target.value)}}/>
                                                         <div className="search_list_bg" style={{display:`${display}`}}>

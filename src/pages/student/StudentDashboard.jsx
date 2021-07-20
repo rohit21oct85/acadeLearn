@@ -135,18 +135,20 @@ export default function StudentDashboard(){
                                     <p className="rpt1" style={{display: section == "tab1" ? "block" : 'none'}}>Here, select a subject to view the test assigned by your teacher.</p>
                                     <p className="rpt2" style={{display: section == "tab2" ? "block" : 'none'}}>Here you can view the scores of all the previous tests that you attempted.</p>
                                     <p className="rpt3" style={{display: section == "tab3" ? "block" : 'none'}}>Here, you can view the average score of all the tests you have attempted for the different subjects.</p>
-                                    <ul className="nav nav-tabs nav-linetriangle no-hover-bg">
-                                        <li className="nav-item">
-                                            <a className={section == "tab1" ? "nav-link active" : 'nav-link'}  data-toggle="tab" aria-controls="tab41" href="#tab41" aria-expanded="true" onClick={()=>{changeSection('tab1')}}>  Attempt Test  </a>
-                                        </li>
-                                        <li className="nav-item">
-                                            <a className={section == "tab2" ? "nav-link active" : 'nav-link'}  data-toggle="tab" aria-controls="tab42" href="#tab42" aria-expanded="false" onClick={()=>{changeSection('tab2')}}>Last Test Score  </a>
-                                        </li>
-                                        <li className="nav-item">
-                                            <a className={section == "tab3" ? "nav-link active" : 'nav-link'}  data-toggle="tab" aria-controls="tab43" href="#tab43" aria-expanded="false" onClick={()=>{changeSection('tab3')}}>Cumulative Test Score  </a>
-                                        </li>
-                                    </ul>
-                                    <div className="tab-content px-1 pt-1">
+                                    <div className="ul-listing">
+                                        <ul className="nav nav-tabs nav-linetriangle no-hover-bg">
+                                            <li className="nav-item">
+                                                <a className={section == "tab1" ? "nav-link active" : 'nav-link'}  data-toggle="tab" aria-controls="tab41" href="#tab41" aria-expanded="true" onClick={()=>{changeSection('tab1')}}>  Attempt Test  </a>
+                                            </li>
+                                            <li className="nav-item">
+                                                <a className={section == "tab2" ? "nav-link active" : 'nav-link'}  data-toggle="tab" aria-controls="tab42" href="#tab42" aria-expanded="false" onClick={()=>{changeSection('tab2')}}>Last Test Score  </a>
+                                            </li>
+                                            <li className="nav-item">
+                                                <a className={section == "tab3" ? "nav-link active" : 'nav-link'}  data-toggle="tab" aria-controls="tab43" href="#tab43" aria-expanded="false" onClick={()=>{changeSection('tab3')}}>Cumulative Test Score  </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div className="tab-content px-1 pt-1  princi-class">
                                         <div role="tabpanel" className={section == "tab1" ? "tab-pane active" : 'tab-pane'} aria-expanded="true" aria-labelledby="base-tab41">
                                             <div className="tab-pane active" id="comp-order-tab" aria-expanded="true" role="tablist" aria-labelledby="complete-order">
                                                 <div className="card mb-0">

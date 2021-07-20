@@ -1,6 +1,7 @@
 import { useHistory, Link } from 'react-router-dom'
 import React, { useState, useContext } from 'react';
 import { AuthContext } from '../../context/AuthContext';
+import { authAxios, apiUrl } from '../../config/config';
 
 export default function HeaderNav(){
     const [searchState, setSearchState] = useState('');
@@ -33,9 +34,16 @@ export default function HeaderNav(){
         }
     }
 
-    const logout = () => {
-        dispatch({ type: 'LOGOUT' })
-        history.push('/');
+    const logout = async() => {
+        const user_type = localStorage.getItem('user_type');
+        let formData = {user_type: localStorage.getItem('user_type') , user_id: localStorage.getItem('user_id')};
+        await authAxios.post(`${apiUrl}v1/${user_type}/logout`, formData).then(response =>{
+            if(response){
+                dispatch({ type: 'LOGOUT' })
+                history.push('/');
+            }
+        })
+        
     }
 
     return(

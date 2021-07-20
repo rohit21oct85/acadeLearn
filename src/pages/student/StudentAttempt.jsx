@@ -8,7 +8,9 @@ import useRandomQuestion from '../../pages/student/hooks/useRandomQuestion'
 import useQuestionList from '../../pages/student/hooks/useQuestionList'
 import useUpdateAttemptTest from '../../pages/student/hooks/useUpdateAttemptTest'
 import useQuestionPaper from '../../pages/student/hooks/useQuestionPaper'
+import useCreateUploadTest from '../../pages/student/hooks/useCreateUploadTest'
 import { useToasts } from 'react-toast-notifications';
+import { imageUrl } from '../../config/config'
 
 export default function StudentAttempt(){
     const history = useHistory();
@@ -20,6 +22,7 @@ export default function StudentAttempt(){
 	const [attemptId, setAttemptId] = useState();
 	const [duration, setDuration] = useState();
 	const [formData, setFormData] = useState('');
+	const [answers, setAnswers] = useState('');
 	const [loading, setLoading] = useState(false);
 	const [questLoading, setQuestLoading] = useState(false);
 	const [opt, setOpt] = useState('');
@@ -27,25 +30,17 @@ export default function StudentAttempt(){
 	const set = (e, option, id) => {
 		setOpt(option)
 		let answer = "";
-		// if(params.test_type == "mock-test"){
-		// 	if(e.target.value == "yes"){
-		// 		answer = "a";
-		// 	}else{
-		// 		answer = "b"
-		// 	}
-		// 	if(counts-1 == questions?.length-1){
-		// 		setFormData({...formData,  ['answer'] : answer, ['option']: option, ['question_id']:id, ['completion_status'] : "completed" });
-		// 	}else{
-		// 		setFormData({...formData, ['answer'] : answer, ['option']: option, ['question_id']:id,});
-		// 	}
-		// }else{
 			if(counts-1 == questions?.length-1){
 				setFormData({...formData,  ['answer'] : e.target.value, ['option']: option, ['question_id']:id, ['completion_status'] : "completed" });
 			}else{
 				setFormData({...formData, ['answer'] : e.target.value, ['option']: option, ['question_id']:id,});
-			}
-		// }
-		
+			}		
+	}
+
+	const changeOption = (e,key, option, id) => {
+		// setFormData([...formData,  {[`answer${key}`] : e.target.value, [`option${key}`]: option, }]);
+		setAnswers({...answers,  [`answer${key}`] : e.target.value, [`option${key}`]: option,});
+		setFormData({...formData, ['answers']: answers});
 	}
 
 	useEffect(() => {
@@ -93,6 +88,7 @@ export default function StudentAttempt(){
 	const {data: questions, questionsLoading} = useQuestionList();
 	const {data: questionPaper, questionPaperLoading} = useQuestionPaper();
 	const attempt = useUpdateAttemptTest(formData);
+	const attemptUpload = useCreateUploadTest(formData);
 
 	useEffect(()=>{
 		setQuestLoading(false)
@@ -200,10 +196,10 @@ export default function StudentAttempt(){
 		tabSwitchCount = tabSwitchCount +1 ;
 		localStorage.setItem('tabSwitchCount',tabSwitchCount);
 		if(tabSwitchCount >= 2){
-			// endTest()
+			endTest()
 		}
 	};
-
+	
 	useEffect(() => {
 		window.addEventListener('blur', onBlur);
 		// Specify how to clean up after this effect:
@@ -211,6 +207,18 @@ export default function StudentAttempt(){
 		  window.removeEventListener('blur', onBlur);
 		};
 	});
+
+	const submitUploadTest = async() => {
+		setFormData({...formData, ['answers']: answers, ['completion_status']: "completed"});
+		await attemptUpload.mutate(formData, {
+			onSuccess: (data, variables, context) => {
+				if(data?.data){
+					history.push(`/student/student-result/${params.class_id}/${params.class_name}/${params.test_id}/${data?.data?.attemptId}/${params.test_type}`);
+				}
+				setLoading(false)
+			},
+		});
+	}
 
 	return(
         <>
@@ -226,7 +234,7 @@ export default function StudentAttempt(){
 									<div className="col-xl-12 col-lg-12">
 										<div className="card"> 
 											<div className="card-content">
-												<div className="card-body">
+												<div className="card-body attempt-new">
 													<div className="container-fluid">
 														<div className="row">
 															<div className="col-xl-12 col-lg-12">
@@ -354,7 +362,7 @@ export default function StudentAttempt(){
 							<div className="col-xl-12 col-lg-12">
 							<div className="card">
 								<div className="card-content">
-									<div className="card-body">
+									<div className="card-body attempt-new">
 										<div className="container-fluid">
 										<div className="row">
 										<div className="col-xl-12 col-lg-12">
@@ -369,13 +377,13 @@ export default function StudentAttempt(){
 												<h3 className="job-title">{localStorage.getItem('test_test_name')}</h3>
 											</div>
 											<div className="col-md-6 online_answ_bg">
-												<div className="online_answ">{console.log(questionPaper)}
+												<div className="online_answ">
 													{questionPaper?.extension == "png" || questionPaper?.extension == "jpg" 
 														? 
 														questionPaper.questions?.map(( item, key ) => {
 															return(
-																<>{console.log("sadas",item)}
-																	<img src={item} className="img-fluid" alt="question_paper"/>
+																<>
+																	<img src={`${imageUrl}uploads/${item}`} className="img-fluid" alt="question_paper"/>
 																</>
 															)
 														}) 
@@ -383,7 +391,7 @@ export default function StudentAttempt(){
 														
 														questionPaper?.questions?.map(( item, key ) => {
 															return(
-																<>{console.log("sadfsfsdfsdas",item)}
+																<>
 																	<iframe src={item} />
 																</>
 															)
@@ -394,23 +402,24 @@ export default function StudentAttempt(){
 											<div className="col-md-6 ovr_flw_hedn">
 												<div className="Qnd_anw">
 													<div className="question bg-Not-select">
-													{[...Array(questionPaper?.questionLength)].map((e, i) =>
-														<div className="bh_answer1">
-															<div className=" question-title">
-																<h5 className=""><span>Q {i+1}.</span></h5>
+														{[...Array(questionPaper?.questionLength)].map((e, i) =>
+															<div className="bh_answer1">
+																<div className=" question-title">
+																	<h5 className=""><span>Q {i+1}.</span></h5>
+																</div>
+																<ul>
+																	<li><input type="radio" id={`check-a${i}`} name={`ans${i+1}`}  value="a" onChange={(e)=>{changeOption(e, i+1, "option_a",question?._id)}}/> <label htmlFor={`check-a${i}`}> A</label></li>
+																	<li><input type="radio" id={`check-b${i}`} name={`ans${i+1}`}  value="b" onChange={(e)=>{changeOption(e, i+1, "option_b",question?._id)}}/> <label htmlFor={`check-b${i}`}> B</label></li>
+																	<li><input type="radio" id={`check-c${i}`} name={`ans${i+1}`}  value="c" onChange={(e)=>{changeOption(e, i+1, "option_c",question?._id)}}/> <label htmlFor={`check-c${i}`}> C</label></li>
+																	<li><input type="radio" id={`check-d${i}`} name={`ans${i+1}`}  value="d" onChange={(e)=>{changeOption(e, i+1, "option_d",question?._id)}}/> <label htmlFor={`check-d${i}`}> D</label></li>
+																</ul>
 															</div>
-															<ul>
-																<li><input type="radio" id={`check-a`} name={`ans${i+1}`}  value="a"/> <label htmlFor="check-a"> A</label></li>
-																<li><input type="radio" id={`check-b`} name={`ans${i+1}`}  value="b"/> <label htmlFor="check-b"> B</label></li>
-																<li><input type="radio" id={`check-c`} name={`ans${i+1}`}  value="c"/> <label htmlFor="check-c"> C</label></li>
-																<li><input type="radio" id={`check-d`} name={`ans${i+1}`}  value="d"/> <label htmlFor="check-d"> D</label></li>
-															</ul>
+														)}
+														<div className="p-1 bg-Not-select bdr_to1">
+															<div className="col-md-12 text-right"> 
+																<button className="btn nextqus_btn" type="button" onClick={submitUploadTest}>Submit<i class="fa fa-angle-right ml-2"></i></button>
+															</div>
 														</div>
-													)}																										<div className="p-1 bg-Not-select bdr_to1">
-														<div className="col-md-12 text-right"> 
-															<button className="btn nextqus_btn" type="button">Next<i class="fa fa-angle-right ml-2"></i></button>
-														</div>
-													</div>
 													</div>
 												</div>
 											</div>

@@ -121,7 +121,7 @@ export default function TeacherDashboard(){
 			await updateMutation.mutate({id:id,testduration:testduration,startDate:startDate,testWindow:testWindow,teacher_id:localStorage.getItem('user_id'),school_id:localStorage.getItem('school_id')},{
 				onError: (error) => {
 				if(error.response.status == 405){
-					alert('Test cant be assigned at this time\n Some test with the same timing already assigned.\n Change test timing and assign again')
+					addToast('Test cant be assigned at this time\n Some test with the same timing already assigned.\n Change test timing and assign again', { appearance: 'error',autoDismiss: true });
 					setLoading(false)
 				}
 				},
@@ -259,7 +259,8 @@ export default function TeacherDashboard(){
 			onError:(error)=>{
 				console.log(error.response.status)
 				if(error.response.status == 405){
-					alert('Test cant be assigned!\nSome test is assigned for the same time')
+					addToast('Test cant be assigned!\nSome test is assigned for the same time', { appearance: 'error',autoDismiss: true });
+					setLoadingCreate(false)
 				}
 			}
 		});
@@ -306,6 +307,7 @@ export default function TeacherDashboard(){
 									<p className="rpt2" style={{display: section == "tab2" ? "block" : 'none'}}>Select the class and test for which you wish to analyze the performance of the students.</p>
 									<p className="rpt3" style={{display: section == "tab3" ? "block" : 'none'}}>Select a className and subject to view a detailed report of the subject-wise performance of your className.</p>
 									<p className="rpt4" style={{display: section == "tab4" ? "block" : 'none'}}>It will show the overall performance of all the classes. By clicking on 'View', you can examine the detailed performace report of each class.</p>
+									<div className="ul-listing style2">
 									<ul className="nav nav-tabs nav-linetriangle no-hover-bg">
 										<li className="nav-item">
 										<a className={section == "tab0" ? "nav-link active" : 'nav-link'} id="base-tab1" data-toggle="tab" aria-controls="tab0" href="#tab0" aria-expanded="true" onClick={()=>{changeSection('tab0')}}> Create Test  </a>
@@ -323,7 +325,8 @@ export default function TeacherDashboard(){
 										<a className={section == "tab4" ? "nav-link active" : 'nav-link'} id="base-tab4" data-toggle="tab" aria-controls="tab4" href="#tab4" aria-expanded="false" onClick={()=>{changeSection('tab4')}}>Class-wise Reports  </a>
 										</li>
 									</ul>
-									<div className="tab-content px-1 pt-1">
+									</div>
+									<div className="tab-content px-1 pt-1  princi-class">
 										<div role="tabpanel" className={section == "tab1" ? "tab-pane container-fluid active" : 'tab-pane container-fluid'} aria-expanded="true" aria-labelledby="base-tab1">
 										<div className="row mb-5 pt-1">
 											<div className="col-md-6">
