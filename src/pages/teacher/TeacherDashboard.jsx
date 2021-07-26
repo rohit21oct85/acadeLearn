@@ -38,7 +38,7 @@ export default function TeacherDashboard(){
 	const [base64FilesArr, setBase64FilesArr] = useState([]);
 	const [startDate, setStartDate] = useState(new Date());
 	const [error, setError] = useState();
-	const [correctAnswers, setCorrectAnswers] = useState([]);
+	// const [correctAnswers, setCorrectAnswers] = useState([]);
 	const [allowMultiple, setAllowMultiple] = useState(true);
 	const [loadingCreate, setLoadingCreate] = useState(false);
 	const [formData1, setFormData1] = useState({});
@@ -217,13 +217,13 @@ export default function TeacherDashboard(){
 	}
 	
 	const selectAnswer = (e,id) => {
-		setCorrectAnswers([...correctAnswers,{[e.target.name]: e.target.value}])
-		// setCorrectAnswers(correctAnswers => [...correctAnswers,{[e.target.name]: e.target.value}])
-		// setFormData1({...formData1, ['correctAnswers']:correctAnswers})
+		// setCorrectAnswers([...correctAnswers, {[e.target.name]: e.target.value}])
 	}
 
 	const setWindow = (e) => {
-		setFormData1({...formData1,['test_window']:e.target.value})
+		if(e.target.value != 999){
+			setFormData1({...formData1,['test_window']:e.target.value})
+		}
 	}
 	
 	const setDuration = (e) => {
@@ -231,15 +231,27 @@ export default function TeacherDashboard(){
 	}
 
 	const createTest = async (e) => {
+		let cor = [];
 		e.preventDefault();
-		// setFormData1({...formData1, ['correctAnswers']:correctAnswers})
-		formDataUpload.append(['correctAnswers'], JSON.stringify(correctAnswers))
+		const radios = document.getElementsByClassName('rAnswer')
+		for(let i = 0; i < radios.length; i++){
+			if(radios[i].checked){
+				const myObject = {}
+				myObject[radios[i].name] = radios[i].value;
+				cor.push(myObject)
+			}
+		}
+		if(cor.length != answers){
+			addToast('You Havnt selected answers for the questions', { appearance: 'error',autoDismiss: true });
+			return;
+		}
+		formDataUpload.append(['correctAnswers'], JSON.stringify(cor))
 		formDataUpload.append(['extension'],formData1.extension)
 		formDataUpload.append(['total_question'],formData1.total_question)
 		formDataUpload.append(['start_date'],formData1.start_date)
-		formDataUpload.append(['chapter_id'],formData1.chapter_id)
-		formDataUpload.append(['unit_id'],formData1.unit_id)
-		formDataUpload.append(['class_id'],formData1.class_id)
+		formDataUpload.append(['chapter_id'],params.chapter_id)
+		formDataUpload.append(['unit_id'],params.test_id)
+		formDataUpload.append(['class_id'],params.class_id)
 		formDataUpload.append(['test_name'],formData1.test_name)
 		formDataUpload.append(['test_window'],formData1.test_window)
 		formDataUpload.append(['test_duration'],formData1.test_duration)
@@ -255,9 +267,9 @@ export default function TeacherDashboard(){
 					addToast("Test Created Successfully.", { appearance: 'success',autoDismiss: true });
 				}
 				setLoadingCreate(false)
+				setAnswers('')
 			},
 			onError:(error)=>{
-				console.log(error.response.status)
 				if(error.response.status == 405){
 					addToast('Test cant be assigned!\nSome test is assigned for the same time', { appearance: 'error',autoDismiss: true });
 					setLoadingCreate(false)
@@ -294,7 +306,7 @@ export default function TeacherDashboard(){
 					<div className="col-xl-12 col-lg-12">
 						<div className="card">
 							<div className="card-header">
-								<h4 className="card-title rpt1" style={{display: section == "tab0" ? "block" : 'none'}}>Create Tests </h4>
+								<h4 className="card-title rpt1" style={{display: section == "tab0" ? "block" : 'none'}}>Teacher Led Test </h4>
 								<h4 className="card-title rpt1" style={{display: section == "tab1" ? "block" : 'none'}}>Assign Tests </h4>
 								<h4 className="card-title rpt2" style={{display: section == "tab2" ? "block" : 'none'}}>Student-wise Reports</h4>
 								<h4 className="card-title rpt3" style={{display: section == "tab3" ? "block" : 'none'}}>Subject-wise Reports</h4>
@@ -302,7 +314,7 @@ export default function TeacherDashboard(){
 							</div>
 							<div className="card-content">
 								<div className="card-body pt-0">
-									<p className="rpt1" style={{display: section == "tab0" ? "block" : 'none'}}>Create a Test.</p>
+									<p className="rpt1" style={{display: section == "tab0" ? "block" : 'none'}}>Create a Teacher Led Test.</p>
 									<p className="rpt1" style={{display: section == "tab1" ? "block" : 'none'}}>Select a class to assign a test to your students.</p>
 									<p className="rpt2" style={{display: section == "tab2" ? "block" : 'none'}}>Select the class and test for which you wish to analyze the performance of the students.</p>
 									<p className="rpt3" style={{display: section == "tab3" ? "block" : 'none'}}>Select a className and subject to view a detailed report of the subject-wise performance of your className.</p>
@@ -310,7 +322,7 @@ export default function TeacherDashboard(){
 									<div className="ul-listing style2">
 									<ul className="nav nav-tabs nav-linetriangle no-hover-bg">
 										<li className="nav-item">
-										<a className={section == "tab0" ? "nav-link active" : 'nav-link'} id="base-tab1" data-toggle="tab" aria-controls="tab0" href="#tab0" aria-expanded="true" onClick={()=>{changeSection('tab0')}}> Create Test  </a>
+										<a className={section == "tab0" ? "nav-link active" : 'nav-link'} id="base-tab1" data-toggle="tab" aria-controls="tab0" href="#tab0" aria-expanded="true" onClick={()=>{changeSection('tab0')}}> Teacher Led Test  </a>
 										</li>
 										<li className="nav-item">
 										<a className={section == "tab1" ? "nav-link active" : 'nav-link'} id="base-tab1" data-toggle="tab" aria-controls="tab1" href="#tab1" aria-expanded="true" onClick={()=>{changeSection('tab1')}}> Assign Test  </a>
@@ -362,29 +374,34 @@ export default function TeacherDashboard(){
 										<div className={section == "tab0" ? "tab-pane container-fluid active" : 'tab-pane container-fluid'} id="tab0" aria-labelledby="base-tab0">
 										<div className="row mb-5 pt-1">
 											{/* <div className="col-md-6">
-												<h4 className="card-title"><strong> Create Test </strong></h4>
+												<h4 className="card-title"><strong> Teacher Led Test </strong></h4>
 											</div> */}
 											<div className="col-md-12">
 												<form className="form" encType='multipart/form-data' onSubmit={createTest}>
 													<div className="form-body">
 													<div className="row">
 														<div className="col-md-3">
-															<h4 className="card-title"><strong>Create Test</strong></h4>
+															<h4 className="card-title"><strong>Teacher Led Test</strong></h4>
 															<div className="form-group col-md-12 mb-1">
-																<input type="text" className="form-control" placeholder="Test name" onChange={setName}/> 
+																<span tooltip="Set a name for the test you are assigning. Set a name for the test you are assigning."> 
+																	<input type="text" className="form-control" placeholder="Test name" onChange={setName}/> 
+																</span>
 															</div>
 															<div className="form-group col-md-12 mb-1">
-																<select className="form-control" onChange={handleChange} value={params.class_id ? params.class_id : 9999}>
-																<option value="999">--Select Class-- </option>
-																{classes && classes.map((item,key)=>{
-																	return(
-																		<option value={item.class_id} data-class_name={item.class_name} key={key} >{item.class_name + ' th'} </option>
-																	)
-																})}
-																</select>
+																<span tooltip="Select the class for which you are assigning this test."> 
+																	<select className="form-control" onChange={handleChange} value={params.class_id ? params.class_id : 9999}>
+																		<option value="999">--Select Class-- </option>
+																		{classes && classes.map((item,key)=>{
+																			return(
+																				<option value={item.class_id} data-class_name={item.class_name} key={key} >{item.class_name + ' th'} </option>
+																			)
+																		})}
+																	</select>
+																</span>
 															</div> 
 															<div className="form-group col-md-12 mb-1">
 																{/* test_id here contains unit_id */}
+																<span tooltip="Select the unit based on which this test has been prepared."> 
 																<select className="form-control" onChange={handleChangeUnit} value={params.test_id ? params.test_id : 9999}>
 																<option value="999">--Select Unit-- </option>
 																{classAndSubjectWiseUnit && classAndSubjectWiseUnit.map((it,key)=>{
@@ -393,9 +410,11 @@ export default function TeacherDashboard(){
 																		)
 																})}
 																</select>
+																</span>
 															</div>
 														
 															<div className="form-group col-md-12 mb-1">
+															<span tooltip="Select the chapter for which you are assigning this test."> 
 																<select className="form-control" onChange={handleChapter}>
 																<option value="">--Select Chapter-- </option>
 																{classSubjectAndUnitWiseChapter && classSubjectAndUnitWiseChapter.map((it,key)=>{
@@ -404,47 +423,56 @@ export default function TeacherDashboard(){
 																		)
 																})}
 																</select>
+																</span>
 															</div>
 														
 															<div className="form-group col-md-12 mb-1"> 
+															<span tooltip="Set the number of questions you have included in this test."> 
 																<input type="number" className="form-control" id="qNumber" placeholder="Number of Question" onChange={setNumber}/> 
+															</span>
 															</div>
 														
 															<div className="form-group choose_file col-md-12 mb-1">
 																<div className="input-group mb-0">
 																	<div className="input-group-prepend">
-																		<span className="input-group-text p-0" id="basic-addon1">
-																			<select className="form-control" onChange={selectUploadFileType}>
-																				<option value="png">.png</option>
-																				<option value="jpg">.jpg</option>
-																				<option value="pdf">.pdf</option>
-																				<option value="docx">.docx</option>
-																			</select>
+																		<span tooltip="Select the file format of the test you are uploading."> 
+																			<span className="input-group-text p-0" id="basic-addon1">
+																				<select className="form-control" onChange={selectUploadFileType}>
+																					<option value="png">.png</option>
+																					<option value="jpg">.jpg</option>
+																					<option value="pdf">.pdf</option>
+																					<option value="docx">.docx</option>
+																				</select>
+																			</span>
 																		</span>
-																		
 																	</div>
-																	
-																	<input type="file" name="files" className="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" multiple={allowMultiple}  onChange={chooseFiles}/>
-
+																		<input type="file" name="files" className="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" multiple={allowMultiple}  onChange={chooseFiles}/>
 																</div>   
 																<small id="passwordHelp" className="text-danger">
 																		{error && error}
 																</small>
 															</div>
 															<div className="form-group col-md-12 mb-1"> 
-																<input type="number" className="form-control" placeholder="Test Duration" onChange={setDuration}/> 
+																<span tooltip="Set the total time required to complete this test."> 
+																	<input type="number" className="form-control" placeholder="Test Duration" onChange={setDuration}/> 
+																</span>
 															</div>
 															<div className="form-group col-md-12 mb-1"> 
-																<select className="form-control" onChange={setWindow}>
-																	<option value="30">30 minutes</option>
-																	<option value="60">1 hour</option>
-																	<option value="90">1 hour 30 min</option>
-																	<option value="120">2 hour</option>
-																	<option value="150">2 hours 30 min</option>
-																</select>
+																<span tooltip="Set the time window during which a student will be able to attempt this test."> 
+																	<select className="form-control" onChange={setWindow}>
+																		<option value="999">Select Test Window</option>
+																		<option value="30">30 minutes</option>
+																		<option value="60">1 hour</option>
+																		<option value="90">1 hour 30 min</option>
+																		<option value="120">2 hour</option>
+																		<option value="150">2 hours 30 min</option>
+																	</select>
+																</span>
 															</div>
 															<div className="form-group col-md-12 mb-1 date_bg1">
-																<DatePicker selected={startDate} onChange={(date) => setStartDate(date)} isClearable showTimeSelect dateFormat="MM/d/yyyy h:mm aa" />
+																<span tooltip="Select the date and time for which test will be scheduled"> 
+																	<DatePicker selected={startDate} onChange={(date) => setStartDate(date)} isClearable showTimeSelect dateFormat="MM/d/yyyy h:mm aa" />
+																</span>
 															</div>
 															<div className="form-group col-md-12 mb-1">
 																<button className="btn btnsavetext1">{loadingCreate ? "loading" : "Save Test"}</button>
@@ -457,10 +485,10 @@ export default function TeacherDashboard(){
 															<div className="form-group col-md-12 mb-1">
 																{[...Array(answers)].map((e, i) => <ul className="create_title1" key={i}>
 																		<label>{i+1}.</label> 
-																		<li><input type="radio" id={`check-a`} name={`ans${i+1}`} value="A" onChange={(e)=>{selectAnswer(e,`check-a`)}}/> <label htmlFor="check-a"> A</label></li>
-																		<li><input type="radio" id={`check-b`} name={`ans${i+1}`} value="B" onChange={(e)=>{selectAnswer(e,`check-b`)}}/> <label htmlFor="check-b"> B</label></li>
-																		<li><input type="radio" id={`check-c`} name={`ans${i+1}`} value="C" onChange={(e)=>{selectAnswer(e,`check-c`)}}/> <label htmlFor="check-c"> C</label></li>
-																		<li><input type="radio" id={`check-d`} name={`ans${i+1}`} value="D" onChange={(e)=>{selectAnswer(e,`check-d`)}}/> <label htmlFor="check-d"> D</label></li>
+																		<li><input className="rAnswer" type="radio" id={`check-a${i}`} name={`ans${i+1}`} value="A" onChange={(e)=>{selectAnswer(e,`check-a`)}}/> <label htmlFor={`check-a${i}`}> A</label></li>
+																		<li><input className="rAnswer" type="radio" id={`check-b${i}`} name={`ans${i+1}`} value="B" onChange={(e)=>{selectAnswer(e,`check-b`)}}/> <label htmlFor={`check-b${i}`}> B</label></li>
+																		<li><input className="rAnswer" type="radio" id={`check-c${i}`} name={`ans${i+1}`} value="C" onChange={(e)=>{selectAnswer(e,`check-c`)}}/> <label htmlFor={`check-c${i}`}> C</label></li>
+																		<li><input className="rAnswer" type="radio" id={`check-d${i}`} name={`ans${i+1}`} value="D" onChange={(e)=>{selectAnswer(e,`check-d`)}}/> <label htmlFor={`check-d${i}`}> D</label></li>
 																</ul>
 																)}                                                              
 															</div>

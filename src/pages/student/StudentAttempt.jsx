@@ -11,6 +11,8 @@ import useQuestionPaper from '../../pages/student/hooks/useQuestionPaper'
 import useCreateUploadTest from '../../pages/student/hooks/useCreateUploadTest'
 import { useToasts } from 'react-toast-notifications';
 import { imageUrl } from '../../config/config'
+import mammoth from 'mammoth';
+import FileViewer from "react-file-viewer";
 
 export default function StudentAttempt(){
     const history = useHistory();
@@ -21,24 +23,27 @@ export default function StudentAttempt(){
 	const [counts, setCounts] = useState(0);
 	const [attemptId, setAttemptId] = useState();
 	const [duration, setDuration] = useState();
+	const [completion, setCompletion] = useState();
 	const [formData, setFormData] = useState('');
 	const [answers, setAnswers] = useState('');
 	const [loading, setLoading] = useState(false);
 	const [questLoading, setQuestLoading] = useState(false);
 	const [opt, setOpt] = useState('');
-	
+	const [base64FilesArr, setBase64FilesArr] = useState([]);
+	const [docu, setDocu] = useState([]);
+
 	const set = (e, option, id) => {
 		setOpt(option)
 		let answer = "";
 			if(counts-1 == questions?.length-1){
-				setFormData({...formData,  ['answer'] : e.target.value, ['option']: option, ['question_id']:id, ['completion_status'] : "completed" });
+				setCompletion('completed')
+				setFormData({...formData,  ['answer'] : e.target.value, ['option']: option, ['question_id']:id,});
 			}else{
 				setFormData({...formData, ['answer'] : e.target.value, ['option']: option, ['question_id']:id,});
 			}		
 	}
 
 	const changeOption = (e,key, option, id) => {
-		// setFormData([...formData,  {[`answer${key}`] : e.target.value, [`option${key}`]: option, }]);
 		setAnswers({...answers,  [`answer${key}`] : e.target.value, [`option${key}`]: option,});
 		setFormData({...formData, ['answers']: answers});
 	}
@@ -60,8 +65,13 @@ export default function StudentAttempt(){
 		let allowedTime = new Date(localStorage.getItem('test_test_time'));
 		allowedTime.setMinutes( allowedTime.getMinutes() + parseInt(tWindow));
 		if(current_time > allowedTime){
-			setFormData({...formData, ['completion_status'] : "timeover"});
-				endTest();
+				setCompletion('timeover')
+			// setFormData({...formData, ['completion_status'] : "timeover"});
+				if(params.test_type == "upload-test"){
+					endTestUpload();
+				}else{
+					endTest()
+				}
 		}else{
 			const difference = (Math.abs(allowedTime  - new Date(attemptTime))/1000)/60
 			if(difference < tDuration){
@@ -84,6 +94,7 @@ export default function StudentAttempt(){
 	},[attemptId])
 
 	var count = 0 ;
+	var docs = [];
 	const {data: question, questionLoading} = useRandomQuestion();
 	const {data: questions, questionsLoading} = useQuestionList();
 	const {data: questionPaper, questionPaperLoading} = useQuestionPaper();
@@ -103,6 +114,37 @@ export default function StudentAttempt(){
 		setCounts(count+1)
 	},[questions])
 
+	const convert = (f, k) => {
+		var reader = new FileReader();
+		// Closure to capture the file information.
+		reader.onload = (function(theFile){
+			return function(e) {
+				let type = "";
+				var arrayBuffer = reader.result;
+				var binaryData = e.target.result;
+				//Converting Binary Data to base 64
+				var base64String = window.btoa(binaryData);
+				//showing file converted to base64
+				if (f.name.split('.').pop() == "pdf"){
+					type = "data:application/pdf;base64,"
+					setBase64FilesArr(base64FilesArr => [...base64FilesArr, type + base64String]);
+				}else if(f.name.split('.').pop() == "png" || f.name.split('.').pop() == "jpg"){
+					type = "data:image/png;base64,"
+					setBase64FilesArr(base64FilesArr => [...base64FilesArr, type + base64String]);
+				}else if(f.name.split('.').pop()== "docx"){
+					mammoth.convertToHtml({arrayBuffer: arrayBuffer}).then(function (resultObject) {
+						// result1.innerHTML = resultObject.value
+						console.log("Html for Docx",resultObject.value)
+						setBase64FilesArr(base64FilesArr => [...base64FilesArr, resultObject.value]);
+					})
+				}
+				// alert('File converted to base64 successfuly!\nCheck in Textarea');
+			};
+		})(f);
+		// Read in the image file as a data URL.
+		reader.readAsBinaryString(f);
+	}
+
 	// useEffect(() => {
 	// 	function toggleFullScreen() {
 	// 		if (!document.fullscreenElement) {
@@ -117,6 +159,7 @@ export default function StudentAttempt(){
 	// });
 
 	const saveAnswerAndNext = async () => {
+		setFormData({...formData, ['completion_status'] : completion});
 		setLoading(true)
 		setQuestLoading(true)
 		let search = window.location.search;
@@ -155,15 +198,19 @@ export default function StudentAttempt(){
 		async function tick() {
 			var counter = document.getElementById("timer");
 			sec++;
-			
 			localStorage.setItem('COUNTER', sec);
 			const measuredTime = new Date(null);
 			measuredTime.setSeconds(sec);
 			let MHSTime = measuredTime.toISOString().substr(11, 8);
 			const test_duration = localStorage.getItem('test_test_duration');
-			if(sec > test_duration*60){ //*60 converts to seconds
-				setFormData({...formData, ['completion_status'] : "timeover"});
+			if(sec > test_duration * 60){ //*60 converts to seconds
+				setCompletion('timeover')
+				// setFormData({...formData, ['completion_status'] : "timeover"});
+				if(params.test_type == "upload-test"){
+					endTestUpload();
+				}else{
 					endTest()
+				}
 			}
 			if(counter){
 				// counter.innerHTML = "0:" + (MHSTime < 10 ? "0" : "") + String(MHSTime);
@@ -176,7 +223,33 @@ export default function StudentAttempt(){
 
 	let optionsDocx = [{key: 0,value: " A", option: "option_a",},{key: 1,value: " B", option: "option_b",},{key: 3,value: " C", option: "option_c",},{key: 4,value: " D", option: "option_d",}];
     async function endTest(){
+		setFormData({...formData, ['completion_status'] : completion});
 		await attempt.mutate(formData,{
+			onSuccess: (data, variables, context) => {
+				if(data?.data){
+					setAttemptId(data?.data?.attemptId)
+					var ele = document.getElementsByName("option");
+					setFormData({})
+					for(var i=0;i<ele.length;i++)
+						ele[i].checked = false;
+				}
+				history.push(`/student/student-result/${params.class_id}/${params.class_name}/${params.test_id}/${data?.data?.attemptId}/${params.test_type}`);
+			},
+		});
+	}
+
+    async function endTestUpload(){
+		const radios = document.getElementsByClassName('rAnswer')
+		const myObject = {}
+		for(let i = 0; i < radios.length; i++){
+			if(radios[i].checked){
+				myObject[radios[i].name] = radios[i].value;
+				const index = radios[i].name.slice(radios[i].name.length - 1)
+				myObject[`option${index}`] = "option_" + radios[i].value;
+			}
+		}
+		setFormData({...formData, ['answers']: myObject, ['completion_status'] : completion});
+		await attemptUpload.mutate(formData, {
 			onSuccess: (data, variables, context) => {
 				if(data?.data){
 					setAttemptId(data?.data?.attemptId)
@@ -196,7 +269,13 @@ export default function StudentAttempt(){
 		tabSwitchCount = tabSwitchCount +1 ;
 		localStorage.setItem('tabSwitchCount',tabSwitchCount);
 		if(tabSwitchCount >= 2){
-			endTest()
+			setCompletion('cheating')
+			// setFormData({...formData, ['completion_status'] : "cheating"});
+			if(params.test_type == "upload-test"){
+				endTestUpload();
+			}else{
+				endTest();
+			}
 		}
 	};
 	
@@ -209,8 +288,21 @@ export default function StudentAttempt(){
 	});
 
 	const submitUploadTest = async() => {
-		setFormData({...formData, ['answers']: answers, ['completion_status']: "completed"});
-		await attemptUpload.mutate(formData, {
+		const radios = document.getElementsByClassName('rAnswer')
+		const myObject = {}
+		for(let i = 0; i < radios.length; i++){
+			if(radios[i].checked){
+				myObject[radios[i].name] = radios[i].value;
+				const index = radios[i].name.slice(radios[i].name.length - 1)
+				myObject[`option${index}`] = "option_" + radios[i].value;
+			}
+		}
+		// setFormData({...formData, ['answers']: myObject, ['completion_status']: "completed"});
+		// console.log(formData)
+		const newData = { }
+		newData.answers = myObject;
+		newData.completion_status = completion;
+		await attemptUpload.mutate(newData, {
 			onSuccess: (data, variables, context) => {
 				if(data?.data){
 					history.push(`/student/student-result/${params.class_id}/${params.class_name}/${params.test_id}/${data?.data?.attemptId}/${params.test_type}`);
@@ -269,7 +361,7 @@ export default function StudentAttempt(){
 																								<span>
 																									{question.options.map((item,key)=>{
 																										return(
-																											<div className="ans ml-2">
+																											<div className="ans ml-2" key={key}>
 																												<label className={"radio " + (opt == optionsDocx[key]['option'] ? 'active' :'')}> <input type="radio" name="option" value={item} onChange={(e)=>{set(e, optionsDocx[key]['option'], question?._id)}}/><span className="checkmark"></span> <span><div dangerouslySetInnerHTML={{ __html: item }}/></span> </label>
 																											</div>
 																										)
@@ -376,14 +468,14 @@ export default function StudentAttempt(){
 											<div className="upload-area__header col-md-12">
 												<h3 className="job-title">{localStorage.getItem('test_test_name')}</h3>
 											</div>
-											<div className="col-md-6 online_answ_bg">
+											<div className="col-md-8 online_answ_bg">
 												<div className="online_answ">
 													{questionPaper?.extension == "png" || questionPaper?.extension == "jpg" 
 														? 
 														questionPaper.questions?.map(( item, key ) => {
 															return(
 																<>
-																	<img src={`${imageUrl}uploads/${item}`} className="img-fluid" alt="question_paper"/>
+																	<img src={`${imageUrl}uploads/${item}`} key={key} className="img-fluid" alt="question_paper"/>
 																</>
 															)
 														}) 
@@ -392,32 +484,33 @@ export default function StudentAttempt(){
 														questionPaper?.questions?.map(( item, key ) => {
 															return(
 																<>
-																	<iframe src={item} />
+																	<FileViewer fileType={questionPaper?.extension} filePath={`${imageUrl}uploads/${item}`} onError={"error"} />
+																	{/* <iframe src={`${imageUrl}uploads/${item}`} /> */}
 																</>
 															)
 														})
 													}
 												</div>
 											</div>
-											<div className="col-md-6 ovr_flw_hedn">
+											<div className="col-md-4 ovr_flw_hedn">
 												<div className="Qnd_anw">
 													<div className="question bg-Not-select">
 														{[...Array(questionPaper?.questionLength)].map((e, i) =>
 															<div className="bh_answer1">
 																<div className=" question-title">
-																	<h5 className=""><span>Q {i+1}.</span></h5>
+																	<h5 className=""><span>Question {i+1}.</span></h5>
 																</div>
 																<ul>
-																	<li><input type="radio" id={`check-a${i}`} name={`ans${i+1}`}  value="a" onChange={(e)=>{changeOption(e, i+1, "option_a",question?._id)}}/> <label htmlFor={`check-a${i}`}> A</label></li>
-																	<li><input type="radio" id={`check-b${i}`} name={`ans${i+1}`}  value="b" onChange={(e)=>{changeOption(e, i+1, "option_b",question?._id)}}/> <label htmlFor={`check-b${i}`}> B</label></li>
-																	<li><input type="radio" id={`check-c${i}`} name={`ans${i+1}`}  value="c" onChange={(e)=>{changeOption(e, i+1, "option_c",question?._id)}}/> <label htmlFor={`check-c${i}`}> C</label></li>
-																	<li><input type="radio" id={`check-d${i}`} name={`ans${i+1}`}  value="d" onChange={(e)=>{changeOption(e, i+1, "option_d",question?._id)}}/> <label htmlFor={`check-d${i}`}> D</label></li>
+																	<li><input className="rAnswer" type="radio" id={`check-a${i}`} name={`answer${i+1}`}  value="a" onChange={(e)=>{changeOption(e, i+1, "option_a",question?._id)}}/> <label htmlFor={`check-a${i}`}> A</label></li>
+																	<li><input className="rAnswer" type="radio" id={`check-b${i}`} name={`answer${i+1}`}  value="b" onChange={(e)=>{changeOption(e, i+1, "option_b",question?._id)}}/> <label htmlFor={`check-b${i}`}> B</label></li>
+																	<li><input className="rAnswer" type="radio" id={`check-c${i}`} name={`answer${i+1}`}  value="c" onChange={(e)=>{changeOption(e, i+1, "option_c",question?._id)}}/> <label htmlFor={`check-c${i}`}> C</label></li>
+																	<li><input className="rAnswer" type="radio" id={`check-d${i}`} name={`answer${i+1}`}  value="d" onChange={(e)=>{changeOption(e, i+1, "option_d",question?._id)}}/> <label htmlFor={`check-d${i}`}> D</label></li>
 																</ul>
 															</div>
 														)}
 														<div className="p-1 bg-Not-select bdr_to1">
 															<div className="col-md-12 text-right"> 
-																<button className="btn nextqus_btn" type="button" onClick={submitUploadTest}>Submit<i class="fa fa-angle-right ml-2"></i></button>
+																<button className="btn nextqus_btn" type="button" onClick={submitUploadTest}>Submit<i className="fa fa-angle-right ml-2"></i></button>
 															</div>
 														</div>
 													</div>

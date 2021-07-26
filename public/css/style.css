@@ -625,8 +625,10 @@ content:"";  z-index:-1;
     position: absolute;
     left: 0;
     top: 4px;
+    width:18px;
+    height:18px;
 }
-  .accepted_dv label{padding-left:20px;}
+  .accepted_dv label{padding-left:20px;font-size:18px}
 
 .bg_img3 { 
     height: 100%;
@@ -950,9 +952,9 @@ h1.upload-area__title {
    font-size:14px;
     font-weight:500;
     display:inline-block;
-    width:50%;
-    float:left;
-    padding:0px 10px;
+    width: auto;
+    float: left;
+    padding: 10px 45px 0 10px;
 }
 .bh_answer1 ul li span{
    font-weight:600;
@@ -1207,6 +1209,14 @@ h1.upload-area__title {
         transform: translateY(-50%);
         top: 46%;
     }
+    .bh_answer1 ul li {
+        font-size: 14px;
+        font-weight: 500;
+        display: inline-block;
+        width: auto;
+        float: left;
+        padding: 10px 25px 0 10px;
+    }
     .form-group.col-md-6.form-check {
         width: 50%;
     }
@@ -1265,3 +1275,107 @@ h1.upload-area__title {
     }
     .card .card.attempt_text .float-left a.btn{float:none !important;  text-align: left !important;}    
 }
+.test_assign_hlp ol li {
+    padding-left: 4px; position: relative;
+font-size: 18px;
+}
+.checkbox_dv input {
+    width: 18px;  height: 18px; top: 4px;  position: absolute;  left: 0;
+}
+.test_assign_hlp ol li label {  padding-left: 28px; vertical-align: top;
+}
+.test_assign_hlp p {
+    text-align: justify;
+    font-size: 18px;
+}
+.online_answ_bg img {
+    width: 60%;
+}
+
+[tooltip] {
+    position: relative; 
+    width:100%;
+    display:inline-block;
+  }
+  /* Applies to all tooltips */
+  [tooltip]::before,
+  [tooltip]::after {
+    text-transform: none; /* opinion 2 */
+    font-size: .9em; /* opinion 3 */
+    line-height: 1;
+    user-select: none;
+    pointer-events: none;
+    position: absolute;
+    display: none;
+    opacity: 0;
+  }
+  [tooltip]::before {
+    content: '';
+    border: 5px solid transparent; /* opinion 4 */
+    z-index: 999999999999; /* absurdity 1 */
+  }
+  [tooltip]::after {
+    content: attr(tooltip); 
+    
+    font-family: Helvetica, sans-serif;
+    text-align: center; 
+    min-width: 4em;
+    max-width: 25em; 
+    overflow: hidden; 
+    padding: 1ch 1.5ch;
+    border-radius: .3ch;
+    box-shadow: 0 1em 2em -.5em rgba(0, 0, 0, 0.35);
+    background: #333;
+    color: #fff;
+    z-index: 9999999999; /* absurdity 2 */
+  }
+  /* Make the tooltips respond to hover */
+  [tooltip]:hover::before,
+  [tooltip]:hover::after {
+    display: block;
+  }
+  /* don't show empty tooltips */
+  [tooltip='']::before,
+  [tooltip='']::after {
+    display: none !important;
+  }
+  /* FLOW: UP */
+  [tooltip]:not([flow])::before,
+  [tooltip][flow^="up"]::before {
+    bottom: 100%;
+    border-bottom-width: 0;
+    border-top-color: #333;
+  }
+  [tooltip]:not([flow])::after,
+  [tooltip][flow^="up"]::after {
+    bottom: calc(100% + 5px);
+  }
+  [tooltip]:not([flow])::before,
+  [tooltip]:not([flow])::after,
+  [tooltip][flow^="up"]::before,
+  [tooltip][flow^="up"]::after {
+    left: 50%;
+    transform: translate(-50%, -.5em);
+  }
+  /* KEYFRAMES */
+  @keyframes tooltips-vert {
+    to {
+      opacity: .9;
+      transform: translate(-50%, 0);
+    }
+  }
+  @keyframes tooltips-horz {
+    to {
+      opacity: .9;
+      transform: translate(0, -50%);
+    }
+  }
+  /* FX All The Things */ 
+  [tooltip]:not([flow]):hover::before,
+  [tooltip]:not([flow]):hover::after,
+  [tooltip][flow^="up"]:hover::before,
+  [tooltip][flow^="up"]:hover::after,
+  [tooltip][flow^="down"]:hover::before,
+  [tooltip][flow^="down"]:hover::after {
+    animation: tooltips-vert 300ms ease-out forwards;
+  }

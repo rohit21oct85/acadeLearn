@@ -107,29 +107,51 @@ export default function Login(){
             
             setLoading(false);
         }   
-    }
-
-    useEffect(checkLoggedInUser,[state]);
+    }    
+    // useEffect(checkLoggedInUser,[state]);
     
-    async function checkLoggedInUser(){
-        if(state?.isLoggedIn == true){
-            if(state?.user_type == "student"){
-                history.push(`/student/student-dashboard/${state.class_id}/${state.class_name}`)
-            }else if(state?.user_type == "teacher"){
-                history.push(`/teacher/teacher-dashboard/tab0`)
-            }else if(state?.user_type == "principal"){
-                history.push(`/principal/principal-dashboard/${state.school_id}`)
-            }
-        }else if(state?.isLoggedIn != true){
-            if(params.user_type == "student"){
-                history.push('/student/login');
-            }else if(params.user_type == "teacher"){
-                history.push('/teacher/login');
-            }else if(params.user_type == "principal"){
-                history.push('/principal/login');
+    // async function checkLoggedInUser(){
+    //     if(state?.isLoggedIn == true){
+    //         if(state?.user_type == "student"){
+    //             history.push(`/student/student-dashboard/${state.class_id}/${state.class_name}`)
+    //         }else if(state?.user_type == "teacher"){
+    //             history.push(`/teacher/teacher-dashboard/tab0`)
+    //         }else if(state?.user_type == "principal"){
+    //             history.push(`/principal/principal-dashboard/${state.school_id}`)
+    //         }
+    //     }else if(state?.isLoggedIn != true){
+    //         if(params.user_type == "student"){
+    //             history.push('/student/login');
+    //         }else if(params.user_type == "teacher"){
+    //             history.push('/teacher/login');
+    //         }else if(params.user_type == "principal"){
+    //             history.push('/principal/login');
+    //         }
+    //     }
+    // }
+
+    useEffect(()=>{
+        async function checkLoggedInUser(){
+            if(state?.isLoggedIn == true){
+                if(state?.user_type == "student"){
+                    history.push(`/student/student-dashboard/${state.class_id}/${state.class_name}`)
+                }else if(state?.user_type == "teacher"){
+                    history.push(`/teacher/teacher-dashboard/tab0`)
+                }else if(state?.user_type == "principal"){
+                    history.push(`/principal/principal-dashboard/${state.school_id}`)
+                }
+            }else if(state?.isLoggedIn != true){
+                if(params.user_type == "student"){
+                    history.push('/student/login');
+                }else if(params.user_type == "teacher"){
+                    history.push('/teacher/login');
+                }else if(params.user_type == "principal"){
+                    history.push('/principal/login');
+                }
             }
         }
-    }
+        checkLoggedInUser();
+    },[])
 
     return(
         <>  
