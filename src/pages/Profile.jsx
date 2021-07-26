@@ -2,8 +2,47 @@ import Head from '../components/common/Head'
 import Footer from '../components/common/Footer'
 import Foot from '../components/common/Foot'
 import HeaderNav from '../components/common/HeaderNav'
+import { useState, useContext } from 'react'
+import {AuthContext} from '../context/AuthContext';
+import {apiUrl, authAxios} from '../config/config';
+import {useLocation, useParams, useHistory} from 'react-router-dom'
+import {useMutation, useQueryClient} from 'react-query'
+import { useToasts } from 'react-toast-notifications';
 
 export default function Profile(){
+    const queryClient = useQueryClient()
+    const {state} = useContext(AuthContext);
+    const params = useParams();
+    const location = useLocation();
+    const path = location.pathname;
+    const history = useHistory();
+
+    const { addToast } = useToasts();
+
+    const [formData, setFormData] = useState();
+
+    const getData = (e) => {
+        setFormData({...formData, [e.target.name] : e.target.value})
+    }
+
+    const saveData = () => {
+        mutation.mutate(formData);
+    }
+
+    const mutation = useMutation(formData => {
+        const user_id = localStorage.getItem('user_id');
+            return authAxios.patch(`${apiUrl}v1/web/update-student/${user_id}`,formData)
+        },{
+        onSuccess: (data) => {
+            console.log(data)
+            if(data.message){
+                addToast('Profile Updated Successfully! Please Logout and Login again', { appearance: 'success',autoDismiss: true });
+            }
+        },
+        onError: () => {
+        },
+    });
+
     return(
         <>
         <Head/>
@@ -45,7 +84,7 @@ export default function Profile(){
                                                             </div>
                                                         </div> 
                                                     <div className="card-body">
-                                                        <h4 className="card-title">Philip Garrett</h4> 
+                                                        <h4 className="card-title">{localStorage.getItem('name')}</h4> 
                                                         <h6 className="card-subtitle text-muted">Student</h6> 
                                                     </div>  
                                                 </div>
@@ -56,46 +95,38 @@ export default function Profile(){
                                                 <div className="row">
                                                     <div className="col-lg-6 col-md-12">
                                                         <div className="form-group">
-                                                            <label>First Name</label>
-                                                            <input type="text" className="form-control" placeholder="Charlotte"/>
+                                                            <label>Name</label>
+                                                            <input name="name" type="text" className="form-control" placeholder="Charlotte" defaultValue={localStorage.getItem('name')} onChange={getData}/>
                                                         </div>
                                                     </div>
                                                     <div className="col-lg-6 col-md-12">
                                                         <div className="form-group">
-                                                            <label>Last Name</label>
-                                                            <input type="text" className="form-control" placeholder="Deao"/>
+                                                            <label>Email</label>
+                                                            <input type="email" disabled className="form-control" placeholder="Deao" defaultValue={localStorage.getItem('email')}/>
                                                         </div>
                                                     </div>
                                                     <div className="col-lg-6 col-md-12">
                                                         <div className="form-group">
-                                                            <label>DOB</label>
-                                                            <input type="date" className="form-control" name="dob"  placeholder="Enter Your Date of Birth"/>
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-lg-6 col-md-12">
-                                                        <div className="form-group">
-                                                            <label>ClassName</label>
-                                                            <select className="form-control">
-                                                            <option value="">--Select ClassName-- </option>
-                                                            <option value="">ClassName 6th </option>
-                                                                <option value="">ClassName 7th </option>
-                                                                <option value="">ClassName 8th </option>
-                                                                <option value="">ClassName 9th </option>
-                                                                <option value="">ClassName 10th </option>
-                                                                <option value="">ClassName 11th </option>
-                                                                <option value="">ClassName 12th </option>
-                                                                                            </select>
+                                                            <label>Class</label>
+                                                            <select className="form-control" defaultValue={localStorage.getItem('class_name')} disabled>
+                                                                <option value="">--Select ClassName-- </option>
+                                                                <option value="6">ClassName 6th </option>
+                                                                <option value="7">ClassName 7th </option>
+                                                                <option value="8">ClassName 8th </option>
+                                                                <option value="9">ClassName 9th </option>
+                                                                <option value="10">ClassName 10th </option>
+                                                            </select>
                                                         </div>
                                                     </div>
                                                     <div className="col-lg-6 col-md-12">
                                                         <div className="form-group">
                                                             <label> Section  </label>
-                                                            <select name="" required className="form-control">
+                                                            <select name="" required className="form-control" defaultValue={localStorage.getItem('section')} disabled>
                                                             <option value="">-Select Section-</option>
-                                                                <option value="1">A </option>
-                                                                <option value="2">B</option>
-                                                                <option value="2">C</option>
-                                                                <option value="2">D</option> 
+                                                                <option value="A">A </option>
+                                                                <option value="B">B</option>
+                                                                <option value="C">C</option>
+                                                                <option value="D">D</option> 
                                                             </select> 
                                                         </div>
                                                     </div>
@@ -108,21 +139,21 @@ export default function Profile(){
                                                     <div className="col-lg-6 col-md-12">
                                                         <div className="form-group m_p_0">
                                                                 <label>Select Gender</label>
-                                                                <select name="" required className="form-control">
+                                                                <select required className="form-control" name="gender"  onChange={getData}>
                                                                     <option value="">-Select-</option>
-                                                                    <option value="1">Male </option>
-                                                                    <option value="2">Female</option> 
+                                                                    <option value="male">Male </option>
+                                                                    <option value="female">Female</option> 
                                                                 </select> 
                                                         </div>
                                                     </div>
                                                     <div className="col-lg-6 col-md-12">
                                                     <div className="form-group">
                                                             <label>Address</label>
-                                                            <textarea type="text" className="form-control" placeholder="Address"></textarea>
+                                                            <textarea type="text" className="form-control" placeholder="Address" name="address" onChange={getData}></textarea>
                                                     </div>
                                                     </div>  
                                                     <div className="col-md-12">
-                                                        <button className="btn btn-primary btn-round" >Save</button>
+                                                        <button className="btn btn-primary btn-round" onClick={saveData}>Save</button>
                                                     </div>
                                                 </div>
                                             </div>

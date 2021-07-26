@@ -43,6 +43,8 @@ export default function Login(){
                         let access_token = response?.data?.accessToken
                         let refresh_token = response?.data?.refreshToken
                         let user_id = user_type == "student" ? response?.data?.student?._id : (user_type == "teacher") ? response?.data?.teacher?._id : response?.data?.principal?._id
+                        let gender = user_type == "student" ? response?.data?.student?.gender : (user_type == "teacher") ? response?.data?.teacher?.gender : response?.data?.principal?.gender
+                        let address = user_type == "student" ? response?.data?.student?.address : (user_type == "teacher") ? response?.data?.teacher?.address : response?.data?.principal?.address
                         let name = user_type == "student" ? response?.data?.student?.name : (user_type == "teacher") ? response?.data?.teacher?.name : response?.data?.principal?.name
                         let email = user_type == "student" ? response?.data?.student?.email : (user_type == "teacher") ? response?.data?.teacher?.email : response?.data?.principal?.email
                         let created_at = user_type == "student" ? response?.data?.student?.created_at : (user_type == "T") ? response?.data?.teacher?.created_at : response?.data?.principal?.created_at
@@ -68,6 +70,8 @@ export default function Login(){
                         localStorage.setItem('isLoggedIn', isLoggedIn);
                         localStorage.setItem('subject_name',subject_name);
                         localStorage.setItem('subject_id',subject_id);
+                        localStorage.setItem('gender',gender);
+                        localStorage.setItem('address',address);
                         const payloadData = {
                             isLoggedIn,
                             name,
@@ -81,7 +85,9 @@ export default function Login(){
                             class_id,
                             created_at,
                             access_token,
-                            refresh_token
+                            refresh_token,
+                            gender,
+                            address
                         }
                         if(isLoggedIn){
                             dispatch({type: 'LOGIN', payload: payloadData});

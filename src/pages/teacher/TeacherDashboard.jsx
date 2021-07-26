@@ -383,12 +383,12 @@ export default function TeacherDashboard(){
 														<div className="col-md-3">
 															<h4 className="card-title"><strong>Teacher Led Test</strong></h4>
 															<div className="form-group col-md-12 mb-1">
-																<span tooltip="Set a name for the test you are assigning. Set a name for the test you are assigning."> 
+																<span flow="right" tooltip="Set a name for the test you are assigning."> 
 																	<input type="text" className="form-control" placeholder="Test name" onChange={setName}/> 
 																</span>
 															</div>
 															<div className="form-group col-md-12 mb-1">
-																<span tooltip="Select the class for which you are assigning this test."> 
+																<span flow="right" tooltip="Select the class for which you are assigning this test."> 
 																	<select className="form-control" onChange={handleChange} value={params.class_id ? params.class_id : 9999}>
 																		<option value="999">--Select Class-- </option>
 																		{classes && classes.map((item,key)=>{
@@ -401,7 +401,7 @@ export default function TeacherDashboard(){
 															</div> 
 															<div className="form-group col-md-12 mb-1">
 																{/* test_id here contains unit_id */}
-																<span tooltip="Select the unit based on which this test has been prepared."> 
+																<span flow="right" tooltip="Select the unit based on which this test has been prepared."> 
 																<select className="form-control" onChange={handleChangeUnit} value={params.test_id ? params.test_id : 9999}>
 																<option value="999">--Select Unit-- </option>
 																{classAndSubjectWiseUnit && classAndSubjectWiseUnit.map((it,key)=>{
@@ -414,7 +414,7 @@ export default function TeacherDashboard(){
 															</div>
 														
 															<div className="form-group col-md-12 mb-1">
-															<span tooltip="Select the chapter for which you are assigning this test."> 
+															<span flow="right" tooltip="Select the chapter for which you are assigning this test."> 
 																<select className="form-control" onChange={handleChapter}>
 																<option value="">--Select Chapter-- </option>
 																{classSubjectAndUnitWiseChapter && classSubjectAndUnitWiseChapter.map((it,key)=>{
@@ -427,7 +427,7 @@ export default function TeacherDashboard(){
 															</div>
 														
 															<div className="form-group col-md-12 mb-1"> 
-															<span tooltip="Set the number of questions you have included in this test."> 
+															<span flow="right" tooltip="Set the number of questions you have included in this test."> 
 																<input type="number" className="form-control" id="qNumber" placeholder="Number of Question" onChange={setNumber}/> 
 															</span>
 															</div>
@@ -435,7 +435,7 @@ export default function TeacherDashboard(){
 															<div className="form-group choose_file col-md-12 mb-1">
 																<div className="input-group mb-0">
 																	<div className="input-group-prepend">
-																		<span tooltip="Select the file format of the test you are uploading."> 
+																		<span flow="right" tooltip="Select the file format of the test you are uploading."> 
 																			<span className="input-group-text p-0" id="basic-addon1">
 																				<select className="form-control" onChange={selectUploadFileType}>
 																					<option value="png">.png</option>
@@ -453,12 +453,12 @@ export default function TeacherDashboard(){
 																</small>
 															</div>
 															<div className="form-group col-md-12 mb-1"> 
-																<span tooltip="Set the total time required to complete this test."> 
+																<span flow="right" tooltip="Set the total time required to complete this test."> 
 																	<input type="number" className="form-control" placeholder="Test Duration" onChange={setDuration}/> 
 																</span>
 															</div>
 															<div className="form-group col-md-12 mb-1"> 
-																<span tooltip="Set the time window during which a student will be able to attempt this test."> 
+																<span flow="right" tooltip="Set the time window during which a student will be able to attempt this test."> 
 																	<select className="form-control" onChange={setWindow}>
 																		<option value="999">Select Test Window</option>
 																		<option value="30">30 minutes</option>
@@ -470,7 +470,7 @@ export default function TeacherDashboard(){
 																</span>
 															</div>
 															<div className="form-group col-md-12 mb-1 date_bg1">
-																<span tooltip="Select the date and time for which test will be scheduled"> 
+																<span flow="right" tooltip="Select the date and time for which test will be scheduled"> 
 																	<DatePicker selected={startDate} onChange={(date) => setStartDate(date)} isClearable showTimeSelect dateFormat="MM/d/yyyy h:mm aa" />
 																</span>
 															</div>

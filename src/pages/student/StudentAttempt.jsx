@@ -13,6 +13,7 @@ import { useToasts } from 'react-toast-notifications';
 import { imageUrl } from '../../config/config'
 import mammoth from 'mammoth';
 import FileViewer from "react-file-viewer";
+import Modal from '../../components/common/Modal'
 
 export default function StudentAttempt(){
     const history = useHistory();
@@ -31,6 +32,7 @@ export default function StudentAttempt(){
 	const [opt, setOpt] = useState('');
 	const [base64FilesArr, setBase64FilesArr] = useState([]);
 	const [docu, setDocu] = useState([]);
+	const [modalShow, setModalShow] = useState('none');
 
 	const set = (e, option, id) => {
 		setOpt(option)
@@ -264,7 +266,8 @@ export default function StudentAttempt(){
 	}
 
 	const onBlur = () => {
-		addToast('Tab Switching is not Allowed!\n if u do it once again ur test will be cancelled', { appearance: 'error',autoDismiss: true, });
+		setModalShow('block')
+		// addToast('Tab Switching is not Allowed!\n if u do it once again ur test will be cancelled', { appearance: 'error',autoDismiss: true, });
 		let tabSwitchCount = JSON.parse(localStorage.getItem('tabSwitchCount'))!= null ? JSON.parse(localStorage.getItem('tabSwitchCount')) : 0 
 		tabSwitchCount = tabSwitchCount +1 ;
 		localStorage.setItem('tabSwitchCount',tabSwitchCount);
@@ -272,7 +275,7 @@ export default function StudentAttempt(){
 			setCompletion('cheating')
 			// setFormData({...formData, ['completion_status'] : "cheating"});
 			if(params.test_type == "upload-test"){
-				endTestUpload();
+				// endTestUpload();
 			}else{
 				endTest();
 			}
@@ -314,8 +317,10 @@ export default function StudentAttempt(){
 
 	return(
         <>
+		
             <Head/>
             <HeaderNav/>
+			<Modal show={modalShow} setShow={setModalShow}/>
 			{params.test_type != "upload-test" ? 
 			<>
 				<div className="app-content content mt-5">
@@ -468,7 +473,7 @@ export default function StudentAttempt(){
 											<div className="upload-area__header col-md-12">
 												<h3 className="job-title">{localStorage.getItem('test_test_name')}</h3>
 											</div>
-											<div className="col-md-8 online_answ_bg">
+											<div className="col-md-7 online_answ_bg">
 												<div className="online_answ">
 													{questionPaper?.extension == "png" || questionPaper?.extension == "jpg" 
 														? 
@@ -492,7 +497,7 @@ export default function StudentAttempt(){
 													}
 												</div>
 											</div>
-											<div className="col-md-4 ovr_flw_hedn">
+											<div className="col-md-5 ovr_flw_hedn">
 												<div className="Qnd_anw">
 													<div className="question bg-Not-select">
 														{[...Array(questionPaper?.questionLength)].map((e, i) =>
@@ -501,10 +506,10 @@ export default function StudentAttempt(){
 																	<h5 className=""><span>Question {i+1}.</span></h5>
 																</div>
 																<ul>
-																	<li><input className="rAnswer" type="radio" id={`check-a${i}`} name={`answer${i+1}`}  value="a" onChange={(e)=>{changeOption(e, i+1, "option_a",question?._id)}}/> <label htmlFor={`check-a${i}`}> A</label></li>
-																	<li><input className="rAnswer" type="radio" id={`check-b${i}`} name={`answer${i+1}`}  value="b" onChange={(e)=>{changeOption(e, i+1, "option_b",question?._id)}}/> <label htmlFor={`check-b${i}`}> B</label></li>
-																	<li><input className="rAnswer" type="radio" id={`check-c${i}`} name={`answer${i+1}`}  value="c" onChange={(e)=>{changeOption(e, i+1, "option_c",question?._id)}}/> <label htmlFor={`check-c${i}`}> C</label></li>
-																	<li><input className="rAnswer" type="radio" id={`check-d${i}`} name={`answer${i+1}`}  value="d" onChange={(e)=>{changeOption(e, i+1, "option_d",question?._id)}}/> <label htmlFor={`check-d${i}`}> D</label></li>
+																	<li><input className="rAnswer" type="radio" id={`check-a${i}`} name={`answer${i+1}`}  value="a" onChange={(e)=>{changeOption(e, i+1, "option_a",question?._id)}}/> <label htmlFor={`check-a${i}`}>Option A</label></li>
+																	<li><input className="rAnswer" type="radio" id={`check-b${i}`} name={`answer${i+1}`}  value="b" onChange={(e)=>{changeOption(e, i+1, "option_b",question?._id)}}/> <label htmlFor={`check-b${i}`}>Option B</label></li>
+																	<li><input className="rAnswer" type="radio" id={`check-c${i}`} name={`answer${i+1}`}  value="c" onChange={(e)=>{changeOption(e, i+1, "option_c",question?._id)}}/> <label htmlFor={`check-c${i}`}>Option C</label></li>
+																	<li><input className="rAnswer" type="radio" id={`check-d${i}`} name={`answer${i+1}`}  value="d" onChange={(e)=>{changeOption(e, i+1, "option_d",question?._id)}}/> <label htmlFor={`check-d${i}`}>Option D</label></li>
 																</ul>
 															</div>
 														)}

@@ -949,12 +949,12 @@ h1.upload-area__title {
     width:100%;
 }
 .bh_answer1 ul li{
-   font-size:14px;
+   font-size:18px;
     font-weight:500;
     display:inline-block;
     width: auto;
     float: left;
-    padding: 10px 45px 0 10px;
+    padding: 10px 35px 0 10px;
 }
 .bh_answer1 ul li span{
    font-weight:600;
@@ -1277,10 +1277,10 @@ h1.upload-area__title {
 }
 .test_assign_hlp ol li {
     padding-left: 4px; position: relative;
-font-size: 18px;
+font-size: 22px;
 }
 .checkbox_dv input {
-    width: 18px;  height: 18px; top: 4px;  position: absolute;  left: 0;
+    width: 18px;  height: 18px; top: 12px;  position: absolute;  left: 0;
 }
 .test_assign_hlp ol li label {  padding-left: 28px; vertical-align: top;
 }
@@ -1297,6 +1297,7 @@ font-size: 18px;
     width:100%;
     display:inline-block;
   }
+  
   /* Applies to all tooltips */
   [tooltip]::before,
   [tooltip]::after {
@@ -1316,29 +1317,32 @@ font-size: 18px;
   }
   [tooltip]::after {
     content: attr(tooltip); 
-    
-    font-family: Helvetica, sans-serif;
-    text-align: center; 
-    min-width: 4em;
-    max-width: 25em; 
-    overflow: hidden; 
-    padding: 1ch 1.5ch;
-    border-radius: .3ch;
-    box-shadow: 0 1em 2em -.5em rgba(0, 0, 0, 0.35);
-    background: #333;
-    color: #fff;
-    z-index: 9999999999; /* absurdity 2 */
+   
+      text-align: center;
+      min-width: 280px;
+      max-width: 260px;
+      overflow: hidden;
+      padding: 1ch 1.5ch;
+      border-radius: .3ch;
+      box-shadow: 0 1em 2em -0.5em rgb(0 0 0 / 35%);
+      background: #333;
+      color: #fff;
+      line-height: 19px;
+      z-index: 9999999999;
   }
+  
   /* Make the tooltips respond to hover */
   [tooltip]:hover::before,
   [tooltip]:hover::after {
     display: block;
   }
+  
   /* don't show empty tooltips */
   [tooltip='']::before,
   [tooltip='']::after {
     display: none !important;
   }
+  
   /* FLOW: UP */
   [tooltip]:not([flow])::before,
   [tooltip][flow^="up"]::before {
@@ -1357,6 +1361,53 @@ font-size: 18px;
     left: 50%;
     transform: translate(-50%, -.5em);
   }
+   
+   
+   
+  /* FLOW: DOWN */
+  [tooltip][flow^="down"]::before {
+    top: 100%;
+    border-top-width: 0;
+    border-bottom-color: #333;
+  }
+  [tooltip][flow^="down"]::after {
+    top: calc(100% + 5px);
+  }
+  [tooltip][flow^="down"]::before,
+  [tooltip][flow^="down"]::after {
+    left: 50%;
+    transform: translate(-50%, .5em);
+  }
+  
+  /* FLOW: LEFT */
+  [tooltip][flow^="left"]::before {
+    top: 50%;
+    border-right-width: 0;
+    border-left-color: #333;
+    left: calc(0em - 5px);
+    transform: translate(-.5em, -50%);
+  }
+  [tooltip][flow^="left"]::after {
+    top: 50%;
+    right: calc(100% + 5px);
+    transform: translate(-.5em, -50%);
+  }
+  
+  /* FLOW: RIGHT */
+  [tooltip][flow^="right"]::before {
+    top: 50%;
+    border-left-width: 0;
+    border-right-color: #333;
+    right: calc(0em - 5px);
+    transform: translate(.5em, -50%);
+  }
+  [tooltip][flow^="right"]::after {
+    top: 50%;
+    left: calc(100% + 5px);
+    transform: translate(.5em, -50%);
+    font-size: 14px;
+  }
+  
   /* KEYFRAMES */
   @keyframes tooltips-vert {
     to {
@@ -1364,12 +1415,14 @@ font-size: 18px;
       transform: translate(-50%, 0);
     }
   }
+  
   @keyframes tooltips-horz {
     to {
       opacity: .9;
       transform: translate(0, -50%);
     }
-  }
+  } 
+  
   /* FX All The Things */ 
   [tooltip]:not([flow]):hover::before,
   [tooltip]:not([flow]):hover::after,
@@ -1379,3 +1432,56 @@ font-size: 18px;
   [tooltip][flow^="down"]:hover::after {
     animation: tooltips-vert 300ms ease-out forwards;
   }
+  
+  
+  
+  [tooltip][flow^="left"]:hover::before,
+  [tooltip][flow^="left"]:hover::after,
+  [tooltip][flow^="right"]:hover::before,
+  [tooltip][flow^="right"]:hover::after {
+    animation: tooltips-horz 300ms ease-out forwards;
+  }
+
+  .bg_whitealt{background:#fff !important;}
+	 .icontexto img{ width: 150px;}
+	 
+	 .alrt_msg1{background:#fff; border: 2px solid #1e9ff2; border-radius:10px; box-shadow:0 2px 18px 1px rgb(49 53 72 / 20%); padding:50px;}
+	 .alrt_msg1 h2{font-weight: 600;
+    color: #f2424b;
+    margin-top: 20px;
+    font-size: 30px;}
+	 .alrt_msg1 a{display: inline-block;
+    width: 120px;
+    height: 50px;
+    line-height: 50px;
+    color: #fff;
+    background: #fc7d49;
+    font-size: 18px;
+    font-weight: 600;
+    box-shadow: 0 4px 0 rgb(242 67 75 / 17%);
+    border-radius: 50px; transition:0.3s;
+    margin-top: 20px;}
+	.alrt_msg1 a:hover{color:#fff;  background: #FD6F35;}
+
+    .scrolling{
+        overflow: hidden;
+        overflow-y: scroll;
+        max-height: 300px;
+        height: 100%;
+        display: inline-block;
+        padding: 15px;
+        box-shadow: 0 0 2px rgb(0 0 0 / 40%);
+        margin: 20px 0;
+        border-radius: 5px;
+    }
+
+
+    .modal-backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1040;
+        width: 100vw;
+        height: 100vh;
+        background-color: #000;
+    }

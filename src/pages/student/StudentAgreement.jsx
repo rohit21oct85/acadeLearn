@@ -68,8 +68,8 @@ export default function StudentAgreement(){
 					<div className="content-wrapper">
 						<div className="content-body">
 							<div className="row">
-								<div className="card">
-									<div className="col-md-12">
+								<div className="">
+									<div className="col-md-8 offset-2 card">
 										<div className="test_assign_hlp">
 											<h1>Important Guidelines And Instructions For Students</h1>
 											<p>(Before starting the test, please read each instruction carefully and click on the boxes beside them.) 
@@ -78,6 +78,7 @@ export default function StudentAgreement(){
 											<p>Candidates/Students are requested to complete the test honesty and ethically while following all the instructions.</p>
 															
 											</div>
+											<div className="scrolling">
 											<div className="test_assign_hlp pt-0">
 																<h2>Basic Instructions</h2> 
 																<ol>
@@ -121,11 +122,12 @@ export default function StudentAgreement(){
 																<li><div className="checkbox_dv"><input type="checkbox" className="test-id"  onClick={changeCheck}/><label>The test will continue in case the internet connection is interrupted but the students will be able to view the results only after the connection resumes.</label> </div></li>
 															</ol>
 											</div>
+											</div>
 						<div className="test_assign_hlp pt-0">
 						<h5><strong>Click on the box below ONLY if you have read all the above instructions carefully.</strong></h5> 
 						<div className="accepted_dv"> 
-						<input disabled={disabledCheck} type="checkbox" id="accepted" name="accepted" onClick={change}/>
-						<label htmlFor="accepted">  “ I am ({localStorage.getItem('name')}), and I have read and hereby accepted all the instructions mentioned above. I, therefore, want to open the test portal, and my test starts now.</label>
+						<input disabled={disabledCheck} type="checkbox" id="accepted" name="accepted" onClick={change}/> 
+					 	 <label htmlFor="accepted">  " I am ({localStorage.getItem('name')}), and I have read and hereby accepted all the instructions mentioned above. I, therefore, want to open the test portal, and my test starts now.</label>
 						<button className={`${disabled} start_now_btn btn btn-warning btn-min-width sbmt_view_form btn_click2 mr-1 mb-1 mt-2`} onClick={()=>{
 							if(disabled == ""){
 								toggleFullScreen()
