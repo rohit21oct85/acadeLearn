@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react'
 import {useHistory, useParams } from 'react-router-dom'
 import useRandomQuestion from './hooks/useRandomQuestion'
 import useQuestionList from './hooks/useQuestionList'
-import useUpdateAttemptTest from './hooks/useUpdateAttemptTest'
+import useUpdateAttemptTest from './hooks/useUpdateAttemptTestOffline'
 import useQuestionPaper from './hooks/useQuestionPaper'
 import useCreateUploadTest from './hooks/useCreateUploadTest'
 import { useToasts } from 'react-toast-notifications';
@@ -26,6 +26,7 @@ export default function StudentAttempt(){
 	const [duration, setDuration] = useState();
 	const [completion, setCompletion] = useState();
 	const [formData, setFormData] = useState('');
+	const [formDataOffline, setFormDataOffline] = useState('');
 	const [answers, setAnswers] = useState('');
 	const [loading, setLoading] = useState(false);
 	const [questLoading, setQuestLoading] = useState(false);
@@ -33,6 +34,9 @@ export default function StudentAttempt(){
 	const [base64FilesArr, setBase64FilesArr] = useState([]);
 	const [docu, setDocu] = useState([]);
 	const [modalShow, setModalShow] = useState('none');
+	const [question, setQuestion] = useState('none');
+	const [answered, setAnswered] = useState('false');
+	const [questionPaper, setquestionPaper] = useState();
 
 	const set = (e, option, id) => {
 		setOpt(option)
@@ -60,32 +64,26 @@ export default function StudentAttempt(){
 
 	useEffect(()=>{
 		const current_time = new Date();
-		// const sTime = new Date(localStorage.getItem('test_test_time'));
+		const sTime = new Date(localStorage.getItem('test_test_time'));
 		const attemptTime = localStorage.getItem('test_test_attempt_time');
 		const tWindow = localStorage.getItem('test_test_window')
 		let tDuration = localStorage.getItem('test_test_duration')
 		let allowedTime = new Date(localStorage.getItem('test_test_time'));
 		allowedTime.setMinutes( allowedTime.getMinutes() + parseInt(tWindow));
-		console.log(allowedTime)
 		if(current_time > allowedTime){
 				setCompletion('timeover')
-				// setFormData({...formData, ['completion_status'] : "timeover"});
+			// setFormData({...formData, ['completion_status'] : "timeover"});
 				if(params.test_type == "upload-test"){
 					endTestUpload();
 				}else{
 					endTest()
 				}
 		}else{
-			const diffInSecs = (allowedTime - new Date(attemptTime))/ 1000;
-			// const d = convertTo(diffInSecs, "timer")
-			// console.log(getTimeRemaining(d))
 			const difference = (Math.abs(allowedTime  - new Date(attemptTime))/1000)/60
 			if(difference < tDuration){
 				tDuration = difference;
-				localStorage.setItem('test_test_duration', diffInSecs)
+				localStorage.setItem('test_test_duration', difference)
 			}
-			// console.log(getTimeRemaining(fracMinToMinSec(difference)))
-			// console.log(fracMinToMinSec(difference))
 			setDuration(parseFloat(tDuration)?.toFixed(2));
 		}
 	},[])
@@ -98,30 +96,78 @@ export default function StudentAttempt(){
 			localStorage.removeItem('COUNTER');
 			history.push(`/student/student-attempt/${params.class_id}/${params.class_name}/${params.test_id}/${params.test_type}`);
 		}
-		// timer()
-		startTimer(localStorage.getItem('test_test_duration'));
+		timer()
 	},[attemptId])
 
 	var count = 0 ;
 	var docs = [];
-	const {data: question, questionLoading} = useRandomQuestion();
+
+	// const {data: question, questionLoading} = useRandomQuestion();
 	const {data: questions, questionsLoading} = useQuestionList();
-	const {data: questionPaper, questionPaperLoading} = useQuestionPaper();
-	const attempt = useUpdateAttemptTest(formData);
+	const {data: questionPapers, questionPaperLoading} = useQuestionPaper();
+	const attempt = useUpdateAttemptTest(formDataOffline);
 	const attemptUpload = useCreateUploadTest(formData);
 
 	useEffect(()=>{
 		setQuestLoading(false)
-		setOpt('')
 	},[question])
 
 	useEffect(()=>{
-		let count = 0;
-      	questions && questions.map((item,key) => {
-			item.answer && count++
-		})
-		setCounts(count+1)
-	},[questions])
+			// const fetchedQuestions = JSON.parse(localStorage.getItem('questions'));
+			// if(fetchedQuestions == null){
+				if(questions != undefined && localStorage.getItem('questions') == null){
+					questions  && localStorage.setItem("questions", JSON.stringify(questions))
+					if(params.test_type == "mock-test"){
+						let filteredArray = questions?.filter(function(item){
+							return !("answer" in item);
+						});
+						if(filteredArray?.length > 0){
+							setQuestion(filteredArray[0])
+						}
+					}else{
+						let filteredArray = questions?.filter(function(item){
+							return !("answer" in item);
+						});
+						const question = filteredArray[Math?.floor(Math?.random() * filteredArray?.length)];
+						setQuestion(question)
+					}
+				}
+				if(questionPapers != undefined && localStorage.getItem('questionPaper') != null){
+					questionPapers  && localStorage.setItem("questionPaper", JSON.stringify(questionPapers))
+					setquestionPaper(questionPapers)
+				}
+			// }		
+	},[questions, questionPapers])
+
+	useEffect(()=>{
+		function checkModifiedQuestion(){
+			if(localStorage.getItem('questions') != "undefined"){
+			//only for single test and mock test
+				let count = 0;
+				setOpt('')
+				setAnswered(false);
+				let filteredArray = JSON.parse(localStorage.getItem('questions'))!= null && JSON.parse(localStorage.getItem('questions')).filter(function(it){
+					if(!("answer" in it)){
+						return it
+					}
+				});
+				JSON.parse(localStorage.getItem('questions'))?.map(item => {
+					item.answer && count++
+				})
+
+				setCounts(count+1)
+				if(params.test_type == "mock-test"){
+					if(filteredArray.length > 0){
+						setQuestion(filteredArray[0])
+					}
+				}else{
+					const question = filteredArray[Math?.floor(Math?.random() * filteredArray?.length)];
+					setQuestion(question)
+				}
+			}
+		}
+		checkModifiedQuestion();
+	},[answered])
 
 	const convert = (f, k) => {
 		var reader = new FileReader();
@@ -154,6 +200,19 @@ export default function StudentAttempt(){
 		reader.readAsBinaryString(f);
 	}
 
+	// useEffect(() => {
+	// 	function toggleFullScreen() {
+	// 		if (!document.fullscreenElement) {
+	// 			document.documentElement.requestFullscreen();
+	// 		} else {
+	// 			if (document.exitFullscreen) {
+	// 				// document.exitFullscreen();
+	// 			}
+	// 		}
+	// 	}
+	// 	toggleFullScreen()
+	// });
+
 	const saveAnswerAndNext = async () => {
 		setFormData({...formData, ['completion_status'] : completion});
 		setLoading(true)
@@ -170,23 +229,64 @@ export default function StudentAttempt(){
 			setLoading(false)
 			return;
 		}
-
-		await attempt.mutate(formData,{
-			onSuccess: (data, variables, context) => {
-				if(data?.data){
-					setAttemptId(data?.data?.attemptId)
-					var ele = document.getElementsByName("option");
-					setFormData({})
-					for(var i=0;i<ele.length;i++)
-						ele[i].checked = false;
-				}
-				setLoading(false)
-				if(counts-1 == questions?.length-1){
-					history.push(`/student/student-result/${params.class_id}/${params.class_name}/${params.test_id}/${data?.data?.attemptId}/${params.test_type}`);
-				}
-			},
-		});
+		const fetchedData = JSON.parse(localStorage.getItem('questions'))
+		fetchedData.map((item,key) => {
+			if(item._id == formData.question_id){
+				item.answer = formData.answer;
+				item.option = formData.option;
+			}
+		})
+		localStorage.setItem("questions", JSON.stringify(fetchedData))
+		setLoading(false)
+		setQuestLoading(false)
+		setAnswered(true);
+		var ele = document.getElementsByName("option");
+		// setFormData({})
+		for(var i=0;i<ele.length;i++)
+			ele[i].checked = false;
+		if(counts-1 == questions?.length-1){
+			setFormDataOffline({...formDataOffline,['completion_status'] : completion, ['questions']:JSON.parse(localStorage.getItem('questions')), ['attemptId'] : localStorage.getItem('attemptIdUploadTest'), ['time_taken']:localStorage.getItem('COUNTER')})
+		}
+		// await attempt.mutate(formData,{
+		// 	onSuccess: (data, variables, context) => {
+		// 		if(data?.data){
+		// 			setAttemptId(data?.data?.attemptId)
+		// 			var ele = document.getElementsByName("option");
+		// 			setFormData({})
+		// 			for(var i=0;i<ele.length;i++)
+		// 				ele[i].checked = false;
+		// 		}
+		// 		setLoading(false)
+		// 		if(counts-1 == questions?.length-1){
+		// 			history.push(`/student/student-result/${params.class_id}/${params.class_name}/${params.test_id}/${data?.data?.attemptId}/${params.test_type}`);
+		// 		}
+		// 	},
+		// });
 	}
+
+	useEffect(()=>{
+		const saveQuestion = async ()=>{
+			await attempt.mutate(formDataOffline,{
+				onSuccess: (data, variables, context) => {
+					if(data?.data){
+						// setAttemptId(data?.data?.attemptId)
+						var ele = document.getElementsByName("option");
+						setFormData({})
+						setFormDataOffline({})
+						for(var i=0;i<ele.length;i++)
+							ele[i].checked = false;
+					}
+					setLoading(false)
+					history.push(`/student/student-result/${params.class_id}/${params.class_name}/${params.test_id}/${localStorage.getItem('attemptIdUploadTest')}/${params.test_type}`);
+				},
+			});
+		}
+		if(navigator.onLine){
+			saveQuestion()
+		}else{
+			history.push(`/student/student-result/${params.class_id}/${params.class_name}/${params.test_id}/${localStorage.getItem('attemptIdUploadTest')}/${params.test_type}`);
+		}
+	},[formDataOffline])
 
 	function timer() {
 		const time = localStorage.getItem('COUNTER');
@@ -199,7 +299,7 @@ export default function StudentAttempt(){
 			measuredTime.setSeconds(sec);
 			let MHSTime = measuredTime.toISOString().substr(11, 8);
 			const test_duration = localStorage.getItem('test_test_duration');
-			if(sec > test_duration * 60){ // *60 converts to seconds
+			if(sec > test_duration * 60){ //*60 converts to seconds
 				setCompletion('timeover')
 				// setFormData({...formData, ['completion_status'] : "timeover"});
 				if(params.test_type == "upload-test"){
@@ -217,41 +317,6 @@ export default function StudentAttempt(){
 		tick();
 	}
 
-	function startTimer(t) {
-		// var testTime = 60 * 5;
-		const time = localStorage.getItem('COUNTER') != null ? parseInt(localStorage.getItem('COUNTER')) : localStorage.getItem('test_test_duration') ;
-		// console.log(time, "time")
-		var timer = time, hours, minutes, seconds;
-		// console.log(timer, "timer")
-		async function tick() {
-			var display = document.querySelector('#timer2');
-			// hours = parseInt ((timer/60)/60, 10);
-			minutes = parseInt(timer / 60, 10)
-			seconds = parseInt(timer % 60, 10);
-			
-			// hours = hours < 10 ? "0" + hours : hours;
-			minutes = minutes < 10 ? "0" + minutes : minutes;
-			seconds = seconds < 10 ? "0" + seconds : seconds;
-			
-			--timer
-			localStorage.setItem('COUNTER', timer);
-			if (timer <= 0) {
-				// timer = duration;
-				setCompletion('timeover')
-				if(params.test_type == "upload-test"){
-					endTestUpload();
-				}else{
-					endTest()
-				}
-			}
-			if(display){
-				display.textContent = String(minutes + ":" + seconds);
-				setTimeout(tick , 1000);
-			}
-		}
-		tick();
-	}
-	
 	let optionsDocx = [{key: 0,value: " A", option: "option_a",},{key: 1,value: " B", option: "option_b",},{key: 3,value: " C", option: "option_c",},{key: 4,value: " D", option: "option_d",}];
     async function endTest(){
 		setFormData({...formData, ['completion_status'] : completion});
@@ -295,7 +360,7 @@ export default function StudentAttempt(){
 	}
 
 	const onBlur = () => {
-		setModalShow('block')
+		// setModalShow('block')
 		// addToast('Tab Switching is not Allowed!\n if u do it once again ur test will be cancelled', { appearance: 'error',autoDismiss: true, });
 		let tabSwitchCount = JSON.parse(localStorage.getItem('tabSwitchCount'))!= null ? JSON.parse(localStorage.getItem('tabSwitchCount')) : 0 
 		tabSwitchCount = tabSwitchCount +1 ;
@@ -317,6 +382,27 @@ export default function StudentAttempt(){
 	
 	const offline = () => {
 		addToast('You are offline, Kindly connect to the internet', { appearance: 'error',autoDismiss: true });
+		if(localStorage.getItem('questions') != "undefined"){
+			let questions = JSON.parse(localStorage.getItem('questions'))
+			if(params.test_type == "mock-test"){
+				let filteredArray = questions?.filter(function(item){
+					return !("answer" in item);
+				});
+				if(filteredArray?.length > 0){
+					setQuestion(filteredArray[0])
+				}
+			}else{
+				let filteredArray = questions?.filter(function(item){
+					return !("answer" in item);
+				});
+				const question = filteredArray[Math?.floor(Math?.random() * filteredArray?.length)];
+				setQuestion(question)
+			}
+		}
+		if(localStorage.getItem('questionPaper') != "undefined"){
+			let questionPaper = JSON.parse(localStorage.getItem('questionPaper'))
+			setquestionPaper(questionPaper)
+		}
 	}
 
 	useEffect(() => {
@@ -332,14 +418,6 @@ export default function StudentAttempt(){
 		};
 	});
 
-	// window.addEventListener("offline", () => {
-	// 	addToast('Offline, Kindly connect to the internet', { appearance: 'error',autoDismiss: true });
-	// });
-	  
-	// window.addEventListener("online", () => {
-	// 	addToast('Back Online', { appearance: 'success',autoDismiss: true });
-	// });
-
 	const submitUploadTest = async() => {
 		const radios = document.getElementsByClassName('rAnswer')
 		const myObject = {}
@@ -350,19 +428,20 @@ export default function StudentAttempt(){
 				myObject[`option${index}`] = "option_" + radios[i].value;
 			}
 		}
-		// setFormData({...formData, ['answers']: myObject, ['completion_status']: "completed"});
-		// console.log(formData)
+
 		const newData = { }
 		newData.answers = myObject;
 		newData.completion_status = completion;
-		await attemptUpload.mutate(newData, {
-			onSuccess: (data, variables, context) => {
-				if(data?.data){
-					history.push(`/student/student-result/${params.class_id}/${params.class_name}/${params.test_id}/${data?.data?.attemptId}/${params.test_type}`);
-				}
-				setLoading(false)
-			},
-		});
+		console.log(newData);
+		return;
+		// await attemptUpload.mutate(newData, {
+		// 	onSuccess: (data, variables, context) => {
+		// 		if(data?.data){
+		// 			history.push(`/student/student-result/${params.class_id}/${params.class_name}/${params.test_id}/${data?.data?.attemptId}/${params.test_type}`);
+		// 		}
+		// 		setLoading(false)
+		// 	},
+		// });
 	}
 
 	return(
@@ -385,7 +464,7 @@ export default function StudentAttempt(){
 														<div className="row">
 															<div className="col-xl-12 col-lg-12">
 																<div className="timer-s" >
-																	<span className="test-end">Total Left:</span><span className="" id="timer"></span><span className="" id="timer2"></span>
+																	<span className="test-end">Total time taken:</span><span className="" id="timer"></span>
 																</div>
 																<div className="timer-s" style={{"float":"left"}}>
 																	<span className="test-end">Total Allowed:</span><span className="">{duration} min</span>
@@ -455,7 +534,7 @@ export default function StudentAttempt(){
 															<a className="btn job-btn">All Attempt Question</a>
 															<div className="col-md-12 Attendence_dv  msq-o">
 																<ul>
-																	{questions && questions.map((item, key)=>{
+																	{localStorage.getItem('questions') != null && localStorage.getItem('questions') != undefined && JSON.parse(localStorage.getItem('questions')).map((item, key)=>{
 																		if(item.answer){
 																			count++
 																			return(
@@ -465,7 +544,7 @@ export default function StudentAttempt(){
 																			)
 																		}
 																	})}
-																	{questions && questions.map((item, key)=>{
+																	{localStorage.getItem('questions') != null && localStorage.getItem('questions') != undefined && JSON.parse(localStorage.getItem('questions')).map((item, key)=>{
 																		if(!item.answer){
 																			count++
 																			return(
@@ -528,19 +607,19 @@ export default function StudentAttempt(){
 														? 
 														questionPaper.questions?.map(( item, key ) => {
 															return(
-																<>
-																	<img src={`${imageUrl}uploads/${item}`} key={key} className="img-fluid" alt="question_paper"/>
-																</>
+																<span key={key}>
+																	<img src={`${imageUrl}uploads/${item}`} className="img-fluid" alt="question_paper"/>
+																</span>
 															)
 														}) 
 														:
 														
 														questionPaper?.questions?.map(( item, key ) => {
 															return(
-																<>
+																<span key={key}>
 																	<FileViewer fileType={questionPaper?.extension} filePath={`${imageUrl}uploads/${item}`} onError={"error"} />
 																	{/* <iframe src={`${imageUrl}uploads/${item}`} /> */}
-																</>
+																</span>
 															)
 														})
 													}
@@ -550,7 +629,7 @@ export default function StudentAttempt(){
 												<div className="Qnd_anw">
 													<div className="question bg-Not-select">
 														{[...Array(questionPaper?.questionLength)].map((e, i) =>
-															<div className="bh_answer1">
+															<div className="bh_answer1" key={i}>
 																<div className=" question-title">
 																	<h5 className=""><span>Question {i+1}.</span></h5>
 																</div>

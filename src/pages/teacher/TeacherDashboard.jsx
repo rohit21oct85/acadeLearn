@@ -18,6 +18,7 @@ import CumilativeStudent from '../../components/teacher/CumulativeStudent'
 import useClassWiseList from './hooks/useClassWiseList'
 import useClassAndSubjectWiseUnitList from './hooks/useClassAndSubjectWiseUnitList'
 import useClassSubjectAndUnitWiseChapterList from './hooks/useClassSubjectAndUnitWiseChapterList'
+import useClassSubjectAllChapters from './hooks/useClassSubjectAllChapters'
 import useCreateTest from './hooks/useCreateTest';
 import { useToasts } from 'react-toast-notifications';
 
@@ -28,6 +29,9 @@ import 'jspdf-autotable'
 
 import './css/style.css'
 import './css/math.css'
+
+import axios from 'axios';
+import  { apiUrl } from '../../config/config' 
 
 export default function TeacherDashboard(){
 	const [section, setSection] = useState();
@@ -65,6 +69,7 @@ export default function TeacherDashboard(){
     const {data:classWise, classWiseLoading} = useClassWiseList();
     const {data:classAndSubjectWiseUnit, classAndSubjectWiseUnitLoading} = useClassAndSubjectWiseUnitList();
     const {data:classSubjectAndUnitWiseChapter, classSubjectAndUnitWiseChapterLoading} = useClassSubjectAndUnitWiseChapterList();
+    const {data:allChapters, allChaptersLoading} = useClassSubjectAllChapters();
 	const createTestMutation = useCreateTest(formDataUpload);
 	
 	useEffect(() => {
@@ -108,6 +113,23 @@ export default function TeacherDashboard(){
 			// formDataUpload.append(['chapter_id'],e.target.value)
 		}
 	}
+
+	const handleChangeUnitPerQuestion = async (e) => {
+		console.log(e.target.value)
+		const subject_id = localStorage.getItem('subject_id');
+		const result = await axios.get(`${apiUrl}v1/web/view-all-chapters/${params.class_id}/${subject_id}/${params.test_id}`,{
+			headers: {
+				'Content-Type': 'Application/json',
+				'Authorization':'Bearer '+ state.access_token
+			}
+		});
+		console.log(result.data.data)
+	}
+
+	const handleChapterPerQuestion = (e) => {
+		console.log(e.target.value)
+	}
+
 	let totalStudents = 0;
 	let formData = '';
 
@@ -241,6 +263,13 @@ export default function TeacherDashboard(){
 				cor.push(myObject)
 			}
 		}
+
+		const chapters = document.getElementsByClassName('chapters')
+		for(let i = 0; i < chapters.length; i++){
+			cor[i][`chapter${i+1}`] = document.getElementById(`chapters-${i+1}`)?.selectedOptions[0].value
+			cor[i][`unit${i+1}`] = document.getElementById(`units-${i+1}`)?.selectedOptions[0].value
+		}
+
 		if(cor.length != answers){
 			addToast('You Havnt selected answers for the questions', { appearance: 'error',autoDismiss: true });
 			return;
@@ -380,7 +409,7 @@ export default function TeacherDashboard(){
 												<form className="form" encType='multipart/form-data' onSubmit={createTest}>
 													<div className="form-body">
 													<div className="row">
-														<div className="col-md-3">
+														<div className="col-md-4">
 															<h4 className="card-title"><strong>Teacher Led Test</strong></h4>
 															<div className="form-group col-md-12 mb-1">
 																<span flow="right" tooltip="Set a name for the test you are assigning."> 
@@ -450,11 +479,29 @@ export default function TeacherDashboard(){
 																</div>   
 																<small id="passwordHelp" className="text-danger">
 																		{error && error}
-																</small>
+																</small>	
 															</div>
 															<div className="form-group col-md-12 mb-1"> 
 																<span flow="right" tooltip="Set the total time required to complete this test."> 
-																	<input type="number" className="form-control" placeholder="Test Duration" onChange={setDuration}/> 
+																	{/* <input type="number" className="form-control" placeholder="Test Duration" onChange={setDuration}/>  */}
+																	<select className="form-control" onChange={setDuration}>
+																		<option value="999">Select Test Duration</option>
+																		<option value="30">30 minutes</option>
+																		<option value="60">1 hour</option>
+																		<option value="90">1 hour 30 min</option>
+																		<option value="120">2 hour</option>
+																		<option value="150">2 hours 30 min</option>
+																		<option value="180">3 hours</option>
+																		<option value="210">3 hours 30 min</option>
+																		<option value="240">4 hours</option>
+																		<option value="270">4 hours 30 min</option>
+																		<option value="300">5 hours</option>
+																		<option value="330">5 hours 30 min</option>
+																		<option value="360">6 hours</option>
+																		<option value="390">6 hours 30 min</option>
+																		<option value="420">7 hours</option>
+																		<option value="450">7 hours 30 min</option>
+																	</select>
 																</span>
 															</div>
 															<div className="form-group col-md-12 mb-1"> 
@@ -466,6 +513,17 @@ export default function TeacherDashboard(){
 																		<option value="90">1 hour 30 min</option>
 																		<option value="120">2 hour</option>
 																		<option value="150">2 hours 30 min</option>
+																		<option value="180">3 hours</option>
+																		<option value="210">3 hours 30 min</option>
+																		<option value="240">4 hours</option>
+																		<option value="270">4 hours 30 min</option>
+																		<option value="300">5 hours</option>
+																		<option value="330">5 hours 30 min</option>
+																		<option value="360">6 hours</option>
+																		<option value="390">6 hours 30 min</option>
+																		<option value="420">7 hours</option>
+																		<option value="450">7 hours 30 min</option>
+																		<option value="480">8 hours</option>
 																	</select>
 																</span>
 															</div>
@@ -480,22 +538,50 @@ export default function TeacherDashboard(){
 															</div>
 														</div>
 
-														<div className="col-md-3">
+														<div className="col-md-8">
 															<h4 className="card-title"><strong>Choose Anwers</strong></h4>
 															<div className="form-group col-md-12 mb-1">
-																{[...Array(answers)].map((e, i) => <ul className="create_title1" key={i}>
+																{[...Array(answers)].map((e, i) => 
+																<div className="row">
+																	<div className="form-group col-lg-4 col-sm-12 mb-1">
+																		{/* test_id here contains unit_id */}
+																		<span flow="right" tooltip="Select the unit based on which this test has been prepared."> 
+																		<select className="form-control units" onChange={handleChangeUnitPerQuestion}  id={`units-${i+1}`} name={`unit${i+1}`}>
+																		<option value="999">--Select Unit-- </option>
+																		{classAndSubjectWiseUnit && classAndSubjectWiseUnit.map((it,key)=>{
+																			return(
+																					<option value={it._id}  key={key} >{it.unit_name} </option>
+																				)
+																		})}
+																		</select>
+																		</span>
+																	</div>
+																<div className="form-group col-lg-4 col-sm-12 mb-1">
+																	<span flow="right" tooltip="Select the chapter for which you are assigning this test."> 
+																		<select className="form-control chapters" onChange={handleChapterPerQuestion}  id={`chapters-${i+1}`} name={`chapter${i+1}`}>
+																		<option value="">--Select Chapter-- </option>
+																		{allChapters && allChapters.map((it,key)=>{
+																			return(
+																					<option value={it._id}  key={key} >{it.chapter_name} </option>
+																				)
+																		})}
+																		</select>
+																	</span>
+																</div>
+																<div className="form-group col-lg-4 col-sm-12 mb-1">
+																<ul className="create_title1" key={i}>
 																		<label>{i+1}.</label> 
 																		<li><input className="rAnswer" type="radio" id={`check-a${i}`} name={`ans${i+1}`} value="A" onChange={(e)=>{selectAnswer(e,`check-a`)}}/> <label htmlFor={`check-a${i}`}> A</label></li>
 																		<li><input className="rAnswer" type="radio" id={`check-b${i}`} name={`ans${i+1}`} value="B" onChange={(e)=>{selectAnswer(e,`check-b`)}}/> <label htmlFor={`check-b${i}`}> B</label></li>
 																		<li><input className="rAnswer" type="radio" id={`check-c${i}`} name={`ans${i+1}`} value="C" onChange={(e)=>{selectAnswer(e,`check-c`)}}/> <label htmlFor={`check-c${i}`}> C</label></li>
 																		<li><input className="rAnswer" type="radio" id={`check-d${i}`} name={`ans${i+1}`} value="D" onChange={(e)=>{selectAnswer(e,`check-d`)}}/> <label htmlFor={`check-d${i}`}> D</label></li>
 																</ul>
+																</div>
+																</div>
 																)}                                                              
 															</div>
-															{/* <div className="form-group col-md-12 mb-1">
-															</div> */}
-														</div>
-														<div className="col-md-6">
+															
+														<div className="col-md-12">
 															<h4 className="card-title"><strong>Uploaded Questions</strong></h4>
 															
 																{anyFile.map((item, key)=>{
@@ -513,7 +599,10 @@ export default function TeacherDashboard(){
 																	})
 																}
 														</div>
-													</div> 
+														
+														</div>
+														</div>
+														
 													</div>
 												</form>
 											</div>
@@ -553,6 +642,7 @@ export default function TeacherDashboard(){
 																		</select>
 																	</div>
 																</div>
+																<button className="btn btn-primary" onClick={makePdf}>Make Pdf</button>
 																</div>
 															</form>
 														</div>

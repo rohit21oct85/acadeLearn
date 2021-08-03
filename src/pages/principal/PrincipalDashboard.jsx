@@ -106,7 +106,6 @@ export default function PrincipalDashboard(){
                                                                     <th>S.No</th>
                                                                     <th>ClassName	</th>
                                                                     <th>No. of Students</th>
-                                                                    <th>Capacity</th>
                                                                     <th>Details</th>
                                                                 </tr>
                                                                 </thead>
@@ -119,7 +118,7 @@ export default function PrincipalDashboard(){
                                                                             <td>{key+1}</td>
                                                                             <td>{item.class_name}</td>
                                                                             <td>{item.student_count}</td>
-                                                                            <td>{item.capacity}</td>
+                                                                            {/* <td>{item.capacity}</td> */}
                                                                             {/* <td><a href="#">View</a></td> */}
                                                                             <td><Link to={`/principal/principal-class-wise-report/${params.school_id}/${item._id}/${item.class_name}`}>View</Link></td>
                                                                         </tr>

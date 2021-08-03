@@ -157,7 +157,7 @@ export default function StudentDashboard(){
                                                     </div>
                                                 </div>
                                                 <div className="row">
-                                                    {tests && tests.map((test, key)=>{
+                                                    {/* {tests && tests.map((test, key)=>{
                                                         let timeAlTest = new Date(test?.start_date)
                                                         timeAlTest.setMinutes( timeAlTest.getMinutes() + test?.test_window );
                                                         let currentTime = new Date()
@@ -166,7 +166,9 @@ export default function StudentDashboard(){
                                                                 <AttemptCard test={test} key={key} fun={()=>{ handleAttempt(test.unit_table_id, test.assign_table_id, test.start_date, test.test_window, test.test_duration,test.test_name,test.test_type) }}/>
                                                             )
                                                         }
-                                                    })}
+                                                    })} */}
+                                                    {tests && <AttemptCard test={tests} fun={()=>{ handleAttempt(tests.unit_table_id, tests.assign_table_id, tests.start_date, tests.test_window, tests.test_duration,tests.test_name,tests.test_type) }}/>}
+
                                                     {mockTest && <AttemptCard test={mockTest} fun={()=>{ handleMockAttempt(mockTest.test_id, mockTest._id, mockTest.start_date, mockTest.test_window, mockTest.test_duration,mockTest.test_name,mockTest.test_type) }}/>}
                                                     {uploadTest && uploadTest.map((up, key)=>{
                                                         let timeAlTest = new Date(up?.start_date)

@@ -5,6 +5,8 @@ import Footer from '../../components/common/Footer'
 import Foot from '../../components/common/Foot'
 import HeaderNav from '../../components/common/HeaderNav'
 import useLastTestScore from '../student/hooks/useLastTestScore'
+import FileViewer from "react-file-viewer";
+import { imageUrl } from '../../config/config'
 
 export default function StudentLastTestScoreReport(){
     const params = useParams();
@@ -61,7 +63,21 @@ export default function StudentLastTestScoreReport(){
                         <div className="card-header">
                             <h4 className="card-title rpt1">Full Score</h4>
                         </div>
-                        <div className="card-content">
+                        {params.test_type == "upload-test" 
+                        ? 
+                        lastScore?.questions[0]?.questions?.map(( item, key ) => {
+                                return(
+                                    <>
+                                        <div className="less-height">
+                                            <FileViewer fileType={lastScore.extension} filePath={`${imageUrl}uploads/${item}`} onError={"error"}/>
+                                        </div>
+                                    </>
+                                )
+                            })
+                        : 
+                        " "
+                        }
+                        <div className="card-content" style={{marginTop:"20px"}}>
                             <div className="card-body pt-0">
                             {/* <p>Here, select a subject to find out your average performance.</p> */}
                             <div className="row">

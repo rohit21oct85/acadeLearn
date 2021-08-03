@@ -1,4 +1,5 @@
 import { useHistory, Link } from 'react-router-dom'
+import { useIdleTimer } from 'react-idle-timer'
 import React, { useState, useContext } from 'react';
 import { AuthContext } from '../../context/AuthContext';
 import { authAxios, apiUrl } from '../../config/config';
@@ -45,6 +46,17 @@ export default function HeaderNav(){
         })
         
     }
+
+    const handleOnIdle = event => {
+        // console.log('user is idle', event)
+        logout()
+    }
+
+    const { getRemainingTime, getLastActiveTime } = useIdleTimer({
+        timeout: 1000 * 60 * 60,
+        onIdle: handleOnIdle,
+        debounce: 500
+    })
 
     return(
         <>

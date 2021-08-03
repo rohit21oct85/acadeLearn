@@ -138,7 +138,7 @@ export default function Login(){
 
     useEffect(()=>{
         async function checkLoggedInUser(){
-            if(state?.isLoggedIn == true){
+            if(state?.isLoggedIn == true || state?.isLoggedIn == "true"){
                 if(state?.user_type == "student"){
                     history.push(`/student/student-dashboard/${state.class_id}/${state.class_name}`)
                 }else if(state?.user_type == "teacher"){
@@ -146,7 +146,7 @@ export default function Login(){
                 }else if(state?.user_type == "principal"){
                     history.push(`/principal/principal-dashboard/${state.school_id}`)
                 }
-            }else if(state?.isLoggedIn != true){
+            }else if(state?.isLoggedIn != true || state?.isLoggedIn != "true"){
                 if(params.user_type == "student"){
                     history.push('/student/login');
                 }else if(params.user_type == "teacher"){

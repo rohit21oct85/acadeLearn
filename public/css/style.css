@@ -1485,3 +1485,21 @@ font-size: 22px;
         height: 100vh;
         background-color: #000;
     }
+    .less-height{
+        height: 500px;
+    }
+
+
+@media (max-width:1365px){
+ul.create_title1 li {
+    display: inline-block;
+    padding: 0 5px;
+}
+}
+
+@media (max-width:992px){
+ul.create_title1 li {
+    display: inline-block;
+    padding: 0 4px;
+}
+}

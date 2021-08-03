@@ -5,7 +5,7 @@ import axios from 'axios'
 import {apiUrl} from '../../../config/config';
 import {AuthContext} from '../../../context/AuthContext';
 
-export default function useUpdateAttemptTestBackup(formData) {
+export default function useUpdateAttemptTest(formDataOffline) {
 	const queryClient = useQueryClient()
 	const {state} = useContext(AuthContext);
 	const params = useParams();
@@ -24,9 +24,8 @@ export default function useUpdateAttemptTestBackup(formData) {
 	const school_id = localStorage.getItem('school_id')
 	const student_id = localStorage.getItem('user_id')
 
-	return useMutation(formData => {
-		// console.log(formData)
-			return axios.patch(`${apiUrl}v1/web/save-answer/${params.test_id}/${params.test_type}`,{school_id:school_id,student_id:student_id, question_id:formData.question_id, answer:formData.answer,option:formData.option,time_taken:localStorage.getItem('COUNTER'),completion_status:formData.completion_status}, options)
+	return useMutation(formDataOffline => {
+			return axios.patch(`${apiUrl}v1/web/save-answer/${params.test_id}/${params.test_type}`,{school_id:school_id,student_id:student_id, data:formDataOffline}, options)
 		},{
 		onSuccess: (data) => {
 				queryClient.invalidateQueries('single-question')

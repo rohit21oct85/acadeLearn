@@ -25,7 +25,7 @@ export default function Modal({...props}){
                                                             <div className="col-xl-8 col-lg-8 m-auto text-center">
                                                                 <div className="alrt_msg1">
                                                                     <div className="icontexto"><img src="/images/icontexto.ico" className="img-fluid" alt="error"/></div>
-                                                                        <h2>Switching tabs between a test is prohibited. If you try this again, your test will be cancelled automatically.</h2>
+                                                                        <h2>{props.text}</h2>
                                                                         <a href="#" onClick={hide}>OK</a>
                                                                     </div>
                                                                 </div>  
@@ -42,7 +42,7 @@ export default function Modal({...props}){
                     </div>
                 </div>
             </div>
-            <div class="modal-backdrop fade show" style={{display: props.show}}></div>
+            <div className="modal-backdrop fade show" style={{display: props.show}}></div>
         </>
     )
 }
