@@ -15,12 +15,12 @@ if(process.env.NODE_ENV === 'development'){
     console.log("production")
     apiUrl = process.env.REACT_APP_LIVE_API_URL;
     imageUrl = process.env.REACT_APP_LIVE_API_URL_IMAGE;
-    // baseUrl = "acadelearn.com";
-    // server_type = "https";
+    baseUrl = "acadelearn.com";
+    server_type = "https";
     // uncomment when service worker is done on production
     //this is just to check 
-    baseUrl = "example.com:5000";
-    server_type = "http";
+    // baseUrl = "example.com:5000";
+    // server_type = "http";
 }
 
 const config = {
@@ -28,7 +28,7 @@ const config = {
     headers: {
         'Content-Type': 'application/json;charset=UTF-8',
         "Access-Control-Allow-Origin": "*",
-        'Access-Control-Allow-Methods': 'GET, PUT, POST, DELETE, OPTIONS',
+        'Access-Control-Allow-Methods': 'GET, POST, PATCH, DELETE',
     },
 };
 

@@ -24,8 +24,8 @@ import { useToasts } from 'react-toast-notifications';
 
 import DatePicker from "react-datepicker";
 import mammoth from 'mammoth';
-import jsPDF from 'jspdf'
-import 'jspdf-autotable'
+
+import { makePdf } from '../../utils/utils'
 
 import './css/style.css'
 import './css/math.css'
@@ -115,7 +115,6 @@ export default function TeacherDashboard(){
 	}
 
 	const handleChangeUnitPerQuestion = async (e) => {
-		console.log(e.target.value)
 		const subject_id = localStorage.getItem('subject_id');
 		const result = await axios.get(`${apiUrl}v1/web/view-all-chapters/${params.class_id}/${subject_id}/${params.test_id}`,{
 			headers: {
@@ -123,11 +122,9 @@ export default function TeacherDashboard(){
 				'Authorization':'Bearer '+ state.access_token
 			}
 		});
-		console.log(result.data.data)
 	}
 
 	const handleChapterPerQuestion = (e) => {
-		console.log(e.target.value)
 	}
 
 	let totalStudents = 0;
@@ -154,12 +151,18 @@ export default function TeacherDashboard(){
 		}
 	}
 
-	const makePdf = () => {
-		const doc = new jsPDF()
-		doc.autoTable({ html: '#tableConvert'})
-		// doc.autoTable({ html: '#tableConvert'},{columns: ColumnDef[{header: 'ID', dataKey: 'id'}] })
-		doc.text("Student Wise Report", 80, 10);
-		doc.save('table.pdf')
+	const callPdf = (e) => {
+		const d = document.getElementById('tableConvertCumulative')
+		let id = "";
+		let heading = ""
+		if(d == null){
+			id = '#tableConvert';
+			heading = "Student Wise Report";
+		}else{
+			id = '#tableConvertCumulative';
+			heading = `Student Wise Report (${singleStudentTests[0].student_name})`;
+		}	
+		makePdf(e, id, heading)
 	}
 
 	useEffect(()=>{
@@ -217,7 +220,7 @@ export default function TeacherDashboard(){
 				}else if(f.name.split('.').pop()== "docx"){
 					mammoth.convertToHtml({arrayBuffer: arrayBuffer}).then(function (resultObject) {
 						// result1.innerHTML = resultObject.value
-						console.log("Html for Docx",resultObject.value)
+						// console.log("Html for Docx",resultObject.value)
 						setBase64FilesArr(base64FilesArr => [...base64FilesArr, resultObject.value]);
 					})
 				}
@@ -307,6 +310,13 @@ export default function TeacherDashboard(){
 		});
 	}
 
+	const openHidden = (obj) => {
+		if(!params.student_id){
+			history.push(`/teacher/teacher-dashboard/tab-2/${params.class_id}/${params.test_id}/${obj}`)
+		}else{
+			history.push(`/teacher/teacher-dashboard/tab-2/${params.class_id}/${params.test_id}`)
+		}
+	}
 
 	return(
 		<>
@@ -393,9 +403,9 @@ export default function TeacherDashboard(){
 															</div>
 															</div>
 										<div className="row">
-											{unitTests && unitTests.map(test =>{
+											{unitTests && unitTests.map((test, key) =>{
 												return(<>
-													<AssignmentCard test={test} fun={(startDate, testWindow)=> {setLoading(true); updateAssignment(test.assign_table_id, test.test_duration, startDate, testWindow)}} loading={loading}/>
+													<AssignmentCard key={key} test={test} fun={(startDate, testWindow)=> {setLoading(true); updateAssignment(test.assign_table_id, test.test_duration, startDate, testWindow)}} loading={loading}/>
 												</>)
 											})}
 										</div>
@@ -428,9 +438,9 @@ export default function TeacherDashboard(){
 																	</select>
 																</span>
 															</div> 
-															<div className="form-group col-md-12 mb-1">
+															{/* <div className="form-group col-md-12 mb-1"> */}
 																{/* test_id here contains unit_id */}
-																<span flow="right" tooltip="Select the unit based on which this test has been prepared."> 
+																{/* <span flow="right" tooltip="Select the unit based on which this test has been prepared."> 
 																<select className="form-control" onChange={handleChangeUnit} value={params.test_id ? params.test_id : 9999}>
 																<option value="999">--Select Unit-- </option>
 																{classAndSubjectWiseUnit && classAndSubjectWiseUnit.map((it,key)=>{
@@ -453,7 +463,7 @@ export default function TeacherDashboard(){
 																})}
 																</select>
 																</span>
-															</div>
+															</div> */}
 														
 															<div className="form-group col-md-12 mb-1"> 
 															<span flow="right" tooltip="Set the number of questions you have included in this test."> 
@@ -542,7 +552,7 @@ export default function TeacherDashboard(){
 															<h4 className="card-title"><strong>Choose Anwers</strong></h4>
 															<div className="form-group col-md-12 mb-1">
 																{[...Array(answers)].map((e, i) => 
-																<div className="row">
+																<div className="row" key={i}>
 																	<div className="form-group col-lg-4 col-sm-12 mb-1">
 																		{/* test_id here contains unit_id */}
 																		<span flow="right" tooltip="Select the unit based on which this test has been prepared."> 
@@ -622,7 +632,7 @@ export default function TeacherDashboard(){
 																	<div className="form-group col-md-3 mb-2">
 																		{/* <!-- <label className="">Select ClassName </label>--> */}
 																		<select className="form-control"  onChange={handleChange} value={params.class_id ? params.class_id : 999}>
-																			<option value="999">--Select ClassName-- </option>
+																			<option value="999">--Select Class-- </option>
 																			{classes && classes.map((item,key)=>{
 																			return(
 																				<option value={item.class_id} data-class_name={item.class_name} key={key}>{item.class_name + ' th'} </option>
@@ -641,8 +651,16 @@ export default function TeacherDashboard(){
 																			})}
 																		</select>
 																	</div>
+																	{params.test_id 
+																	? 
+																	<div className="form-group col-md-2 mb-2">
+																		<button className="btn btn-primary" onClick={(e)=>callPdf(e)}>Make Pdf {singleStudentTests && ` for ${singleStudentTests[0].student_name}`}</button>
+																	</div>
+																	:
+																	""
+																	}
 																</div>
-																<button className="btn btn-primary" onClick={makePdf}>Make Pdf</button>
+																{/* <button className="btn btn-primary ml-2 " disabled={!singleStudentTests}  onClick={makePdf} > </button> */}
 																</div>
 															</form>
 														</div>
@@ -662,15 +680,15 @@ export default function TeacherDashboard(){
 														<tbody>
 															{studentWiseReport && studentWiseReport.map((item,key)=>{
 																return(
-																<tr key={key}>
-																	<td className="text-truncate">
-																		<span>{item.student_name}</span>
-																	</td>
-																	<td>{item && item.time_taken && new Date(item?.time_taken * 1000)?.toISOString()?.substr(11, 8)} </td>
-																	<td>{item.correctAnswers}/{item.totalMarks} </td>
-																	<td width="10%">{item.cScorePercentage?.toFixed(2)} %  </td>
-																	<td><Link to={`/teacher/teacher-dashboard/${params.class_id}/${params.test_id}/${item.student_id}`}>View</Link></td>
-																</tr>
+																	<tr key={key}>
+																		<td className="text-truncate">
+																			<span>{item.student_name}</span>
+																		</td>
+																		<td>{item && item.time_taken && new Date(item?.time_taken * 1000)?.toISOString()?.substr(11, 8)} </td>
+																		<td>{item.correctAnswers?.toFixed(2)}/{item.totalMarks} </td>
+																		<td width="10%">{item.cScorePercentage?.toFixed(2)} %  </td>
+																		<td><a href="#" onClick={()=>{openHidden(item.student_id)}}>View</a></td>
+																	</tr>
 																)
 																})}
 															</tbody>
@@ -695,7 +713,7 @@ export default function TeacherDashboard(){
 																	<div className="form-group col-md-3 mb-2">
 																		{/* <!--<label className="">Select ClassName </label>--> */}
 																		<select className="form-control"  onChange={handleChange} value={params.class_id ? params.class_id : 999}>
-																			<option value="999">--Select ClassName-- </option>
+																			<option value="999">--Select Class-- </option>
 																			{classes && classes.map((item,key)=>{
 																			return(
 																				<option value={item.class_id} data-class_name={item.class_name} key={key}>{item.class_name + ' th'} </option>

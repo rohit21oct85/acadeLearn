@@ -13,7 +13,6 @@ export default function useUnitTestList() {
     const subject_id = localStorage.getItem('subject_id')
     const school_id = localStorage.getItem('school_id')
     return useQuery(key, async () => {
-        console.log(params.window)
         if(state.access_token){
             if(params.class_id){
                 const result = await axios.get(`${apiUrl}v1/web/get-all-assigned-tests-classbased/${school_id}/${params.class_id}/${subject_id}`,{

@@ -159,7 +159,7 @@ export default function PrincipalDashboard(){
                                                                 <option value="9999">All</option>
                                                                     {subjects && subjects.map((item, key)=>{
                                                                         return(
-                                                                            <option value={item._id}>{item.subject_name}</option>
+                                                                            <option value={item._id} key={key}>{item.subject_name}</option>
                                                                         )
                                                                     })}                                                         
                                                                 </select>
@@ -175,7 +175,7 @@ export default function PrincipalDashboard(){
                                             </div>
                                             {teacherWise && teacherWise.map((item,key)=>{
                                                 return (
-                                                    <div className="col-md-3 text-center">
+                                                    <div className="col-md-3 text-center" key={key}>
                                                         <div className="profile-widget">
                                                             <div className="profile-img">
                                                             <a href="#" className="avatar"><img alt="" src="/images/portrait/small/avatar-s-19.png"/></a>

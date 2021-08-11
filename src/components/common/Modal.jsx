@@ -9,7 +9,7 @@ export default function Modal({...props}){
     return(
         <>
             <div className="modal" style={{display: props.show}}>
-                <div className="modal-dialog modal-dialog-centered mw-100 w-75" role="document">
+                <div className="modal-dialog modal-dialog-centered modal-lg" role="document">
                     <div className="modal-content">
                         <div className="modal-body">
                             <div className="app-content content bg_whitealt">
@@ -19,7 +19,7 @@ export default function Modal({...props}){
                                     <div className="row">
                                         <div className="col-xl-12 col-lg-12">  
                                                 <div className="card-content">
-                                                <div className="card-body">
+                                                <div className="card-body switching-tab-test">
                                                     <div className="container-fluid">
                                                         <div className="row">
                                                             <div className="col-xl-8 col-lg-8 m-auto text-center">

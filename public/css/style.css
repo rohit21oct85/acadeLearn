@@ -454,12 +454,13 @@ span.test-end {
 }
 .Attendence_dv.msq-o ul {
     padding: 8px;
-}	
+    text-align: center;
+}
 .Attendence_dv ul li {
     display: inline-block;
     text-align: center;
     margin-bottom: 10px;
-    margin-right: 5px;
+    margin: 5px 5.4px;
 }
   
 .Attendence_dv ul li.Not-select a {
@@ -628,7 +629,10 @@ content:"";  z-index:-1;
     width:18px;
     height:18px;
 }
-  .accepted_dv label{padding-left:20px;font-size:18px}
+  .accepted_dv label{
+      padding-left:20px;
+      font-size:18px;
+    }
 
 .bg_img3 { 
     height: 100%;
@@ -1502,4 +1506,153 @@ ul.create_title1 li {
     display: inline-block;
     padding: 0 4px;
 }
+}
+
+@media (max-width:991px){.test_assign_hlp ol li label {
+    padding-left: 28px;
+    vertical-align: top;
+    font-size: 15px;
+}
+.test_assign_hlp ol li {
+    padding-left: 0;
+    position: relative;
+    font-size: 15px;
+}
+.checkbox_dv input {
+    width: 18px;
+    height: 18px;
+    top: 5px;}
+
+    .accepted_dv label {
+        padding-left: 20px;
+        font-size: 14px;
+        text-align: justify;
+    }
+    .test_assign_hlp.pt-0 h5 {
+        margin: 14px 0;
+        font-size: 14px;
+    }
+    .question-title h5 div {
+        font-size: 16px !important;
+        text-align: justify;
+    }
+   .q_nsekected {
+        position: relative !important;
+    }
+    .question-title h5 {
+        margin-left: 0 !important;
+    }
+}
+
+.question-title h5 div span {
+    display: inline;
+}
+
+@media (max-width:991px){.test_assign_hlp ol li label {
+    padding-left: 28px;
+    vertical-align: top;
+    font-size: 14px;
+    text-align: justify;
+    line-height: 19px;
+}
+.test_assign_hlp ol li {
+    padding-left: 0;
+    position: relative;
+    font-size: 15px;
+}
+.checkbox_dv input {
+    width: 18px;
+    height: 18px;
+    top: 5px;}
+}
+
+@media (max-width:767px){
+    .card-body.switching_tab_test {
+        min-height: 1px;
+        padding: 7px 1px;
+    }
+    
+    .alrt_msg1 {
+        background: #fff;
+        border: 2px solid #1e9ff2;
+        border-radius: 10px;
+        box-shadow: 0 2px 18px 1px rgb(49 53 72 / 20%);
+        padding: 11px;
+    }
+    
+    .alrt_msg1 h2 {
+        font-size: 12px;
+    }
+    
+    .card-body.switching_tab_test {
+        min-height: 1px;
+        padding: 7px 1px;
+    }
+    
+    .ques_oit {
+        font-size: 12px !important;
+    }
+}
+
+@media (max-width:767px){
+
+    .test_assign_hlp h1 {
+        font-size: 16px;
+        text-align: center;
+    }
+    
+    .test_assign_hlp p {
+        font-size: 13px;
+        text-align: justify;
+        text-align-last: center;
+    }
+    .test_assign_hlp {
+        padding: 20px 0;
+    }
+    .scrolling .test_assign_hlp.pt-0 {
+        padding: 0;
+    }
+ }
+    
+ .radio span div span {
+    padding-left: 0!important;
+}
+
+@media (max-width: 991px){
+.ans {
+    width: 100%;
+    padding: 4px 0 !important;
+}
+.radio{
+    padding:20px 10px;
+}
+.radio span{
+    padding-left: 32px;
+}
+.job-content.job-widget.mcq-start {
+    padding: 0;
+}
+.job-widget span {
+    padding-left: 0;
+}
+.radio span div {
+    color: #000 !important;
+    padding-left: 36px;
+}
+a.btn.job-btn {
+    margin-top: 20px;
+}
+}
+.radio span div span img {
+    width: auto !important;
+    height: auto !important;
+}
+span.centering-load {
+    text-align: center;
+    display: inline-block;
+    width: 100%;
+    font-size: 14px;
+    font-weight: 600;
+    color: #f97149;
+    padding-top: 10px;
 }

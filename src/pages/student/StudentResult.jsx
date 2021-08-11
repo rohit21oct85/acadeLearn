@@ -6,23 +6,78 @@ import {useParams, Link, useHistory} from 'react-router-dom'
 import useFetchResult from './hooks/useFetchResults'
 import { useEffect, useState } from 'react'
 import { useToasts } from 'react-toast-notifications';
+import useUpdateAttemptTest from './hooks/useUpdateAttemptTestOffline'
+import useCreateUploadTest from './hooks/useCreateUploadTest'
 
 export default function StudentResult(){
     const params  = useParams();
     const history = useHistory();
     const [time,  setTime] = useState();
+    // const [formDataOffline, setFormDataOffline] = useState(null);
+    let formDataOffline = {};
+    let formData
     const { addToast } = useToasts();
 
     const {data: result, resultLoading} = useFetchResult();
+    const attempt = useUpdateAttemptTest(formDataOffline);
+    const attemptUpload = useCreateUploadTest(formData);
 
     useEffect(()=>{
-        localStorage.removeItem('COUNTER');
         localStorage.removeItem('test_test_duration');
         localStorage.removeItem('test_test_window');
         localStorage.removeItem('test_test_time');
         localStorage.removeItem('test_test_attempt_time');
         localStorage.removeItem('tabSwitchCount');
-    },[])
+        // const questions = JSON.parse(localStorage.getItem('questions'));
+        // const questionPaper = JSON.parse(localStorage.getItem('questionPaper'));
+        // const time_taken = JSON.parse(localStorage.getItem('COUNTER'));
+        // // setFormDataOffline((formDataOffline) => ({...formDataOffline,['completion_status'] : "completed", ['questions']:questions, ['attemptId'] : localStorage.getItem('attemptIdUploadTest'), ['time_taken']:time_taken}))
+        // if(params.test_type == "upload-test"){
+        //     formData = JSON.parse(localStorage.getItem('uploadData'));
+        //     saveQuestionPaper()
+
+        //     const saveQuestionPaper = async () => {
+        //         await attemptUpload.mutate(formData, {
+        //             onSuccess: (data, variables, context) => {
+        //                 if(data?.data){
+        //                     localStorage.removeItem("questionPaper");
+        //                     localStorage.removeItem("uploadData");
+        //                     localStorage.removeItem('COUNTER');
+        //                 }
+        //             },
+        //         });
+        //     }
+        // }else{
+        //     formDataOffline.completion_status = "completed";
+        //     formDataOffline.questions = questions;
+        //     formDataOffline.time_taken = time_taken;
+        //     formDataOffline.attemptId = localStorage.getItem('attemptIdUploadTest');    
+            
+        //     const saveQuestion = async ()=>{
+        //         await attempt.mutate(formDataOffline,{
+        //             onSuccess: (data, variables, context) => {
+        //                 if(data?.data){
+        //                     localStorage.removeItem("questions");
+        //                     localStorage.removeItem('COUNTER');
+        //                 }
+        //             },
+        //         });
+        //     }
+        //     if(navigator.onLine){
+        //         if(result && result.end_time){
+        //             setTime(new Date(result.end_time))
+        //         }
+        //         if(localStorage.getItem('questions') != null){
+        //             saveQuestion()
+        //         }
+        //     }else{
+        //         addToast('Kindly Connect to the internet to view your result', { appearance: 'error',autoDismiss: true });
+        //     }
+        // }       
+        if(result && result.end_time){
+            setTime(new Date(result.end_time))
+        } 
+    },[result])
     
     useEffect(() => {
 		function toggleFullScreen() {
@@ -47,16 +102,16 @@ export default function StudentResult(){
         }
     }
 
-    useEffect(()=>{
-        if(result && result.end_time){
-            setTime(new Date(result.end_time))
-        }
-    },[result])
+    // useEffect(()=>{
+        
+    // },[result])
 
     return(
         <>
         <Head/>
         <HeaderNav/>
+        {/* {navigator.onLine == false ? <span>Connect to the internet</span> :  */}
+        <>
         <div className="app-content content mt-5">
             <div className="content-overlay"></div>
             <div className="content-wrapper"> 
@@ -92,7 +147,7 @@ export default function StudentResult(){
                                             </tr>
                                             <tr>
                                                 <th>Score </th>
-                                                <td> {result?.correctAnswers}/{result?.totalQuestions}</td>
+                                                <td> {result?.correctAnswers * result?.marksPerQuestion}/{result?.total_marks}</td>
                                             </tr>
                                             <tr>
                                                 <th className="head-result">Result can be viewed after :</th>
@@ -123,6 +178,8 @@ export default function StudentResult(){
                 </div>
             </div>
             </div>
+        </>
+        {/* } */}
         <Footer/>
         <Foot/>
         </>

@@ -41,7 +41,8 @@ export default function AssignmentCard({test, key, fun, loading}){
                             </div> */}
                             <div className="col-md-10 datetime">
                             <ul>
-                                <li className="pl-0"><DatePicker selected={startDate} onChange={(date) => setStartDate(date)} isClearable showTimeSelect dateFormat="MM/d/yyyy h:mm aa"/></li>
+                                <li className="pl-0">
+                                    <DatePicker selected={startDate} onChange={(date) => setStartDate(date)} isClearable showTimeSelect dateFormat="MM/d/yyyy h:mm aa"/></li>
                                 <li><input type="text" name="test-window" defaultValue={test?.test_window} id="test-window" placeholder="test-window enter in min" onChange={enterTestWindow}/>
                                <label className="small">Test window should be greater than test duration</label>
                                 </li>

@@ -4,11 +4,15 @@ import Footer from '../../components/common/Footer'
 import Foot from '../../components/common/Foot'
 import HeaderNav from '../../components/common/HeaderNav'
 import useClassSectionReportList from './hooks/useClassSectionReportList'
+import { makePdf } from '../../../src/utils/utils'
 
 export default function TeacherClassSectionReport(){
    const params = useParams();
 
    const {data:datas, datasLoading} = useClassSectionReportList();
+
+   
+
     return(
         <>
         <Head/>
@@ -47,8 +51,11 @@ export default function TeacherClassSectionReport(){
                            <div className="card-body">
                               <div className="col-md-12">
                                  <div className="table-responsive mt-2 second_lbl_show">
-                                    <h4 className="pb-2"><strong>Student Wise Report</strong></h4>
-                                    <table className="table table-striped table-bordered zero-configuration">
+                                    <div className="form-group col-md-12 mb-2">
+                                       <h4 className="pb-2"><strong>Student Wise Report</strong></h4>
+                                       <button className="btn btn-primary" onClick={(e)=>makePdf(e, "#tableCumulative", "Cumulative Student wise Report")}>Make Pdf</button>
+                                    </div>
+                                    <table id="tableCumulative" className="table table-striped table-bordered zero-configuration">
                                        <thead>
                                           <tr>
                                              <th>Student Name </th>
@@ -60,7 +67,7 @@ export default function TeacherClassSectionReport(){
                                        <tbody>
                                           {datas && datas.map((item,key)=>{
                                              return(
-                                                <tr>
+                                                <tr key={key}>
                                                    <td className="text-truncate">
                                                       {/* <span className="avatar avatar-xs">
                                                       <img className="box-shadow-2" src="./images/portrait/small/avatar-s-9.png" alt="avatar"/> 

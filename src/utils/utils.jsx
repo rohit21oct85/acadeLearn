@@ -1,3 +1,6 @@
+import jsPDF from 'jspdf'
+import 'jspdf-autotable'
+
 const MakeSlug = (str) => {
     return str?.trim()?.toLowerCase()?.replace(/[^\w ]+/g,'')?.replace(/ +/g,'-');   
 }
@@ -70,6 +73,23 @@ function formatAMPM(date) {
     return strTime;
 }
 
+const makePdf = (e, id, title) => {
+    e.preventDefault()
+    const doc = new jsPDF()
+
+    doc.autoTable({startY:  24, html: id })
+    // doc.addImage(localStorage.getItem('schoolImageUrl'), "JPEG", 15, 40, 180, 180);
+    // doc.autoTable({ html: '#tableConvert'},{columns: ColumnDef[{header: 'ID', dataKey: 'id'}] })
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(24);
+    doc.text(localStorage.getItem('schoolName'), 105, 10, null, null, "center");
+    doc.setLineWidth(1.5);
+    doc.line(10, 13, 200, 13); 
+    doc.setFontSize(12);
+    doc.text(title, 105, 20, null, null, "center")
+    doc.save('table.pdf')
+}
+
 export {
     MakeSlug,
     MakeScore,
@@ -79,5 +99,6 @@ export {
     getAllValue,
     ObjectToCsv,
     downloadData,
-    formatAMPM
+    formatAMPM,
+    makePdf
 }

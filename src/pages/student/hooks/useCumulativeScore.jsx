@@ -17,6 +17,7 @@ export default function useCumulativeScore() {
             const result = await axios.post(`${apiUrl}v1/web/get-cumulative-score/${subject_id}`,{class_id :class_id, student_id:student_id, school_id:school_id},{
                 headers: {
                     'Content-Type': 'Application/json',
+                    'Access-Control-Allow-Origin': "https://*.acadelearn.com",
                     'Authorization':'Bearer '+state.access_token
                 }
             }

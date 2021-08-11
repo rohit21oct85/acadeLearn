@@ -7,7 +7,6 @@ function DocView(item) {
 //   ];
  
   return <>
-            {console.log(item)}
             <DocViewer documents={item} />
         </>;
 }

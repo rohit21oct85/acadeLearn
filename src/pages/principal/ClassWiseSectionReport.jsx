@@ -4,6 +4,7 @@ import Footer from '../../components/common/Footer'
 import Foot from '../../components/common/Foot'
 import HeaderNav from '../../components/common/HeaderNav'
 import useClassSectionReportList from '../teacher/hooks/useClassSectionReportList'
+import { makePdf } from '../../../src/utils/utils'
 
 export default function ClassWiseSectionReport(){
 
@@ -48,8 +49,9 @@ export default function ClassWiseSectionReport(){
                             <div className="card-body">
                                 <div className="col-md-12">
                                     <div className="table-responsive mt-2 second_lbl_show">
-                                        <h4 className="pb-2"><strong>ClassName Wise Reports</strong></h4>
-                                        <table className="table table-striped table-bordered zero-configuration">
+                                        <h4 className="pb-2"><strong>Class Wise Reports</strong></h4>
+                                        <button className="btn btn-primary" onClick={(e)=>{makePdf(e,"#tableCumulativePrincipal","Cumulative Student wise Report")}}>Make Pdf</button>
+                                        <table id="tableCumulativePrincipal" className="table table-striped table-bordered zero-configuration">
                                         <thead>
                                         <tr>
                                              <th>Student Name </th>
@@ -61,7 +63,7 @@ export default function ClassWiseSectionReport(){
                                         <tbody>
                                             {datas && datas.map((item,key)=>{
                                              return(
-                                                <tr>
+                                                <tr key={key}>
                                                    <td className="text-truncate">
                                                       {/* <span className="avatar avatar-xs">
                                                       <img className="box-shadow-2" src="./images/portrait/small/avatar-s-9.png" alt="avatar"/> 
