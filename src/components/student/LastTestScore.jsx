@@ -15,7 +15,7 @@ export default function LastTestScore({score, fun}){
                         <div className="d-flex justify-content-between lh-condensed">
                             <div className="order-details">
                                 <h4 className="my-0">Total Score </h4>
-                                <p>{score?.correctAnswers}/{score?.totalQuestions}</p>
+                                <p>{score?.correctAnswers?.toFixed(2)}/{score?.totalQuestions}</p>
                             </div>
                             <div className="order-details">
                                 <h4 className="my-0">Total Time Taken</h4>

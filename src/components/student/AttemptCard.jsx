@@ -17,7 +17,7 @@ export default function AttemptCard({test, key, fun}){
         allowed_time.setMinutes( allowed_time.getMinutes() + data.test_window );
         if(current_time > start_time){
             if(current_time < allowed_time){
-                addToast("Test is Live! you can't cancel the test now.", { appearance: 'success',autoDismiss: true });
+                addToast("Please wait while your test is prepared.", { appearance: 'success',autoDismiss: true });
                 fun();
             }else{
                 addToast("Test has Expired.", { appearance: 'error',autoDismiss: true });
