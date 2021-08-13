@@ -12,8 +12,8 @@ export default function useTestList() {
     const class_id = params?.class_id
     const school_id = localStorage.getItem('school_id')
     const student_id = localStorage.getItem('user_id')
-    return useQuery(`assigned-tests-${class_id}`, async () => {
-        if(state?.access_token && class_id !== undefined){
+    return useQuery(`assigned-tests-${class_id}-${params.window}`, async () => {
+        if(state?.access_token && class_id !== undefined && params.window == "tab1"){
             const result = await axios.post(`${apiUrl}v1/web/get-assigned-tests/${school_id}/${class_id}`,{student_id: student_id},{
                 headers: {
                     'Content-Type': 'Application/json',

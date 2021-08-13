@@ -42,7 +42,7 @@ export const openRoutesOnSubDomain = [
 
 export const studentRoutes = [
     {
-        path:'/:user_type?/student-dashboard/:class_id?/:class_name?/:subject_id?',
+        path:'/:user_type?/student-dashboard/:window/:class_id?/:class_name?/:subject_id?',
         component: StudentDashboard
     },
     {

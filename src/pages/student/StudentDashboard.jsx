@@ -1,5 +1,5 @@
 import {useHistory, useParams} from 'react-router-dom'
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Head from '../../components/common/Head'
 import Footer from '../../components/common/Footer'
 import Foot from '../../components/common/Foot'
@@ -20,8 +20,10 @@ export default function StudentDashboard(){
     const [section, setSection] = useState('tab1');
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState('');
+
     const changeSection = (value) => {
         setSection(value)
+        history.push(`/student/student-dashboard/${value}/${params.class_id}/${params.class_name}`)
     }
     const history = useHistory();
 
@@ -71,16 +73,22 @@ export default function StudentDashboard(){
     const handleChangeSubject = (e) => {
         if(e.target.value != 999 ){
             if(e.target.value==9999){
-                history.push(`/student/student-dashboard/${params.class_id}/${params.class_name}`)
+                history.push(`/student/student-dashboard/${params.window}/${params.class_id}/${params.class_name}`)
             }else{
-                history.push(`/student/student-dashboard/${params.class_id}/${params.class_name}/${e.target.value}`)
+                history.push(`/student/student-dashboard/${params.window}/${params.class_id}/${params.class_name}/${e.target.value}`)
             }
         }
     }
 
     const handleClick = (attempt_id,t,test_type) => {
+        console.log(test_type)
+        return;
         history.push(`/student/student-result/${params.class_id}/${params.class_name}/${t}/${attempt_id}/${test_type}`)
     }
+    
+    useEffect(()=>{
+		setSection(params.window)
+	},[section])
 
     const {data:subjects, subjectLoading} = useClassSubjectList();
     const {data:tests, testLoading} = useTestList();

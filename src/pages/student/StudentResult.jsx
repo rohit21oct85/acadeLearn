@@ -98,7 +98,7 @@ export default function StudentResult(){
         if(currentTime > endTime){
             history.push(`/student/student-last-report/${params.class_id}/${params.class_name}/${params.attempt_id}/${params.test_type}`)
         }else{
-            addToast('Test Results Can only be Viewed after the test time has Expired', { appearance: 'error',autoDismiss: true });
+            addToast('Test Results Can only be Viewed after the test time has Expired', { appearance: 'info',autoDismiss: true });
         }
     }
 
@@ -147,7 +147,7 @@ export default function StudentResult(){
                                             </tr>
                                             <tr>
                                                 <th>Score </th>
-                                                <td> {result?.correctAnswers * result?.marksPerQuestion}/{result?.total_marks}</td>
+                                                <td> {(result?.correctAnswers * result?.marksPerQuestion).toFixed(2)}/{result?.total_marks}</td>
                                             </tr>
                                             <tr>
                                                 <th className="head-result">Result can be viewed after :</th>
@@ -165,8 +165,8 @@ export default function StudentResult(){
                                 </div>
                                 </div>
                                 <div className="col-md-12 text-center"> 
-                                    <Link to={`/student/student-dashboard/${params.class_id}/${params.class_name}`} className="btn btn-info"> Go To Dashboard</Link>
-                                    <button className="btn btn-info ml-1" onClick={()=>{viewDetails(result?.end_time)}}> View Details</button>
+                                    <Link to={`/student/student-dashboard/tab1/${params.class_id}/${params.class_name}`} className="btn btn-info"> Go To Dashboard</Link>
+                                    <button className="btn btn-info ml-1" onClick={()=>{viewDetails(result?.end_time)}} style={{color:"white"}}> View Details</button>
                                 </div>
                             </div>
                             </div>

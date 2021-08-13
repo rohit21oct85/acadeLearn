@@ -292,6 +292,7 @@ export default function StudentAttemptOffline(){
 			ele[i].checked = false;
 		console.log(completion)
 		if(counts-1 >= (JSON.parse(localStorage.getItem('questions'))).length-1){
+			addToast('Please wait patiently while we save your records, dont reload or close the tab/window', { appearance: 'warning',autoDismiss: true });
 			setFormDataOffline({...formDataOffline, ['completion_status'] : completion == undefined ? "completed" : completion, ['questions']:JSON.parse(localStorage.getItem('questions')), ['attemptId'] : localStorage.getItem('attemptIdUploadTest'), ['time_taken']:localStorage.getItem('COUNTER_INCRE')})
 		}
 	}
@@ -415,7 +416,7 @@ export default function StudentAttemptOffline(){
 	}
 
 	const onBlur = () => {
-		setModalShow('block')
+		// setModalShow('block')
 		let tabSwitchCount = JSON.parse(localStorage.getItem('tabSwitchCount'))!= null ? JSON.parse(localStorage.getItem('tabSwitchCount')) : 0 
 		tabSwitchCount = tabSwitchCount +1 ;
 		localStorage.setItem('tabSwitchCount',tabSwitchCount);
@@ -425,7 +426,7 @@ export default function StudentAttemptOffline(){
 			if(params.test_type == "upload-test"){
 				endTestUpload();
 			}else{
-				endTest();
+				// endTest();
 			}
 		}
 	};

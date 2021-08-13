@@ -30,7 +30,7 @@ export default function Home(){
                                                     <div className="online_classes">
                                                         <span><img src="/images/learning-online-class2.jpg" className="img-fluid" alt="learning-online-className"/></span> 
                                                             <h2>Let us learn together online even <span>though we are apart!</span></h2>
-                                                        <Link to="">Get Started</Link>
+                                                        <Link to="/search-school">Get Started</Link>
                                                     </div>
                                                 </div> 
                                                 <div className="col-md-6 text-center">

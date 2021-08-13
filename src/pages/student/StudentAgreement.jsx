@@ -135,7 +135,7 @@ export default function StudentAgreement(){
 							}else{
 								addToast('Kindly agree to the terms and conditions', { appearance: 'error',autoDismiss: true });
 							}
-						}}>Start Now</button>
+						}} style={{color:"white"}} type="button">Start Now</button>
 						</div>
 						</div>
 						</div>

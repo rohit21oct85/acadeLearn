@@ -26,7 +26,7 @@ export default function AttemptCard({test, isLoading, key, fun}){
         allowed_time.setMinutes( allowed_time.getMinutes() + data.test_window );
         if(current_time > start_time){
             if(current_time < allowed_time){
-                addToast("Please wait while your test is prepared.", { appearance: 'success',autoDismiss: true });
+                addToast("Please wait while your test is being  prepared. you will redirected automatically", { appearance: 'info',autoDismiss: true });
                 fun();
             }else{
                 addToast("Test has Expired.", { appearance: 'error',autoDismiss: true });

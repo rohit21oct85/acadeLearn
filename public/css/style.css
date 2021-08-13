@@ -330,7 +330,7 @@ span#basic-addon2 {
 		}
 	
 	.bg_img1{background:url(/images/bg_img1.jpg) no-repeat center top / cover !important; padding-bottom:180px !important; }
-	.bg_img2{padding-bottom:50px !important;}
+	.bg_img2{padding-bottom:60px !important;}
 	.select_you_are ul li{display:inline-block; margin-top:10px; color:#fff;  padding:0 15px; text-transform:uppercase; }
 	.select_you_are ul li a{font-size:16px; transition:.6s; font-weight:600; color:#fff; display:inline-block; width:100%;}
 	.select_you_are ul li a img{width:130px; transition:.6s; border-radius:100px;}
@@ -1541,6 +1541,9 @@ ul.create_title1 li {
     }
     .question-title h5 {
         margin-left: 0 !important;
+        width: 100%;
+        overflow: hidden;
+        overflow-x: scroll;
     }
 }
 
@@ -1616,8 +1619,12 @@ ul.create_title1 li {
     
  .radio span div span {
     padding-left: 0!important;
+    display: inline-block !important;
+    padding-right: 5px;
+    width: 100%;
+    white-space: nowrap;
+    overflow-x: scroll;
 }
-
 @media (max-width: 991px){
 .ans {
     width: 100%;
@@ -1638,6 +1645,8 @@ ul.create_title1 li {
 .radio span div {
     color: #000 !important;
     padding-left: 36px;
+    width: 260px;
+    overflow: hidden;
 }
 a.btn.job-btn {
     margin-top: 20px;

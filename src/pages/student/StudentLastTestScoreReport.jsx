@@ -48,7 +48,7 @@ export default function StudentLastTestScoreReport(){
                     <div className="row breadcrumbs-top d-inline-block">
                     <div className="breadcrumb-wrapper col-12">
                         <ol className="breadcrumb">
-                        <li className="breadcrumb-item"><Link to={`/student/student-dashboard/${params.class_id}/${params.class_name}`}>Home</Link> </li>
+                        <li className="breadcrumb-item"><Link to={`/student/student-dashboard/tab1/${params.class_id}/${params.class_name}`}>Home</Link> </li>
                         <li className="breadcrumb-item"><a href="#">Last Report</a> </li>
                         </ol>
                     </div>
@@ -145,7 +145,7 @@ export default function StudentLastTestScoreReport(){
                                 })}
                                 </div>
                                 }
-                                <div className="col-md-12 text-center"> <Link to={`/student/student-dashboard/${params.class_id}/${params.class_name}`} className="btn btn-info"> Go To Dashboard</Link></div>
+                                <div className="col-md-12 text-center"> <Link to={`/student/student-dashboard/tab1/${params.class_id}/${params.class_name}`} className="btn btn-info"> Go To Dashboard</Link></div>
                             </div>
                             </div>
                         </div>
