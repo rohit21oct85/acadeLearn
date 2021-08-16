@@ -1,5 +1,5 @@
 import {useHistory, useParams} from 'react-router-dom'
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Head from '../../components/common/Head'
 import Footer from '../../components/common/Footer'
 import Foot from '../../components/common/Foot'
@@ -14,28 +14,49 @@ import useLastTestScore from '../student/hooks/useLastTestScore'
 import useCumulativeScore from '../student/hooks/useCumulativeScore'
 import useMockTest from '../student/hooks/useMockTest'
 import useUploadTest from '../student/hooks/useUploadTest'
+import { useToasts } from 'react-toast-notifications';
 
 export default function StudentDashboard(){
     const [section, setSection] = useState('tab1');
+    const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState('');
+
     const changeSection = (value) => {
         setSection(value)
+        history.push(`/student/student-dashboard/${value}/${params.class_id}/${params.class_name}`)
     }
     const history = useHistory();
+
+    const { addToast } = useToasts();
 
     const params = useParams();
     let form = ''; 
     // let assign_test_id = ''; 
     const createMutation = useCreateAttemptTest(form);
 
-    const handleAttempt = async(id, assign_test_id, start_time, test_window, test_duration,test_name,test_type) => {
+    const handleAttempt = async(id, assign_test_id, start_time, test_window, test_duration,test_name,test_type,total_marks) => {
+        setLoading(true);
+        localStorage.removeItem('questions');
+        localStorage.removeItem('questionPaper');
+        localStorage.removeItem('uploadData');
+        localStorage.removeItem('COUNTER');
+        localStorage.removeItem('attemptIdUploadTest');
         localStorage.setItem('test_test_name',test_name)
         localStorage.setItem('test_test_time',start_time)
         localStorage.setItem('test_test_window',test_window)
         localStorage.setItem('test_test_duration',test_duration)
         localStorage.setItem('test_test_attempt_time',new Date())
-        await createMutation.mutate({id:id, assign_test_id:assign_test_id,test_type:test_type});
-        history.push(`/student/student-agreement/${params.class_id}/${params.class_name}/${id}/${test_type}`)
+        await createMutation.mutate({id:id, assign_test_id:assign_test_id, test_type:test_type},{
+            onSuccess:(data)=>{
+                console.log("success")
+                setLoading(false);
+                history.push(`/student/student-agreement/${params.class_id}/${params.class_name}/${id}/${test_type}`)
+            },
+            onError: (e)=>{
+                setLoading(false);
+                addToast('ERROR! something went wrong', { appearance: 'error',autoDismiss: true });
+            }
+        });
     }
 
     const handleMockAttempt = async(id,mock_id, start_time, test_window, test_duration,test_name,test_type) => {
@@ -45,23 +66,29 @@ export default function StudentDashboard(){
         localStorage.setItem('test_test_duration',test_duration)
         localStorage.setItem('test_test_attempt_time',new Date())
         await createMutation.mutate({id:id, mock_id:mock_id,test_type:test_type});
-        history.push(`/student/student-agreement/${params.class_id}/${params.class_name}/${id}/${test_type}`)
+        // history.push(`/student/student-agreement/${params.class_id}/${params.class_name}/${id}/${test_type}`)
     }
 
 
     const handleChangeSubject = (e) => {
         if(e.target.value != 999 ){
             if(e.target.value==9999){
-                history.push(`/student/student-dashboard/${params.class_id}/${params.class_name}`)
+                history.push(`/student/student-dashboard/${params.window}/${params.class_id}/${params.class_name}`)
             }else{
-                history.push(`/student/student-dashboard/${params.class_id}/${params.class_name}/${e.target.value}`)
+                history.push(`/student/student-dashboard/${params.window}/${params.class_id}/${params.class_name}/${e.target.value}`)
             }
         }
     }
 
     const handleClick = (attempt_id,t,test_type) => {
+        console.log(test_type)
+        return;
         history.push(`/student/student-result/${params.class_id}/${params.class_name}/${t}/${attempt_id}/${test_type}`)
     }
+    
+    useEffect(()=>{
+		setSection(params.window)
+	},[section])
 
     const {data:subjects, subjectLoading} = useClassSubjectList();
     const {data:tests, testLoading} = useTestList();
@@ -167,16 +194,16 @@ export default function StudentDashboard(){
                                                             )
                                                         }
                                                     })} */}
-                                                    {tests && <AttemptCard test={tests} fun={()=>{ handleAttempt(tests.unit_table_id, tests.assign_table_id, tests.start_date, tests.test_window, tests.test_duration,tests.test_name,tests.test_type) }}/>}
+                                                    {tests && <AttemptCard test={tests} isLoading={loading} fun={()=>{ handleAttempt(tests.unit_table_id, tests.assign_table_id, tests.start_date, tests.test_window, tests.test_duration,tests.test_name,tests.test_type, tests.total_marks) }}/>}
 
-                                                    {mockTest && <AttemptCard test={mockTest} fun={()=>{ handleMockAttempt(mockTest.test_id, mockTest._id, mockTest.start_date, mockTest.test_window, mockTest.test_duration,mockTest.test_name,mockTest.test_type) }}/>}
+                                                    {mockTest && <AttemptCard test={mockTest} isLoading={loading} fun={()=>{ handleMockAttempt(mockTest.test_id, mockTest._id, mockTest.start_date, mockTest.test_window, mockTest.test_duration,mockTest.test_name,mockTest.test_type) }}/>}
                                                     {uploadTest && uploadTest.map((up, key)=>{
                                                         let timeAlTest = new Date(up?.start_date)
                                                         timeAlTest.setMinutes( timeAlTest.getMinutes() + up?.test_window );
                                                         let currentTime = new Date()
                                                         if(timeAlTest > currentTime){
                                                             return (
-                                                                <AttemptCard test={up} key={key} fun={()=>{ handleAttempt(null,up._id, up.start_date, up.test_window, up.test_duration,up.test_name,up.test_type) }}/>
+                                                                <AttemptCard test={up}  isLoading={loading} key={key} fun={()=>{ handleAttempt(null,up._id, up.start_date, up.test_window, up.test_duration,up.test_name,up.test_type,up.total_marks) }}/>
                                                             )
                                                         }
                                                     })}

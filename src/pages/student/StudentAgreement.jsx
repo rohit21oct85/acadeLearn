@@ -77,51 +77,51 @@ export default function StudentAgreement(){
 											</p>
 											<p>Candidates/Students are requested to complete the test honesty and ethically while following all the instructions.</p>
 															
-											</div>
+										</div>
 											<div className="scrolling">
-											<div className="test_assign_hlp pt-0">
-																<h2>Basic Instructions</h2> 
-																<ol>
-																<li><div className="checkbox_dv"><input type="checkbox" className="test-id"  onClick={changeCheck}/><label>The student is not supposed to use his/her Textbook / Solution Manuals / Dictionary / Course Help / Calculator, nor receive help from any other outside source.</label> </div></li>
-												<li><div className="checkbox_dv"><input type="checkbox" className="test-id"  onClick={changeCheck}/><label>The examination will consist of objective-type Multiple-Choice Questions (MCQs).</label> </div></li>
-												<li><div className="checkbox_dv"><input type="checkbox" className="test-id"  onClick={changeCheck}/><label>All questions are compulsory, and students must attempt each of them.</label> </div></li>
-												<li><div className="checkbox_dv"><input type="checkbox" className="test-id"  onClick={changeCheck}/><label>Each multiple-choice question carries __ mark.</label> </div></li>
-												<li><div className="checkbox_dv"><input type="checkbox" className="test-id"  onClick={changeCheck}/><label>The total number of questions may vary based on the course. Please check the details available on your screen to know more about it.</label> </div></li>
-												<li><div className="checkbox_dv"><input type="checkbox" className="test-id"  onClick={changeCheck}/><label>The topics covered in the exam will be as per the syllables provided to you beforehand.</label> </div></li>
-												<li><div className="checkbox_dv"><input type="checkbox" className="test-id"  onClick={changeCheck}/><label>There will be no negative marking for wrong answers.</label> </div></li>
-												</ol>
-											</div>
-											<div className="test_assign_hlp pt-0">
-																	<h2>Exam-Related Instructions </h2> 
+												<div className="test_assign_hlp pt-0">
+																	<h2>Basic Instructions</h2> 
 																	<ol>
-																	<li><div className="checkbox_dv"><input type="checkbox" className="test-id"  onClick={changeCheck}/><label>Each question has four options. The student has to click on the most appropriate option.</label> </div></li>
-													<li><div className="checkbox_dv"><input type="checkbox" className="test-id"  onClick={changeCheck}/><label>The student must click on one option only from the multiple choices/options provided under each question.</label> </div></li>
-													<li><div className="checkbox_dv"><input type="checkbox" className="test-id"  onClick={changeCheck}/><label>To move on to the next question, attempt the current question and click on the ‘Next’ button located below.</label> </div></li>
-													<li><div className="checkbox_dv"><input type="checkbox" className="test-id"  onClick={changeCheck}/><label>You cannot leave a question unattempted and proceed to the next.</label> </div></li>
-													<li><div className="checkbox_dv"><input type="checkbox" className="test-id"  onClick={changeCheck}/><label>After proceeding to the next question, you cannot return to or view the previous question.</label> </div></li>
-													<li><div className="checkbox_dv"><input type="checkbox" className="test-id"  onClick={changeCheck}/><label>You can submit your answers before the time expires.</label> </div></li>
-													<li><div className="checkbox_dv"><input type="checkbox" className="test-id"  onClick={changeCheck}/><label>However, please remember that if you fail to answer all the questions within the time limit, the incomplete test will be submitted automatically.</label> </div></li>
+																	<li><div className="checkbox_dv"><input type="checkbox" className="test-id"  onClick={changeCheck}/><label>The student is not supposed to use his/her Textbook / Solution Manuals / Dictionary / Course Help / Calculator, nor receive help from any other outside source.</label> </div></li>
+													<li><div className="checkbox_dv"><input type="checkbox" className="test-id"  onClick={changeCheck}/><label>The examination will consist of objective-type Multiple-Choice Questions (MCQs).</label> </div></li>
+													<li><div className="checkbox_dv"><input type="checkbox" className="test-id"  onClick={changeCheck}/><label>All questions are compulsory, and students must attempt each of them.</label> </div></li>
+													<li><div className="checkbox_dv"><input type="checkbox" className="test-id"  onClick={changeCheck}/><label>Each multiple-choice question carries __ mark.</label> </div></li>
+													<li><div className="checkbox_dv"><input type="checkbox" className="test-id"  onClick={changeCheck}/><label>The total number of questions may vary based on the course. Please check the details available on your screen to know more about it.</label> </div></li>
+													<li><div className="checkbox_dv"><input type="checkbox" className="test-id"  onClick={changeCheck}/><label>The topics covered in the exam will be as per the syllables provided to you beforehand.</label> </div></li>
+													<li><div className="checkbox_dv"><input type="checkbox" className="test-id"  onClick={changeCheck}/><label>There will be no negative marking for wrong answers.</label> </div></li>
 													</ol>
-																	
-											</div>
-											<div className="test_assign_hlp pt-0">
-															<h2>Technical Requirements And Instructions.</h2> 
-															<ol>
-																<li><div className="checkbox_dv"><input type="checkbox" className="test-id"  onClick={changeCheck}/><label>Students must have stable and high-speed internet connectivity.</label> </div></li>
-																<li><div className="checkbox_dv"><input type="checkbox" className="test-id"  onClick={changeCheck}/><label>Every student will take the examination on a Laptop/Desktop Computer/Smartphone/Tablet.</label> </div></li>
-																<li><div className="checkbox_dv"><input type="checkbox" className="test-id"  onClick={changeCheck}/><label>Please ensure that your device is adequately charged or connected to an active power connection throughout the test hours.<br/>
-																<strong>(Please note that the company will not be responsible for power cuts or other connectivity-related technical issues from the student’s side.)</strong></label> </div></li>
-																<li><div className="checkbox_dv"><input type="checkbox" className="test-id"  onClick={changeCheck}/><label>Before starting your test, please ensure that all the background programs/browsers/tabs are closed, except the test window.</label> </div></li>
-																<li><div className="checkbox_dv"><input type="checkbox" className="test-id"  onClick={changeCheck}/><label>If a student opens another tab or window he/she will not be able to resume the test.</label> </div></li>
-																<li><div className="checkbox_dv"><input type="checkbox" className="test-id"  onClick={changeCheck}/><label>Students MUST NOT STOP the test session temporarily and come back later to continue.
-																<br/><strong>(This is especially important in the online environment because the system will show a time-out error and not let you re-enter the exam site.)</strong></label> </div></li>
-																<li><div className="checkbox_dv"><input type="checkbox" className="test-id"  onClick={changeCheck}/><label>Students MUST NOT CLICK on the Back/Refresh/Close buttons of the browser while the test session is active. 
-																<strong>(If you do, you will not be able to re-enter the exam site.)</strong></label> </div></li>
-																<li><div className="checkbox_dv"><input type="checkbox" className="test-id"  onClick={changeCheck}/><label>Students SHOULD NOT FORGET TO CLICK on the ‘Submit’ button after completing the test.</label> </div></li>
-																<li><div className="checkbox_dv"><input type="checkbox" className="test-id"  onClick={changeCheck}/><label>Students will be able to view the scorecard after the test and score details only after the test window expires.</label> </div></li>
-																<li><div className="checkbox_dv"><input type="checkbox" className="test-id"  onClick={changeCheck}/><label>The test will continue in case the internet connection is interrupted but the students will be able to view the results only after the connection resumes.</label> </div></li>
-															</ol>
-											</div>
+												</div>
+												<div className="test_assign_hlp pt-0">
+																		<h2>Exam-Related Instructions </h2> 
+																		<ol>
+																		<li><div className="checkbox_dv"><input type="checkbox" className="test-id"  onClick={changeCheck}/><label>Each question has four options. The student has to click on the most appropriate option.</label> </div></li>
+														<li><div className="checkbox_dv"><input type="checkbox" className="test-id"  onClick={changeCheck}/><label>The student must click on one option only from the multiple choices/options provided under each question.</label> </div></li>
+														<li><div className="checkbox_dv"><input type="checkbox" className="test-id"  onClick={changeCheck}/><label>To move on to the next question, attempt the current question and click on the ‘Next’ button located below.</label> </div></li>
+														<li><div className="checkbox_dv"><input type="checkbox" className="test-id"  onClick={changeCheck}/><label>You cannot leave a question unattempted and proceed to the next.</label> </div></li>
+														<li><div className="checkbox_dv"><input type="checkbox" className="test-id"  onClick={changeCheck}/><label>After proceeding to the next question, you cannot return to or view the previous question.</label> </div></li>
+														<li><div className="checkbox_dv"><input type="checkbox" className="test-id"  onClick={changeCheck}/><label>You can submit your answers before the time expires.</label> </div></li>
+														<li><div className="checkbox_dv"><input type="checkbox" className="test-id"  onClick={changeCheck}/><label>However, please remember that if you fail to answer all the questions within the time limit, the incomplete test will be submitted automatically.</label> </div></li>
+														</ol>
+																		
+												</div>
+												<div className="test_assign_hlp pt-0">
+																<h2>Technical Requirements And Instructions.</h2> 
+																<ol>
+																	<li><div className="checkbox_dv"><input type="checkbox" className="test-id"  onClick={changeCheck}/><label>Students must have stable and high-speed internet connectivity.</label> </div></li>
+																	<li><div className="checkbox_dv"><input type="checkbox" className="test-id"  onClick={changeCheck}/><label>Every student will take the examination on a Laptop/Desktop Computer/Smartphone/Tablet.</label> </div></li>
+																	<li><div className="checkbox_dv"><input type="checkbox" className="test-id"  onClick={changeCheck}/><label>Please ensure that your device is adequately charged or connected to an active power connection throughout the test hours.<br/>
+																	<strong>(Please note that the company will not be responsible for power cuts or other connectivity-related technical issues from the student’s side.)</strong></label> </div></li>
+																	<li><div className="checkbox_dv"><input type="checkbox" className="test-id"  onClick={changeCheck}/><label>Before starting your test, please ensure that all the background programs/browsers/tabs are closed, except the test window.</label> </div></li>
+																	<li><div className="checkbox_dv"><input type="checkbox" className="test-id"  onClick={changeCheck}/><label>If a student opens another tab or window he/she will not be able to resume the test.</label> </div></li>
+																	<li><div className="checkbox_dv"><input type="checkbox" className="test-id"  onClick={changeCheck}/><label>Students MUST NOT STOP the test session temporarily and come back later to continue.
+																	<br/><strong>(This is especially important in the online environment because the system will show a time-out error and not let you re-enter the exam site.)</strong></label> </div></li>
+																	<li><div className="checkbox_dv"><input type="checkbox" className="test-id"  onClick={changeCheck}/><label>Students MUST NOT CLICK on the Back/Refresh/Close buttons of the browser while the test session is active. 
+																	<strong>(If you do, you will not be able to re-enter the exam site.)</strong></label> </div></li>
+																	<li><div className="checkbox_dv"><input type="checkbox" className="test-id"  onClick={changeCheck}/><label>Students SHOULD NOT FORGET TO CLICK on the ‘Submit’ button after completing the test.</label> </div></li>
+																	<li><div className="checkbox_dv"><input type="checkbox" className="test-id"  onClick={changeCheck}/><label>Students will be able to view the scorecard after the test and score details only after the test window expires.</label> </div></li>
+																	<li><div className="checkbox_dv"><input type="checkbox" className="test-id"  onClick={changeCheck}/><label>The test will continue in case the internet connection is interrupted but the students will be able to view the results only after the connection resumes.</label> </div></li>
+																</ol>
+												</div>
 											</div>
 						<div className="test_assign_hlp pt-0">
 						<h5><strong>Click on the box below ONLY if you have read all the above instructions carefully.</strong></h5> 
@@ -135,7 +135,7 @@ export default function StudentAgreement(){
 							}else{
 								addToast('Kindly agree to the terms and conditions', { appearance: 'error',autoDismiss: true });
 							}
-						}}>Start Now</button>
+						}} style={{color:"white"}} type="button">Start Now</button>
 						</div>
 						</div>
 						</div>

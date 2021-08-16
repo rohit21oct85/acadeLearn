@@ -53,7 +53,7 @@ export default function HeaderNav(){
     }
 
     const { getRemainingTime, getLastActiveTime } = useIdleTimer({
-        timeout: 1000 * 60 * 60,
+        timeout: 1000 * 60 * 30, //30 minutes in milliseconds
         onIdle: handleOnIdle,
         debounce: 500
     })

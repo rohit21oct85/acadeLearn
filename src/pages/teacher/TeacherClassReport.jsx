@@ -40,7 +40,7 @@ export default function TeacherClassReport(){
                         <div className="card">
                         <div className="col-xl-12 col-lg-12 left-arrow1">
                     <ul> 
-                        <li><Link to={`/teacher/teacher-dashboard/${params.class_id}`}><img src="/images/left-arrow.png" className="img-fluid" alt="back-arrow"/> Back</Link></li>
+                        <li><Link to={`/teacher/teacher-dashboard/tab4`}><img src="/images/left-arrow.png" className="img-fluid" alt="back-arrow"/> Back</Link></li>
                     </ul>
                 </div>
                         <div className="card-content">

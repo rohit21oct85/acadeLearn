@@ -92,7 +92,7 @@ export default function Login(){
                         if(isLoggedIn){
                             dispatch({type: 'LOGIN', payload: payloadData});
                             if(user_type=== 'student'){
-                                history.push(`/student/student-dashboard/${class_id}/${class_name}`)
+                                history.push(`/student/student-dashboard/tab1/${class_id}/${class_name}`)
                             }
                             else if(user_type === 'teacher'){
                                 history.push(`/teacher/teacher-dashboard/tab0`)
@@ -140,7 +140,7 @@ export default function Login(){
         async function checkLoggedInUser(){
             if(state?.isLoggedIn == true || state?.isLoggedIn == "true"){
                 if(state?.user_type == "student"){
-                    history.push(`/student/student-dashboard/${state.class_id}/${state.class_name}`)
+                    history.push(`/student/student-dashboard/tab1/${state.class_id}/${state.class_name}`)
                 }else if(state?.user_type == "teacher"){
                     history.push(`/teacher/teacher-dashboard/tab0`)
                 }else if(state?.user_type == "principal"){

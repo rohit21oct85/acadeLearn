@@ -66,7 +66,6 @@ export default function StudentAttempt(){
 		let tDuration = localStorage.getItem('test_test_duration')
 		let allowedTime = new Date(localStorage.getItem('test_test_time'));
 		allowedTime.setMinutes( allowedTime.getMinutes() + parseInt(tWindow));
-		console.log(allowedTime)
 		if(current_time > allowedTime){
 				setCompletion('timeover')
 				// setFormData({...formData, ['completion_status'] : "timeover"});
@@ -120,8 +119,24 @@ export default function StudentAttempt(){
       	questions && questions.map((item,key) => {
 			item.answer && count++
 		})
-		setCounts(count+1)
+		if(counts-1 < questions?.length-1){
+			setCounts(count+1)
+		}
 	},[questions])
+
+
+	useEffect(() => {
+		window.addEventListener('blur', onBlur);
+		window.addEventListener("online", online);
+		window.addEventListener("offline", offline);
+
+		// Specify how to clean up after this effect:
+		return () => {
+			window.removeEventListener('blur', onBlur);
+			window.removeEventListener("online", online);
+			window.removeEventListener("offline", offline);
+		};
+	});
 
 	const convert = (f, k) => {
 		var reader = new FileReader();
@@ -143,7 +158,7 @@ export default function StudentAttempt(){
 				}else if(f.name.split('.').pop()== "docx"){
 					mammoth.convertToHtml({arrayBuffer: arrayBuffer}).then(function (resultObject) {
 						// result1.innerHTML = resultObject.value
-						console.log("Html for Docx",resultObject.value)
+						// console.log("Html for Docx",resultObject.value)
 						setBase64FilesArr(base64FilesArr => [...base64FilesArr, resultObject.value]);
 					})
 				}
@@ -170,6 +185,8 @@ export default function StudentAttempt(){
 			setLoading(false)
 			return;
 		}
+
+		addToast('You will automatically redirected to a new page, kindly dont close tab/window', { appearance: 'error',autoDismiss: true });
 
 		await attempt.mutate(formData,{
 			onSuccess: (data, variables, context) => {
@@ -296,17 +313,15 @@ export default function StudentAttempt(){
 
 	const onBlur = () => {
 		setModalShow('block')
-		// addToast('Tab Switching is not Allowed!\n if u do it once again ur test will be cancelled', { appearance: 'error',autoDismiss: true, });
 		let tabSwitchCount = JSON.parse(localStorage.getItem('tabSwitchCount'))!= null ? JSON.parse(localStorage.getItem('tabSwitchCount')) : 0 
 		tabSwitchCount = tabSwitchCount +1 ;
 		localStorage.setItem('tabSwitchCount',tabSwitchCount);
 		if(tabSwitchCount >= 2){
 			setCompletion('cheating')
-			// setFormData({...formData, ['completion_status'] : "cheating"});
 			if(params.test_type == "upload-test"){
-				// endTestUpload();
+				endTestUpload();
 			}else{
-				// endTest();
+				endTest();
 			}
 		}
 	};
@@ -319,26 +334,6 @@ export default function StudentAttempt(){
 		addToast('You are offline, Kindly connect to the internet', { appearance: 'error',autoDismiss: true });
 	}
 
-	useEffect(() => {
-		window.addEventListener('blur', onBlur);
-		window.addEventListener("online", online);
-		window.addEventListener("offline", offline);
-
-		// Specify how to clean up after this effect:
-		return () => {
-			window.removeEventListener('blur', onBlur);
-			window.removeEventListener("online", online);
-			window.removeEventListener("offline", offline);
-		};
-	});
-
-	// window.addEventListener("offline", () => {
-	// 	addToast('Offline, Kindly connect to the internet', { appearance: 'error',autoDismiss: true });
-	// });
-	  
-	// window.addEventListener("online", () => {
-	// 	addToast('Back Online', { appearance: 'success',autoDismiss: true });
-	// });
 
 	const submitUploadTest = async() => {
 		const radios = document.getElementsByClassName('rAnswer')
@@ -406,7 +401,7 @@ export default function StudentAttempt(){
 																						<span>{counts + ' of ' +questions?.length}</span>
 																						</div>
 																					</div>
-																						<div className="question bg-Not-select p-2 border-bottom">
+																					{questions?.length>0 ? <div className="question bg-Not-select p-2 border-bottom">
 																							<div className="flex-row question-title">
 																								<span className="text-danger q_nsekected">Q.</span>
 																								<h5 className="ml-3"><div style={{fontSize :"20px"}} dangerouslySetInnerHTML={{ __html: question?.question }}/></h5>
@@ -438,7 +433,7 @@ export default function StudentAttempt(){
 																										</label>
 																									</div></> : ""}
 																								</span>}
-																						</div>
+																						</div>: "loading. .." } 
 																					<div className="p-2 bg-Not-select">
 																						<div className="row"> 
 																							<div className="col-md-12 text-right">

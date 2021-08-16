@@ -5,7 +5,7 @@ export default function CumilativeStudent({score, heading}){
         <>
                 <div className="table-responsive col-md-12 pl-0 pr-0 mt-2">
                 <h4 className="pb-1"><strong>{heading && heading}</strong></h4>
-                    <table className="table table-striped table-bordered "> 
+                    <table id="tableConvertCumulative" className="table table-striped table-bordered "> 
                         <thead>
                             <tr>
                                 <th>Test Name </th>
@@ -26,7 +26,7 @@ export default function CumilativeStudent({score, heading}){
                                         <td> 
                                             {item.time_taken && new Date(item?.time_taken * 1000)?.toISOString()?.substr(11, 8)} 
                                         </td>
-                                        <td> {item?.marksScored}   </td>
+                                        <td>{item?.marksScored?.toFixed(2)}</td>
                                         <td>{item?.totalMarks}</td>
                                     </tr>
                                 )

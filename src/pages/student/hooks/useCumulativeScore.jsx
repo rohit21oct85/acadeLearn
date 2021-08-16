@@ -12,11 +12,12 @@ export default function useCumulativeScore() {
     const subject_id = params.subject_id;
     const student_id = localStorage.getItem('user_id')
     const school_id = localStorage.getItem('school_id')
-    return useQuery(`cumulative-score-${class_id}-${subject_id}`, async () => {
-        if(state?.access_token){
+    return useQuery(`cumulative-score-${class_id}-${subject_id}-${params.window}`, async () => {
+        if(state?.access_token && params.window == "tab3"){
             const result = await axios.post(`${apiUrl}v1/web/get-cumulative-score/${subject_id}`,{class_id :class_id, student_id:student_id, school_id:school_id},{
                 headers: {
                     'Content-Type': 'Application/json',
+                    'Access-Control-Allow-Origin': "https://*.acadelearn.com",
                     'Authorization':'Bearer '+state.access_token
                 }
             }

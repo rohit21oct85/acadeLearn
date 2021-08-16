@@ -58,6 +58,7 @@ const reducer = (state, action) => {
             
            
         case 'LOGOUT':
+            const schoolName = localStorage.getItem('schoolName');
             localStorage.clear();
             localStorage.removeItem('access_token');
             localStorage.removeItem('refresh_token');
@@ -69,6 +70,7 @@ const reducer = (state, action) => {
             localStorage.removeItem('user_type');    
             localStorage.removeItem('created_at');
             localStorage.removeItem('isLoggedIn');
+            localStorage.setItem('schoolName',schoolName);
             
             return {
                 ...state,

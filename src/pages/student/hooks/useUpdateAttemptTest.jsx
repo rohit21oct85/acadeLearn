@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react'
 import {useLocation, useParams, useHistory} from 'react-router-dom'
 import {useMutation, useQueryClient} from 'react-query'
 import axios from 'axios'
-import {apiUrl} from '../../../config/config';
+import {apiUrl, authAxios} from '../../../config/config';
 import {AuthContext} from '../../../context/AuthContext';
 
 export default function useUpdateAttemptTestBackup(formData) {
@@ -26,7 +26,7 @@ export default function useUpdateAttemptTestBackup(formData) {
 
 	return useMutation(formData => {
 		// console.log(formData)
-			return axios.patch(`${apiUrl}v1/web/save-answer/${params.test_id}/${params.test_type}`,{school_id:school_id,student_id:student_id, question_id:formData.question_id, answer:formData.answer,option:formData.option,time_taken:localStorage.getItem('COUNTER'),completion_status:formData.completion_status}, options)
+			return authAxios.patch(`${apiUrl}v1/web/save-answer/${params.test_id}/${params.test_type}`,{school_id:school_id,student_id:student_id, question_id:formData.question_id, answer:formData.answer,option:formData.option,time_taken:localStorage.getItem('COUNTER'),completion_status:formData.completion_status}, options)
 		},{
 		onSuccess: (data) => {
 				queryClient.invalidateQueries('single-question')

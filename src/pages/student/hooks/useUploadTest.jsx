@@ -13,8 +13,8 @@ export default function useUploadTest() {
     const school_id = localStorage.getItem('school_id')
     const student_id = localStorage.getItem('user_id')
     const class_id = localStorage.getItem('class_id');
-    return useQuery(`upload-test-${class_id}`, async () => {
-        if(state?.access_token && class_id !== undefined){
+    return useQuery(`upload-test-${class_id}-${params.window}`, async () => {
+        if(state?.access_token && class_id !== undefined && params.window =="tab1"){
             const result = await axios.get(`${apiUrl}v1/web/get-upload-test/${school_id}/${student_id}/${class_id}`,{
                 headers: {
                     'Content-Type': 'Application/json',

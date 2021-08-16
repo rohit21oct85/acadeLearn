@@ -1,10 +1,19 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { Link } from 'react-router-dom'
 import {formatAMPM} from '../../utils/utils'
 import { useToasts } from 'react-toast-notifications';
 
-export default function AttemptCard({test, key, fun}){
-    const { addToast } = useToasts();
+export default function AttemptCard({test, isLoading, key, fun}){
+    const [disabled, setDisabled] = useState();
+    const { addToast } = useToasts(false);
+
+    useEffect(()=>{
+        if(isLoading){
+            setDisabled(true)
+        }else{
+            setDisabled(false)
+        }
+    },[isLoading])
 
     let d = new Date(test?.start_date)
     let endsIN = new Date(test?.start_date)
@@ -17,7 +26,7 @@ export default function AttemptCard({test, key, fun}){
         allowed_time.setMinutes( allowed_time.getMinutes() + data.test_window );
         if(current_time > start_time){
             if(current_time < allowed_time){
-                addToast("Test is Live! you can't cancel the test now.", { appearance: 'success',autoDismiss: true });
+                addToast("Please wait while your test is being  prepared. you will redirected automatically", { appearance: 'info',autoDismiss: true });
                 fun();
             }else{
                 addToast("Test has Expired.", { appearance: 'error',autoDismiss: true });
@@ -52,7 +61,7 @@ export default function AttemptCard({test, key, fun}){
                                 </div>
                                 <div className="col-md-6 text-right">
                                     {/* <a href="#" className="btn btn-outline-info mr-1"><i className="fa fa-eye"></i> SYLLABUS</a> */}
-                                    <Link to="/student/student-attempt"></Link><a href="#" className="btn btn-info" onClick={()=>{attempt(test)}}> ATTEMPT</a> 
+                                    <Link to="/student/student-attempt"></Link><button href="#" className="btn btn-info" style={{color:"white"}} disabled={disabled} onClick={()=>{attempt(test)}}>{isLoading ? "Loading..." :"ATTEMPT"} </button> 
                                 </div>
                             </div>
                         </div>

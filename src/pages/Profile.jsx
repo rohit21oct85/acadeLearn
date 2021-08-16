@@ -34,7 +34,6 @@ export default function Profile(){
             return authAxios.patch(`${apiUrl}v1/web/update-student/${user_id}`,formData)
         },{
         onSuccess: (data) => {
-            console.log(data)
             if(data.message){
                 addToast('Profile Updated Successfully! Please Logout and Login again', { appearance: 'success',autoDismiss: true });
             }

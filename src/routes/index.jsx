@@ -12,6 +12,7 @@ import TeacherWiseReport from '../pages/principal/TeacherWiseReport'
 import ClassWiseReport from '../pages/principal/ClassWiseReport'
 import ClassWiseSectionReport from '../pages/principal/ClassWiseSectionReport'
 import StudentAttempt from '../pages/student/StudentAttempt'
+import StudentAttemptOffline from '../pages/student/StudentAttemptOffline'
 import StudentAgreement from '../pages/student/StudentAgreement'
 import StudentResult from '../pages/student/StudentResult'
 import StudentLastTestScoreReport from '../pages/student/StudentLastTestScoreReport'
@@ -41,7 +42,7 @@ export const openRoutesOnSubDomain = [
 
 export const studentRoutes = [
     {
-        path:'/:user_type?/student-dashboard/:class_id?/:class_name?/:subject_id?',
+        path:'/:user_type?/student-dashboard/:window/:class_id?/:class_name?/:subject_id?',
         component: StudentDashboard
     },
     {
@@ -50,7 +51,7 @@ export const studentRoutes = [
     },
     {
         path:'/:user_type?/student-attempt/:class_id?/:class_name?/:test_id?/:test_type?',
-        component: StudentAttempt
+        component: StudentAttemptOffline
     },
     {
         path:'/:user_type?/student-result/:class_id?/:class_name?/:test_id?/:attempt_id?/:test_type?',

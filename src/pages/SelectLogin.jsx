@@ -25,6 +25,9 @@ export default function SelectLogin(){
         }
         async function getSchoolLogo(sub_domain){
             const data = await authAxios.get(`${apiUrl}v1/web/get-school-logo/${sub_domain}`)
+            const image = `https://drive.google.com/uc?export=view&id=${data?.data?.data?.school_logo}`
+            localStorage.setItem('schoolImageUrl',image);
+            localStorage.setItem('schoolName', data?.data?.data?.school_name);
             setImage(data?.data?.data?.school_logo)
         }
         }, [])

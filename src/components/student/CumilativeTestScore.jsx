@@ -26,7 +26,7 @@ export default function CumilativeTestScore({score}){
                                         <td> 
                                             {item.time_taken && new Date(item?.time_taken * 1000)?.toISOString()?.substr(11, 8)} 
                                         </td>
-                                        <td> {item?.marksScored}   </td>
+                                        <td> {item?.marksScored?.toFixed(2)}   </td>
                                         <td>{item?.totalMarks}</td>
                                     </tr>
                                 )

@@ -9,7 +9,7 @@ export default function Modal({...props}){
     return(
         <>
             <div className="modal" style={{display: props.show}}>
-                <div className="modal-dialog modal-dialog-centered" role="document">
+                <div className="modal-dialog modal-dialog-centered modal-lg" role="document">
                     <div className="modal-content">
                         <div className="modal-body">
                             <div className="app-content content bg_whitealt">

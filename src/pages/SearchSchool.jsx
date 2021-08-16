@@ -12,7 +12,7 @@ export default function SearchSchool(){
     const params  = useParams();
     const location = useLocation();
 
-    const [ searchedSchools, setSearchedSchools ] = useState(null);
+    const [ searchedSchools, setSearchedSchools ] = useState([]);
     const [ search, setSearch ] = useState(null);
     const [display, setDisplay] = useState('none');
 
@@ -23,14 +23,20 @@ export default function SearchSchool(){
                 openSearch(search);
             }else if(search === ""){
                 setDisplay('none');
-                setSearchedSchools(null)
+                setSearchedSchools([])
             }
           }, 1000);
         return () => clearTimeout(delayDebounceFn)
     },[search]);
 
     async function openSearch (e){
-        const data = await axios.post(apiUrl + 'v1/school/search-school',{search:search, limit:3});
+        console.log(e.keyCode)
+        const data = await axios.post(apiUrl + 'v1/school/search-school',{search:search, limit:3},{
+            headers: {
+                'Content-Type': 'Application/json',
+                'Access-Control-Allow-Origin': "*",
+            }
+        });
         if(data){
             setSearchedSchools(data.data.schools);
             if(data && data.data.schools.length == 0){
@@ -41,6 +47,13 @@ export default function SearchSchool(){
 
     const setNewPath = (domain) => {
         window.location.href = domain+"."+baseUrl;
+    }
+
+    const openSchool = (t, obj) => {
+        const image = `https://drive.google.com/uc?export=view&id=${obj.school_logo}`
+        localStorage.setItem('schoolImageUrl',image);
+        // history.push(`${server_type}://${obj.sub_domain}.${baseUrl}`)
+        window.location.href = t
     }
 
     return(
@@ -72,17 +85,18 @@ export default function SearchSchool(){
                                         <p>Login & Access our Extensive Online Library of Bespoke Assessments</p>
                                         <div className="">
                                             <div className="bot-20">&nbsp;</div>
-                                            <form className="school_name_form" autocomplete="off">
+                                            {/* <form className="school_name_form" autoComplete="off"> */}
                                                 <div className="form-group floatlabel">
                                                     <input type="text" className="form-control" name="school-name" id="school-name" placeholder="Enter Your School Name" onChange={(e)=>{setSearch(e.target.value)}}/>
                                                         <div className="search_list_bg" style={{display:`${display}`}}>
-                                                            {searchedSchools && searchedSchools.map((item,key)=>{
+                                                            {searchedSchools.length>0 ? searchedSchools.map((item,key)=>{
                                                                 return(
                                                                     <div className="search_list_btm" key={key}>
                                                                         <div className="school_name1" >
                                                                         {/* onClick={() => setNewPath (item.sub_domain)}> */}
                                                                             {/* <Link to={`http://${item.sub_domain}.${baseUrl}`}> */}
-                                                                            <a href={`${server_type}://${item.sub_domain}.${baseUrl}`}>
+                                                                            <a onClick={()=>{openSchool(`${server_type}://${item.sub_domain}.${baseUrl}`, item)}}>
+                                                                            {/* <a href={`${server_type}://${item.sub_domain}.${baseUrl}`}> */}
                                                                                 <span><img src={`https://drive.google.com/uc?export=view&id=${item.school_logo}`} className="img-fluid" alt="school Iocn"/> </span> 
                                                                                 <p>{item.school_name}</p>
                                                                             </a>
@@ -90,13 +104,13 @@ export default function SearchSchool(){
                                                                         </div>
                                                                     </div>
                                                                 )
-                                                            })}
+                                                            }) : <span className="centering-load">Loading. ..</span>}
                                                         </div>
                                                 </div>
                                                 {/* <div className="search_button" style={{display:`${display}`}}>
                                                     <Link to={`subdomain.${baseUrl}/`}><button className="btn next_btn btn_school_next" type="button">Next</button></Link>
                                                 </div> */}
-                                            </form>
+                                            {/* </form> */}
                                         </div>
                                         
                 </div>

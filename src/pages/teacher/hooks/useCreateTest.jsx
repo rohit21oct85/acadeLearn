@@ -27,7 +27,6 @@ export default function useCreateTest(formData1) {
 	const chapter_id = params?.student_id; //here student_id contains chapter_id
 
 	return useMutation(formData => {
-            console.log(formData)
 			return axios.post(`${apiUrl}v1/web/create-test/${class_id}/${unit_id}/${chapter_id}/${teacher_id}/${school_id}`, formData ,options)
 		},{
 		onSuccess: (data) => {
