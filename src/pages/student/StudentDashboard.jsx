@@ -81,8 +81,6 @@ export default function StudentDashboard(){
     }
 
     const handleClick = (attempt_id,t,test_type) => {
-        console.log(test_type)
-        return;
         history.push(`/student/student-result/${params.class_id}/${params.class_name}/${t}/${attempt_id}/${test_type}`)
     }
     
