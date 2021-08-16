@@ -67,9 +67,9 @@ export default function StudentAgreement(){
 				<div className="content-overlay"></div>
 					<div className="content-wrapper">
 						<div className="content-body">
-							<div className="row">
+							<div className="">
 								<div className="">
-									<div className="col-md-8 offset-2 card">
+									<div className="col-md-8 ml-auto mr-auto card">
 										<div className="test_assign_hlp">
 											<h1>Important Guidelines And Instructions For Students</h1>
 											<p>(Before starting the test, please read each instruction carefully and click on the boxes beside them.) 
