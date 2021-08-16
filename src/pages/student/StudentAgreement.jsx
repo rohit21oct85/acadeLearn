@@ -127,7 +127,7 @@ export default function StudentAgreement(){
 						<h5><strong>Click on the box below ONLY if you have read all the above instructions carefully.</strong></h5> 
 						<div className="accepted_dv"> 
 						<input disabled={disabledCheck} type="checkbox" id="accepted" name="accepted" onClick={change}/> 
-					 	 <label htmlFor="accepted">  " I am ({localStorage.getItem('name')}), and I have read and hereby accepted all the instructions mentioned above. I, therefore, want to open the test portal, and my test starts now.</label>
+					 	 <label htmlFor="accepted">  "I am ({localStorage.getItem('name')}), and I have read and hereby accepted all the instructions mentioned above. I, therefore, want to open the test portal, and my test starts now."</label>
 						<button className={`${disabled} start_now_btn btn btn-warning btn-min-width sbmt_view_form btn_click2 mr-1 mb-1 mt-2`} onClick={()=>{
 							if(disabled == ""){
 								toggleFullScreen()

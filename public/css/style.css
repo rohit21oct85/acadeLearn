@@ -1663,3 +1663,21 @@ span.centering-load {
     color: #f97149;
     padding-top: 10px;
 }
+
+@media (max-width:767px){
+.card.pull-up.attempt_text .float-right {
+    float: none !important;
+    display: block;
+}
+
+.card.pull-up.attempt_text .float-right{display: block;
+    float: none !important;}
+
+.card-body.text_set_attemp.container {
+    padding: 0 0 20px 0;
+}
+
+.card.pull-up.attempt_text .float-left a {
+    padding-left: 0;
+}
+}

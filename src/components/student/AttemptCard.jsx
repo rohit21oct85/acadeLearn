@@ -44,11 +44,10 @@ export default function AttemptCard({test, isLoading, key, fun}){
                             <a href="#" className="btn"><b>Test Name: </b>{test?.test_name}</a>
                         </div>
                         <div className="float-right">
-                            <a href="#" className="">{test?.start_date?.substring(10,0)}</a><br/>
+                            Date: <a href="#" className="">{test?.start_date?.substring(10,0)}</a><br/>
                             Starts at:<a href="#" className=""> { d.getHours()+" : "+ d.getMinutes()+" : "+d.getSeconds()} </a>hrs<br/>
-                            Ends at:<a href="#" className=""> {endsIN.getHours()+" : "+ endsIN.getMinutes()+" : "+endsIN.getSeconds()} </a>min
+                            Ends at:<a href="#" className=""> {endsIN.getHours()+" : "+ endsIN.getMinutes()+" : "+endsIN.getSeconds()} </a>hrs
                         </div>
-                        
                     </div>
                     <div className="card-content live_text">
                         <div className="card-body text_set_attemp container">
