@@ -51,7 +51,7 @@ export const studentRoutes = [
     },
     {
         path:'/:user_type?/student-attempt/:class_id?/:class_name?/:test_id?/:test_type?',
-        component: StudentAttemptOffline
+        component: StudentAttempt
     },
     {
         path:'/:user_type?/student-result/:class_id?/:class_name?/:test_id?/:attempt_id?/:test_type?',
