@@ -50,14 +50,6 @@ export default function StudentAttempt(){
 		setFormData({...formData, ['answers']: answers});
 	}
 
-	useEffect(() => {
-        const script = document.createElement("script");
-        script.id = 'editor';
-        script.src = "https://www.wiris.net/demo/plugins/app/WIRISplugins.js?viewer=image";
-        script.async = true;
-        document.body.appendChild(script);
-    },[attemptId])
-
 	useEffect(()=>{
 		const current_time = new Date();
 		// const sTime = new Date(localStorage.getItem('test_test_time'));
@@ -113,6 +105,14 @@ export default function StudentAttempt(){
 		setQuestLoading(false)
 		setOpt('')
 	},[question])
+	
+	useEffect(() => {
+        const script = document.createElement("script");
+        script.id = 'editor';
+        script.src = "https://www.wiris.net/demo/plugins/app/WIRISplugins.js?viewer=image";
+        script.async = true;
+        document.body.appendChild(script);
+    },[question])
 
 	useEffect(()=>{
 		let count = 0;
@@ -185,8 +185,6 @@ export default function StudentAttempt(){
 			setLoading(false)
 			return;
 		}
-
-		addToast('You will automatically redirected to a new page, kindly dont close tab/window', { appearance: 'error',autoDismiss: true });
 
 		await attempt.mutate(formData,{
 			onSuccess: (data, variables, context) => {
