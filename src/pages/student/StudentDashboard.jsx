@@ -40,6 +40,7 @@ export default function StudentDashboard(){
         localStorage.removeItem('questionPaper');
         localStorage.removeItem('uploadData');
         localStorage.removeItem('COUNTER');
+        localStorage.removeItem('COUNTER_INCRE');
         localStorage.removeItem('attemptIdUploadTest');
         localStorage.setItem('test_test_name',test_name)
         localStorage.setItem('test_test_time',start_time)

@@ -91,7 +91,6 @@ export default function StudentAttemptOffline(){
 				}
 		}else{
 			const diffInSecs = (allowedTime - new Date(attemptTime))/ 1000;
-			console.log(diffInSecs,"in seconds")
 			const difference = (Math.abs(allowedTime  - new Date(attemptTime))/1000)/60
 			console.log(difference,"in minutes")
 			if(difference < tDuration){

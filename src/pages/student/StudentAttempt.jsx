@@ -29,6 +29,7 @@ export default function StudentAttempt(){
 	const [answers, setAnswers] = useState('');
 	const [loading, setLoading] = useState(false);
 	const [questLoading, setQuestLoading] = useState(false);
+	const [close, setClose] = useState(false);
 	const [opt, setOpt] = useState('');
 	const [base64FilesArr, setBase64FilesArr] = useState([]);
 	const [docu, setDocu] = useState([]);
@@ -39,9 +40,9 @@ export default function StudentAttempt(){
 		let answer = "";
 			if(counts-1 == questions?.length-1){
 				setCompletion('completed')
-				setFormData({...formData,  ['answer'] : e.target.value, ['option']: option, ['question_id']:id,});
+				setFormData({...formData,  ['answer'] : e.target.value, ['option']: option, ['question_id']:id,['time_taken']:localStorage.getItem('COUNTER_INCRE')});
 			}else{
-				setFormData({...formData, ['answer'] : e.target.value, ['option']: option, ['question_id']:id,});
+				setFormData({...formData, ['answer'] : e.target.value, ['option']: option, ['question_id']:id,['time_taken']:localStorage.getItem('COUNTER_INCRE')});
 			}		
 	}
 
@@ -68,15 +69,11 @@ export default function StudentAttempt(){
 				}
 		}else{
 			const diffInSecs = (allowedTime - new Date(attemptTime))/ 1000;
-			// const d = convertTo(diffInSecs, "timer")
-			// console.log(getTimeRemaining(d))
 			const difference = (Math.abs(allowedTime  - new Date(attemptTime))/1000)/60
 			if(difference < tDuration){
 				tDuration = difference;
 				localStorage.setItem('test_test_duration', diffInSecs)
 			}
-			// console.log(getTimeRemaining(fracMinToMinSec(difference)))
-			// console.log(fracMinToMinSec(difference))
 			setDuration(parseFloat(tDuration)?.toFixed(2));
 		}
 	},[])
@@ -89,8 +86,8 @@ export default function StudentAttempt(){
 			localStorage.removeItem('COUNTER');
 			history.push(`/student/student-attempt/${params.class_id}/${params.class_name}/${params.test_id}/${params.test_type}`);
 		}
-		// timer()
-		startTimer(localStorage.getItem('test_test_duration'));
+		timer()
+		startTimer(localStorage.getItem('test_test_duration') * 60);
 	},[attemptId])
 
 	var count = 0 ;
@@ -158,7 +155,6 @@ export default function StudentAttempt(){
 				}else if(f.name.split('.').pop()== "docx"){
 					mammoth.convertToHtml({arrayBuffer: arrayBuffer}).then(function (resultObject) {
 						// result1.innerHTML = resultObject.value
-						// console.log("Html for Docx",resultObject.value)
 						setBase64FilesArr(base64FilesArr => [...base64FilesArr, resultObject.value]);
 					})
 				}
@@ -170,7 +166,7 @@ export default function StudentAttempt(){
 	}
 
 	const saveAnswerAndNext = async () => {
-		setFormData({...formData, ['completion_status'] : completion});
+		setFormData({...formData, ['completion_status'] : completion, ['time_taken']:localStorage.getItem('COUNTER_INCRE')});
 		setLoading(true)
 		setQuestLoading(true)
 		let search = window.location.search;
@@ -185,7 +181,6 @@ export default function StudentAttempt(){
 			setLoading(false)
 			return;
 		}
-
 		await attempt.mutate(formData,{
 			onSuccess: (data, variables, context) => {
 				if(data?.data){
@@ -204,12 +199,12 @@ export default function StudentAttempt(){
 	}
 
 	function timer() {
-		const time = localStorage.getItem('COUNTER');
+		const time = localStorage.getItem('COUNTER_INCRE');
 		var sec = time != 0 && time != undefined && time != null ? time : 0;
 		async function tick() {
 			var counter = document.getElementById("timer");
 			sec++;
-			localStorage.setItem('COUNTER', sec);
+			localStorage.setItem('COUNTER_INCRE', sec);
 			const measuredTime = new Date(null);
 			measuredTime.setSeconds(sec);
 			let MHSTime = measuredTime.toISOString().substr(11, 8);
@@ -225,7 +220,7 @@ export default function StudentAttempt(){
 			}
 			if(counter){
 				// counter.innerHTML = "0:" + (MHSTime < 10 ? "0" : "") + String(MHSTime);
-				counter.innerHTML = String(MHSTime);
+				// counter.innerHTML = String(MHSTime);
 					setTimeout(tick, 1000);
 			}
 		}
@@ -234,10 +229,8 @@ export default function StudentAttempt(){
 
 	function startTimer(t) {
 		// var testTime = 60 * 5;
-		const time = localStorage.getItem('COUNTER') != null ? parseInt(localStorage.getItem('COUNTER')) : localStorage.getItem('test_test_duration') ;
-		// console.log(time, "time")
+		const time = localStorage.getItem('COUNTER') != null ? parseInt(localStorage.getItem('COUNTER')) : t ;
 		var timer = time, hours, minutes, seconds;
-		// console.log(timer, "timer")
 		async function tick() {
 			var display = document.querySelector('#timer2');
 			// hours = parseInt ((timer/60)/60, 10);
@@ -269,7 +262,8 @@ export default function StudentAttempt(){
 	
 	let optionsDocx = [{key: 0,value: " A", option: "option_a",},{key: 1,value: " B", option: "option_b",},{key: 3,value: " C", option: "option_c",},{key: 4,value: " D", option: "option_d",}];
     async function endTest(){
-		setFormData({...formData, ['completion_status'] : completion});
+		setClose(true)
+		setFormData({...formData, ['completion_status'] : completion, ['time_taken'] : localStorage.getItem('COUNTER_INCRE')});
 		await attempt.mutate(formData,{
 			onSuccess: (data, variables, context) => {
 				if(data?.data){
@@ -294,7 +288,7 @@ export default function StudentAttempt(){
 				myObject[`option${index}`] = "option_" + radios[i].value;
 			}
 		}
-		setFormData({...formData, ['answers']: myObject, ['completion_status'] : completion});
+		setFormData({...formData, ['answers']: myObject, ['completion_status'] : completion, ['time_taken']:localStorage.getItem('COUNTER_INCRE')});
 		await attemptUpload.mutate(formData, {
 			onSuccess: (data, variables, context) => {
 				if(data?.data){
@@ -314,7 +308,7 @@ export default function StudentAttempt(){
 		let tabSwitchCount = JSON.parse(localStorage.getItem('tabSwitchCount'))!= null ? JSON.parse(localStorage.getItem('tabSwitchCount')) : 0 
 		tabSwitchCount = tabSwitchCount +1 ;
 		localStorage.setItem('tabSwitchCount',tabSwitchCount);
-		if(tabSwitchCount >= 2){
+		if(tabSwitchCount >= 2 && close === false){
 			setCompletion('cheating')
 			if(params.test_type == "upload-test"){
 				endTestUpload();
@@ -344,7 +338,6 @@ export default function StudentAttempt(){
 			}
 		}
 		// setFormData({...formData, ['answers']: myObject, ['completion_status']: "completed"});
-		// console.log(formData)
 		const newData = { }
 		newData.answers = myObject;
 		newData.completion_status = completion;
