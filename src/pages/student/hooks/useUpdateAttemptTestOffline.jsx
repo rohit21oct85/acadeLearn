@@ -25,7 +25,7 @@ export default function useUpdateAttemptTest(formDataOffline) {
 	const student_id = localStorage.getItem('user_id')
 	const attempt_id = params?.attempt_id
 	return useMutation(formDataOffline => {
-			return axios.post(`${apiUrl}v1/web/save-answer-offline/${params.test_id}/${params.test_type}`,{school_id:school_id,student_id:student_id, data:formDataOffline}, options)
+			return axios.patch(`${apiUrl}v1/web/save-answer-offline/${params.test_id}/${params.test_type}`,{school_id:school_id,student_id:student_id, data:formDataOffline}, options)
 		},{
 		onSuccess: (data) => {
 				queryClient.invalidateQueries('single-question')
