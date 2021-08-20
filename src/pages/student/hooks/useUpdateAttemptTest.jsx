@@ -25,7 +25,7 @@ export default function useUpdateAttemptTestBackup(formData) {
 	const student_id = localStorage.getItem('user_id')
 
 	return useMutation(formData => {
-			return authAxios.post(`${apiUrl}v1/web/save-answer/${params.test_id}/${params.test_type}`,{school_id:school_id,student_id:student_id, question_id:formData.question_id, answer:formData.answer,option:formData.option,time_taken:localStorage.getItem('COUNTER_INCRE'),completion_status:formData.completion_status}, options)
+			return authAxios.patch(`${apiUrl}v1/web/save-answer/${params.test_id}/${params.test_type}`,{school_id:school_id,student_id:student_id, question_id:formData.question_id, answer:formData.answer,option:formData.option,time_taken:localStorage.getItem('COUNTER_INCRE'),completion_status:formData.completion_status})
 		},{
 		onSuccess: (data) => {
 				queryClient.invalidateQueries('single-question')

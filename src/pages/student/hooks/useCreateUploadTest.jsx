@@ -26,7 +26,7 @@ export default function useCreateUploadTest(formData) {
 
 	return useMutation(formData => {
 		// console.log(formData)
-			return axios.post(`${apiUrl}v1/web/save-answer-upload/${params.test_type}`,{school_id:school_id,student_id:student_id,answers:formData.answers,time_taken:localStorage.getItem('COUNTER'),completion_status:formData.completion_status,attempt_id:attempt_id}, options)
+			return axios.patch(`${apiUrl}v1/web/save-answer-upload/${params.test_type}`,{school_id:school_id,student_id:student_id,answers:formData.answers,time_taken:localStorage.getItem('COUNTER'),completion_status:formData.completion_status,attempt_id:attempt_id})
 		},{
 		onSuccess: (data) => {
 				//history.push('/admin/app-module');
