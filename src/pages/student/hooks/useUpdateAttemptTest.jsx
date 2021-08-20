@@ -14,17 +14,12 @@ export default function useUpdateAttemptTestBackup(formData) {
 	const history = useHistory();
 	
 	const test_id = params?.test_id
+	// const subject_id = params?.subject_id
 	const school_id = localStorage.getItem('school_id')
 	const student_id = localStorage.getItem('user_id')
-	const time_taken = localStorage.getItem('COUNTER_INCRE');
 
 	return useMutation(formData => {
-			return axios.patch(`${apiUrl}v1/web/save-answer/${params.test_id}/${params.test_type}`,{school_id:school_id,student_id:student_id, question_id:formData.question_id, answer:formData.answer,option:formData.option,time_taken:time_taken,completion_status:formData.completion_status},{
-                headers: {
-                    'Content-Type': 'Application/json',
-                    'Authorization':'Bearer '+state.access_token
-                }
-            })
+			return authAxios.post(`${apiUrl}v1/web/save-answer/${params.test_id}/${params.test_type}`,{school_id:school_id,student_id:student_id, question_id:formData.question_id, answer:formData.answer,option:formData.option,time_taken:localStorage.getItem('COUNTER_INCRE'),completion_status:formData.completion_status})
 		},{
 		onSuccess: (data) => {
 				queryClient.invalidateQueries('single-question')
